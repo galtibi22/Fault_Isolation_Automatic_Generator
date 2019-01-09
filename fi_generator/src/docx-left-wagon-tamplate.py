@@ -1,4 +1,3 @@
-import re
 import json
 import sys
 import argparse
@@ -76,12 +75,12 @@ def fiTaskYes(str, yesOption, noOption):
         for description in arrDesQue[:-1]:
             newDes += description+"."
 
-    yesObj['to'] = newDes[newDes.find("(")+1:newDes.find(")")]
+    yesObj['to'] = removeCharactersFunc(newDes[newDes.find("(")+1:newDes.find(")")])
     yesObj['rtN'] = removeCharactersFunc(noOption)
-    yesObj['msgRt'] = 1
-    yesObj['typ'] = 1
+    yesObj['msgRt'] = "1"
+    yesObj['typ'] = "1"
     yesObj['tskNm'] = newDes[:newDes.find("(")]
-    yesObj['rtY'] = removeCharactersFunc(yesOption)
+    yesObj['rtY'] = removeCharactersFunc(removeCharactersFunc(yesOption))
 
     return yesObj
 
@@ -89,25 +88,26 @@ def fiTaskYes(str, yesOption, noOption):
 
 ############# Main program ###############
 
-removeCharacters = ['\n','\t']
+removeCharacters = ['\n','\t','\u200e']
 IsFaultIsolation = False
 FI_Dict = {}
 FI_Label = True
 FI_Descriptoin = ""
 FI_Num = 0
 
-# parser = argparse.ArgumentParser()
-# parser.add_argument("file")
-# args = parser.parse_args()
+parser = argparse.ArgumentParser()
+parser.add_argument("file")
+args = parser.parse_args()
+document = Document(args.file)
 
-document = Document('DOC-Left-Wagon.docx')
-# document = Document(args.file)
+# document = Document('DOC-Left-Wagon.docx')
+
 
 FI_Array = []
 
 # Main text info to object
 FI_Main_Info = {}
-FI_Main_Info['n'] = FI_Num
+FI_Main_Info['n'] = str(FI_Num)
 FI_Num+=1
 FI_Main_HTML_Obj ={}
 FI_Main_HTML_Data = []
@@ -131,7 +131,6 @@ FI_Main_HTML_Obj['htmlData'] = FI_Main_HTML_Data
 FI_Main_Info['htmlObj'] = FI_Main_HTML_Obj
 FI_Array.append(FI_Main_Info)
 
-
 tables = document.tables
 for table in tables:
     for row in table.rows:
@@ -143,7 +142,7 @@ for table in tables:
                     FI_row.append(paragraph.text)
                     if len(FI_row) == 3:
                         newNumberObj = {}
-                        newNumberObj['n'] = FI_Num
+                        newNumberObj['n'] = str(FI_Num)
                         if(('(' not in  FI_row[0]) and (')' not in  FI_row[0])):
                             # Step
                             newNumberObj['Y'] = {'to' : removeCharactersFunc(FI_row[1]), 'typ' : '0'}
@@ -152,15 +151,15 @@ for table in tables:
                         else:
                             # Task
                             newNumberObj['Y'] = fiTaskYes(FI_row[0], FI_row[1], FI_row[2])
-                            newNumberObj['N'] = { 'typ' : 4 }
+                            newNumberObj['N'] = { 'typ' : '4' }
                             newNumberObj['htmlObj'] = fiTaskDescriptionQuestion(FI_row[0])
                         FI_Array.append(newNumberObj)
                         FI_Num+=1
 
 
 ###### Default end FI numbers ######
-FI_Array.append({ "n": FI_Num, "htmlObj": { "htmlData": [ { "htmlType": "fiNegEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
+FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiNegEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
 FI_Num+=1
-FI_Array.append({ "n": FI_Num, "htmlObj": { "htmlData": [ { "htmlType": "fiPosEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
+FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiPosEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
 
 print(json.dumps(FI_Array, indent=4, sort_keys=True))
