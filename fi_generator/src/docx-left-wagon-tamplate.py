@@ -11,7 +11,7 @@ def checkYesNo(str):
     return False
 
 
-# Method return description and question from string
+# Method return to Step description and question from string
 def fiStepDescriptionQuestion(str):
     htmlDataObj = {}
     htmlDataObjAraay = []
@@ -34,14 +34,58 @@ def fiStepDescriptionQuestion(str):
     return htmlDataObj
 
 
-# Method return Object to 'Y' or 'N' (Yes or No options)
-def fiStepYesOrNo(str):
+
+# Method return to Task description and question from string
+def fiTaskDescriptionQuestion(str):
+    htmlDataObj = {}
+    htmlDataObjAraay = []
+
+    arrDesQue = str.split('.')
+
+    if('?' not in str):
+        objDes = {'htmlType':'fiStpDsc', 'txt' : str}
+        htmlDataObjAraay.append(objDes)
+    else:
+        newDes = ""
+        for description in arrDesQue[:-1]:
+            newDes += description+"."
+        objDes = {'htmlType':'fiStpDsc', 'txt' : newDes}
+        htmlDataObjAraay.append(objDes)
+
+    htmlDataObj['htmlData'] = htmlDataObjAraay
+    return htmlDataObj
+
+
+# Method return remove characters
+def removeCharactersFunc(str):
     for rchar in removeCharacters:
         str = str.replace(rchar,'')
+    return str
+
+
+# Method return Task Object to 'Y' (Yes option only)
+def fiTaskYes(str, yesOption, noOption):
+    yesObj = {}
+    arrDesQue = str.split('.')
+    newDes = ""
+
+    if('?' not in str):
+        newDes = str
+    else:
+        yesObj['msgRtIx'] = arrDesQue[-1]
+        for description in arrDesQue[:-1]:
+            newDes += description+"."
+
+    yesObj['to'] = newDes[newDes.find("(")+1:newDes.find(")")]
+    yesObj['rtN'] = removeCharactersFunc(noOption)
+    yesObj['msgRt'] = 1
+    yesObj['typ'] = 1
+    yesObj['tskNm'] = newDes[:newDes.find("(")]
+    yesObj['rtY'] = removeCharactersFunc(yesOption)
+
+    return yesObj
+
     return {'to' : str, 'typ' : '0'}
-
-
-
 
 ############# Main program ###############
 
@@ -52,12 +96,12 @@ FI_Label = True
 FI_Descriptoin = ""
 FI_Num = 0
 
-parser = argparse.ArgumentParser()
-parser.add_argument("file")
-args = parser.parse_args()
+# parser = argparse.ArgumentParser()
+# parser.add_argument("file")
+# args = parser.parse_args()
 
-# document = Document('DOC-Left-Wagon.docx')
-document = Document(args.file)
+document = Document('DOC-Left-Wagon.docx')
+# document = Document(args.file)
 
 FI_Array = []
 
@@ -100,9 +144,16 @@ for table in tables:
                     if len(FI_row) == 3:
                         newNumberObj = {}
                         newNumberObj['n'] = FI_Num
-                        newNumberObj['Y'] = fiStepYesOrNo(FI_row[1])
-                        newNumberObj['N'] = fiStepYesOrNo(FI_row[2])
-                        newNumberObj['htmlObj'] = fiStepDescriptionQuestion(FI_row[0])
+                        if(('(' not in  FI_row[0]) and (')' not in  FI_row[0])):
+                            # Step
+                            newNumberObj['Y'] = {'to' : removeCharactersFunc(FI_row[1]), 'typ' : '0'}
+                            newNumberObj['N'] = {'to' : removeCharactersFunc(FI_row[2]), 'typ' : '0'}
+                            newNumberObj['htmlObj'] = fiStepDescriptionQuestion(FI_row[0])
+                        else:
+                            # Task
+                            newNumberObj['Y'] = fiTaskYes(FI_row[0], FI_row[1], FI_row[2])
+                            newNumberObj['N'] = { 'typ' : 4 }
+                            newNumberObj['htmlObj'] = fiTaskDescriptionQuestion(FI_row[0])
                         FI_Array.append(newNumberObj)
                         FI_Num+=1
 
