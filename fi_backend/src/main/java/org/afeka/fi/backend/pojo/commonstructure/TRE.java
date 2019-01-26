@@ -40,7 +40,7 @@ public class TRE
     @XmlAttribute(name="lnkCol2tl")
     private String lnkCol2tl;
     @XmlElement(name="ND")
-    private ND ND;
+    public ND ND;
 
   /*  public String getLnkCol0 ()
     {

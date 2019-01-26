@@ -18,15 +18,15 @@ def fiStepDescriptionQuestion(str):
     arrDesQue = str.split('.')
 
     if('?' not in str):
-        objDes = {'htmlType':'fiStpDsc', 'txt' : str}
+        objDes = {'htmlType':'fiStpPrc', 'txt' : str}
         htmlDataObjAraay.append(objDes)
     else:
         newDes = ""
         for description in arrDesQue[:-1]:
             newDes += description+"."
-        objDes = {'htmlType':'fiStpDsc', 'txt' : newDes}
+        objDes = {'htmlType':'fiStpPrc', 'txt' : newDes}
         htmlDataObjAraay.append(objDes)
-        objQue = {'fiStpQst':'fiStpDsc', 'txt' : arrDesQue[-1]}
+        objQue = {'htmlType':'fiStpQst', 'txt' : arrDesQue[-1]}
         htmlDataObjAraay.append(objQue)
 
     htmlDataObj['htmlData'] = htmlDataObjAraay
@@ -42,13 +42,13 @@ def fiTaskDescriptionQuestion(str):
     arrDesQue = str.split('.')
 
     if('?' not in str):
-        objDes = {'htmlType':'fiStpDsc', 'txt' : str}
+        objDes = {'htmlType':'fiStpPrc', 'txt' : str}
         htmlDataObjAraay.append(objDes)
     else:
         newDes = ""
         for description in arrDesQue[:-1]:
             newDes += description+"."
-        objDes = {'htmlType':'fiStpDsc', 'txt' : newDes}
+        objDes = {'htmlType':'fiStpPrc', 'txt' : newDes}
         htmlDataObjAraay.append(objDes)
 
     htmlDataObj['htmlData'] = htmlDataObjAraay
@@ -96,9 +96,10 @@ FI_Descriptoin = ""
 FI_Num = 0
 
 parser = argparse.ArgumentParser()
-parser.add_argument("file")
+parser.add_argument("source")
+parser.add_argument("result")
 args = parser.parse_args()
-document = Document(args.file)
+document = Document(args.source)
 
 # document = Document('DOC-Left-Wagon.docx')
 
@@ -123,7 +124,7 @@ for para in document.paragraphs:
     else:
         FI_Descriptoin+=para.text + "\n"
 
-FI_Main_HTML_Data_Obj['htmlType'] = 'fiDes'
+FI_Main_HTML_Data_Obj['htmlType'] = 'fiStpDsc'
 FI_Main_HTML_Data_Obj['txt'] = FI_Descriptoin
 FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
 
@@ -141,6 +142,7 @@ for table in tables:
                     # print(paragraph.text)
                     FI_row.append(paragraph.text)
                     if len(FI_row) == 3:
+                        des=FI_row[0]
                         newNumberObj = {}
                         newNumberObj['n'] = str(FI_Num)
                         if(('(' not in  FI_row[0]) and (')' not in  FI_row[0])):
@@ -161,5 +163,6 @@ for table in tables:
 FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiNegEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
 FI_Num+=1
 FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiPosEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
-
-print(json.dumps(FI_Array, indent=4, sort_keys=True))
+f= open(args.result,"w+")
+f.write("{\"PG\":"+json.dumps(FI_Array, indent=4, sort_keys=True)+"}")
+print("{\"PG\":"+json.dumps(FI_Array, indent=4, sort_keys=True)+"}")

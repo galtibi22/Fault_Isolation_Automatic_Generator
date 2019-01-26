@@ -1,41 +1,52 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
+import com.google.gson.annotations.Expose;
+import j2html.tags.ContainerTag;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+@XmlRootElement(name = "ND")
+
 public class ND
 {
     @XmlAttribute(name="nPg")
-    private String nPg;
+    public String nPg;
     @XmlAttribute(name="pd")
-    private String pd;
+    public String pd;
     @XmlAttribute(name="v")
-    private String v;
+    public String v;
     @XmlAttribute(name="lbl")
-    private String lbl;
+    public String lbl;
     @XmlAttribute(name="kd")
-    private String kd;
+    public String kd;
     @XmlAttribute(name="newV")
-    private String newV;
+    public String newV;
     @XmlAttribute(name="pdf")
-    private String pdf;
+    public String pdf;
 
     @XmlAttribute(name="ID")
-    private String ID;
+    public String ID;
     @XmlAttribute(name="kIdDsp")
-    private String kIdDsp;
+    public String kIdDsp;
     @XmlAttribute(name="doc")
-    private String doc;
+    public String doc;
     @XmlAttribute(name="typ")
-    private String typ;
+    public String typ;
     @XmlAttribute(name="pic")
-    private String pic;
+    public String pic;
     @XmlElement(name="FI")
-    private FI[] FI;
+    public List<FI> FI=new ArrayList<FI>();
     @XmlElement(name="ND")
-    private ND[] ND;
+    public List<ND> ND=new ArrayList<ND>();
 
+    @XmlTransient
+    @Expose(serialize = false, deserialize = false)
+    public ContainerTag htmlObject;
    /* public String getNPg ()
     {
         return nPg;
@@ -190,8 +201,8 @@ public class ND
                 ", doc='" + doc + '\'' +
                 ", typ='" + typ + '\'' +
                 ", pic='" + pic + '\'' +
-                ", FI=" + Arrays.toString(FI) +
-                ", ND=" + Arrays.toString(ND) +
+                ", FI=" + Arrays.toString(FI.toArray()) +
+                ", ND=" + Arrays.toString(ND.toArray()) +
                 '}';
     }
 }
