@@ -1,2 +1,29 @@
-walla = "walla wwall (ddsds) divddvdv"
-print(walla[walla.find("(")+1:walla.find(")")])
+from glob import glob
+import re
+import os
+import win32com.client as win32
+from win32com.client import constants
+
+
+def save_as_docx(path):
+    # Opening MS Word
+    word = win32.gencache.EnsureDispatch('Word.Application')
+    doc = word.Documents.Open(path)
+    doc.Activate ()
+
+    # Rename path with .docx
+    new_file_abs = os.path.abspath(path)
+    new_file_abs = re.sub(r'\.\w+$', '.docx', new_file_abs)
+
+    # Save and Close
+    word.ActiveDocument.SaveAs(
+        new_file_abs, FileFormat=constants.wdFormatXMLDocument
+    )
+    doc.Close(False)
+    print(new_file_abs)
+
+# Create list of paths to .doc files
+path = glob('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\test\\*.doc', recursive=True)
+print(path[0])
+save_as_docx(path[0])
+
