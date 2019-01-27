@@ -1,4 +1,5 @@
 import json
+import re
 import sys
 import argparse
 from docx import Document
@@ -52,23 +53,27 @@ def fiMainDescription(Header_Name, Header_Description):
 
 
 # Method return remove characters
-def removeCharactersFunc(str):
+def removeCharsFunc(str):
     for rchar in removeCharacters:
         str = str.replace(rchar,'')
-    return str
+    return removeRegexFunc(str)
+
+# Method return remove start characters with regex
+def removeRegexFunc(str):
+    return re.sub(r'(^ |^[0-9]{2}[A-Z])', '', str)
 
 
 # Method return Task Object to 'Y' (Yes option only)
 def fiTaskYes2(str, yesOption, noOption):
     yesObj = {}
 
-    yesObj['to'] = removeCharactersFunc(str)
-    yesObj['rtN'] = removeCharactersFunc(noOption)
+    yesObj['to'] = removeCharsFunc(str)
+    yesObj['rtN'] = removeCharsFunc(noOption)
     yesObj['msgRt'] = "1"
     yesObj['typ'] = "1"
     yesObj['msgRtIx'] = "0"
-    yesObj['tskNm'] = removeCharactersFunc(str)
-    yesObj['rtY'] = removeCharactersFunc(removeCharactersFunc(yesOption))
+    yesObj['tskNm'] = removeCharsFunc(str)
+    yesObj['rtY'] = removeCharsFunc(yesOption)
 
     return yesObj
 
@@ -82,8 +87,6 @@ def fiTaskYes2(str, yesOption, noOption):
 #############################################################################################
 
 removeCharacters = ['\n','\t','\u200e']
-IsFaultIsolation = False
-FI_Dict = {}
 FI_Label = True
 FI_Num = 0
 
@@ -100,8 +103,9 @@ document = Document('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\DOC-Troubles
 FI_Array_List = []
 FI_Array = []
 
-
 tables = document.tables
+print(len(tables[0].rows[0].cells))
+
 for table in tables:
     for row in table.rows:
         FI_row = []
@@ -130,12 +134,8 @@ for table in tables:
                             if FI_row[i] != "":
                                 Number_Of_Actions +=1
 
-                        # print(FI_row[0] + " Number_Of_Actions " + str(Number_Of_Actions))
-                        # print(FI_row)
-
                         for i in range(4, 8):
                             if FI_row[i] != "":
-                                # print(FI_row[i])
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
                                 if(i == 4):
@@ -147,7 +147,6 @@ for table in tables:
                                     newNumberObj['Y'] = fiTaskYes2(FI_row[i], str(Number_Of_Actions+1), str(FI_Num+1))
                                     newNumberObj['N'] = { 'typ' : '4' }
                                 newNumberObj['htmlObj'] = fiStepDescriptionQuestion(FI_Txt_Header[i] + ": " + FI_row[i])
-                                # print(newNumberObj)
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
 
