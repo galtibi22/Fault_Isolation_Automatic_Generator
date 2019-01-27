@@ -126,13 +126,15 @@ FI_Label = True
 FI_Descriptoin = ""
 FI_Num = 0
 
-# parser = argparse.ArgumentParser()
-# parser.add_argument("source")
-# parser.add_argument("result")
-# args = parser.parse_args()
+parser = argparse.ArgumentParser()
+parser.add_argument("source")
+parser.add_argument("result")
+args = parser.parse_args()
+path = glob(args.source, recursive=True)
 # document = Document(args.source)
 
-path = glob('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\test\\DOC-Left-Wagon.doc', recursive=True)
+
+# path = glob('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\test\\DOC-Left-Wagon.doc', recursive=True)
 
 if(path[0].endswith('docx')):
     document = Document(path[0])
