@@ -1,4 +1,4 @@
-package org.afeka.fi.tests;
+package org.afeka.fi.backend.common;
 
 import org.afeka.fi.backend.common.FiLogger;
 import org.afeka.fi.backend.common.FiProperties;

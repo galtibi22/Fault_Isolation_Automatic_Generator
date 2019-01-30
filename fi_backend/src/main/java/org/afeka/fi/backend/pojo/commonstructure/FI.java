@@ -3,17 +3,14 @@ package org.afeka.fi.backend.pojo.commonstructure;
 
 import com.google.gson.annotations.Expose;
 import j2html.tags.ContainerTag;
+import org.afeka.fi.backend.pojo.report.ErrorReport;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-////@XmlRootElement(name="FI")
 public class FI
 {
    @XmlAttribute(name="nPg")
@@ -41,11 +38,19 @@ public class FI
    public String typ;
     @Expose(serialize = true,deserialize = true)
     @XmlElement(name="PG")
-    public List<PG> PG=new ArrayList<PG>();
+    public List<PG> PG=new ArrayList();
 
     @XmlTransient
     @Expose(serialize = false, deserialize = false)
     public ContainerTag htmlObject;
+
+    @XmlTransient
+    @Expose(serialize = false, deserialize = false)
+    public ErrorReport errorReport;
+
+    @XmlTransient
+    @Expose(serialize = false, deserialize = false)
+    public String version;
 
 }
 

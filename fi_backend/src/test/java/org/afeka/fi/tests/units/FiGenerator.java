@@ -1,7 +1,6 @@
 package org.afeka.fi.tests.units;
 
-import org.afeka.fi.backend.common.Generator;
-import org.afeka.fi.tests.FiCommonTest;
+import org.afeka.fi.backend.common.FiCommonTest;
 import org.junit.Test;
 
 public class FiGenerator extends FiCommonTest {

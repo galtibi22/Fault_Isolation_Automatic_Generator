@@ -3,44 +3,46 @@ package org.afeka.fi.backend.pojo.commonstructure;
 
 
 import javax.xml.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @XmlRootElement(name = "TRE")
 public class TRE
 {
     @XmlAttribute(name="lnkCol0")
-    private String lnkCol0;
+    public String lnkCol0;
     @XmlAttribute(name="prnt")
-    private String prnt;
+    public String prnt;
     @XmlAttribute(name="lnkCol0tl")
-    private String lnkCol0tl;
+    public String lnkCol0tl;
     @XmlAttribute(name="lnkCol2")
-    private String lnkCol2;
+    public String lnkCol2;
     @XmlAttribute(name="lnkCol1")
-    private String lnkCol1;
+    public String lnkCol1;
     @XmlAttribute(name="fiRigid")
-    private String fiRigid;
+    public String fiRigid;
     @XmlAttribute(name="srch")
-    private String srch;
+    public String srch;
     @XmlAttribute(name="ful")
-    private String ful;
+    public String ful;
     @XmlAttribute(name="lnkCol2w")
-    private String lnkCol2w;
+    public String lnkCol2w;
     @XmlAttribute(name="nLnkCols")
-    private String nLnkCols;
+    public String nLnkCols;
     @XmlAttribute(name="lnkCol1w")
-    private String lnkCol1w;
+    public String lnkCol1w;
     @XmlAttribute(name="lnkCol0w")
-    private String lnkCol0w;
+    public String lnkCol0w;
     @XmlAttribute(name="mxPgs")
-    private String mxPgs;
+    public String mxPgs;
     @XmlAttribute(name="v")
-    private String v;
+    public String v;
     @XmlAttribute(name="lnkCol1tl")
-    private String lnkCol1tl;
+    public String lnkCol1tl;
     @XmlAttribute(name="lnkCol2tl")
-    private String lnkCol2tl;
+    public String lnkCol2tl;
     @XmlElement(name="ND")
-    public ND ND;
+    public List<ND> ND=new ArrayList<ND>();
 
   /*  public String getLnkCol0 ()
     {

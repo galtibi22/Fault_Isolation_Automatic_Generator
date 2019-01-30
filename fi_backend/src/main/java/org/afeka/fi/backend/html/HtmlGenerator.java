@@ -160,37 +160,5 @@ public class HtmlGenerator extends FiCommon {
         return head.with(body).renderFormatted();
     }
 
-    @Test
-    public void generateFiTitle(){
-        logger.info("Generate html page for fi title");
-        HtmlGenerator generator=new HtmlGenerator();
-        generator.fiTitle("this is a title");
-        generator.fiStpDsc("this is a stp dsc");
-        logger.info(generator.toString());
-    }
 
-    @Test
-    public void generateFiStep(){
-        logger.info("Generate html page for fi step");
-        HtmlGenerator generator=new HtmlGenerator();
-        generator.fiStpPrc("Connect cable CBX to J5 receptacle.");
-        generator.fiStpQst("Does the symptom appear again?");
-        logger.info(generator.toString());
-    }
-    @Test
-    public void generateFiPosEnt(){
-        logger.info("Generate html page for fi positive end");
-        HtmlGenerator generator=new HtmlGenerator();
-        generator.fiPosEnd();
-        logger.info(generator.toString());
-    }
-
-    @Test
-    public void generateFiNegEnt(){
-        logger.info("Generate html page for fi positive end");
-        HtmlGenerator generator=new HtmlGenerator();
-        generator.fiNegEnd();
-        logger.info(generator.toString());
-    }
 }
-//    fiStpPrc,fiStpQst,fiTitle,fiStpTsk,fiPosEnd,fiNegEnd,fiDes

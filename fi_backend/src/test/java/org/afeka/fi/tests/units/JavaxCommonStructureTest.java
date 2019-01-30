@@ -4,9 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.afeka.fi.backend.common.FiProperties;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
-import org.afeka.fi.backend.pojo.commonstructure.PG;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
-import org.afeka.fi.tests.FiCommonTest;
+import org.afeka.fi.backend.common.FiCommonTest;
 import org.junit.Before;
 import org.junit.Test;
 import javax.xml.bind.JAXBContext;
@@ -16,8 +15,6 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.StringWriter;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 
 public class JavaxCommonStructureTest extends FiCommonTest {
@@ -50,7 +47,7 @@ public class JavaxCommonStructureTest extends FiCommonTest {
         builder.excludeFieldsWithoutExposeAnnotation();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
-        String json=gson.toJson(tre.ND.ND.get(0).ND.get(0).ND.get(0).FI.get(0), FI.class);
+        String json=gson.toJson(tre.ND.get(0).ND.get(0).ND.get(0).FI.get(0), FI.class);
         logger.info(json);
     }
         private TRE treXmlToObject(String path) throws JAXBException {

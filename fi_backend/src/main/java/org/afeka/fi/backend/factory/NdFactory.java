@@ -1,21 +1,15 @@
 package org.afeka.fi.backend.factory;
 
-import org.afeka.fi.backend.clients.PythonClient;
-import org.afeka.fi.backend.common.FiProperties;
-import org.afeka.fi.backend.exception.DataNotFoundException;
 import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.html.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
-import org.afeka.fi.backend.pojo.commonstructure.TRE;
-import org.junit.jupiter.api.Test;
-
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.*;
 
-public class NdFactory {
+public class NdFactory  extends ViewFactory {
      private ND nd=new ND();
      /**
       *      * <ND lbl="UAV SYSTEM"
@@ -59,6 +53,9 @@ public class NdFactory {
                   doc(id+"-chapter.html");
      }
 
+     public NdFactory(ND nd){
+          this.nd=nd;
+     }
      /**
       * Every time you add new FI you must run generateMdDoc
       */
@@ -68,12 +65,6 @@ public class NdFactory {
                throw new DataNotValidException("Cannot generate ndDoc for nd.fi.size()=0");
           htmlGenerator.ndDoc(nd.lbl,nd.FI);
           nd.htmlObject=htmlGenerator.toHtml();
-     }
-
-     public void addFi(String fiJson) throws DataNotFoundException {
-          String id=nd.ID+"_"+(nd.FI.size()+1);
-          FiFactory fiFactory=new FiFactory(fiJson,id);
-          nd.FI.add(fiFactory.fi);
      }
 
 
@@ -128,20 +119,23 @@ public class NdFactory {
           return this;
      }
 
-     public void exportND(String resultPath) throws JAXBException, FileNotFoundException {
-          StringWriter sw = new StringWriter();
-          JAXBContext jaxbContext= JAXBContext.newInstance(ND.class);
-          Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-          jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-          jaxbMarshaller.marshal(nd,
-                  new FileOutputStream(new File(resultPath+"fiTre.xml")));
-          for (FI fi:nd.FI){
-               FiFactory.exportFi(fi,resultPath);
-          }
-          PrintWriter out = new PrintWriter(resultPath+nd.doc);
-          out.println(nd.htmlObject.renderFormatted());
-          out.close();
+
+
+     @Override
+     public void export(String path) throws IOException {
+         for(FI fi:nd.FI){
+              new FiFactory(fi).export(path);
+         }
+         save(nd.htmlObject.renderFormatted(),path+nd.doc);
      }
+
+     @Override
+     public void add(Object o) throws Exception {
+          String id=nd.ID+"_"+(nd.FI.size()+1);
+          FiFactory fiFactory=new FiFactory(o.toString(),id);
+          nd.FI.add(fiFactory.fi);
+     }
+
 }
 
 

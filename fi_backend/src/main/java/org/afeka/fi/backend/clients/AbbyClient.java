@@ -2,7 +2,9 @@ package org.afeka.fi.backend.clients;
 
 import com.abbyy.FREngine.*;
 import org.afeka.fi.backend.common.FiCommon;
+import org.afeka.fi.backend.common.FiCommonTest;
 import org.afeka.fi.backend.common.FiProperties;
+import org.junit.Test;
 
 public class AbbyClient extends FiCommon {
 
@@ -35,9 +37,9 @@ public class AbbyClient extends FiCommon {
     }
 
     private void setupFREngine() {
-        String predefined="DocumentConversion_Accuracy";
+        String predefined="TextExtraction_Accuracy";
         logger.info( "Loading predefined profile "+predefined );
-        engine.LoadPredefinedProfile( "" );
+        engine.LoadPredefinedProfile( predefined );
         // Possible profile names are:
         //   "DocumentConversion_Accuracy", "DocumentConversion_Speed",
         //   "DocumentArchiving_Accuracy", "DocumentArchiving_Speed",
@@ -90,4 +92,7 @@ public class AbbyClient extends FiCommon {
             logger.error(ex);
         }
     }
+
+
 }
+
