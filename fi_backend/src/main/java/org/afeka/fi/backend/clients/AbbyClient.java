@@ -37,7 +37,7 @@ public class AbbyClient extends FiCommon {
     }
 
     private void setupFREngine() {
-        String predefined="TextExtraction_Accuracy";
+        String predefined="Version9Compatibility";
         logger.info( "Loading predefined profile "+predefined );
         engine.LoadPredefinedProfile( predefined );
         // Possible profile names are:

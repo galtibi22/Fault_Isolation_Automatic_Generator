@@ -8,6 +8,7 @@ public class AbbyyClientTests extends FiCommonTest {
 
     @Test
     public void runAbby() throws Exception {
-        AbbyClient.runAbby("C:\\Users\\galti\\IdeaProjects\\Fault_Isolation_Automatic_Generator\\data\\fiFlowDaigram.jpg","C:\\Users\\galti\\IdeaProjects\\Fault_Isolation_Automatic_Generator\\data\\fiFlowDaigram.doc");
+        AbbyClient.runAbby("C:\\Users\\galti\\IdeaProjects\\Fault_Isolation_Automatic_Generator\\data\\fi_table_image_excelent.jpg",
+                "C:\\Users\\galti\\IdeaProjects\\Fault_Isolation_Automatic_Generator\\data\\fi_table_image_excelent.doc");
     }
 }
