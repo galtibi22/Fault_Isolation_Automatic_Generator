@@ -1,11 +1,13 @@
 package org.afeka.fi.backend.common;
 
+import org.afeka.fi.backend.pojo.internal.ENV;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class FiProperties {
+public class FiProperties extends FiCommon{
     private static FiProperties instance;
     private Properties prop = new Properties();
 
@@ -15,9 +17,10 @@ public class FiProperties {
      * @throws IOException
      */
     public static void init() throws IOException {
-        String fiPropPath=System.getProperty("user.dir")+"/src/main/resources/fi.properties";
+        instance = new FiProperties();
+        instance.setSystemEnv();
+        String fiPropPath=System.getProperty("user.dir")+"/fi_backend/src/main/resources/"+System.getProperty("env")+".properties";
         try {
-            instance = new FiProperties();
             InputStream input = new FileInputStream(fiPropPath);
             instance.prop.load(input);
             instance.loadProps();
@@ -30,6 +33,18 @@ public class FiProperties {
 
     private Object getProperty(String name){
             return instance.prop.get(name);
+
+    }
+
+    private void setSystemEnv() {
+        logger.info("start setSystemEnv method");
+        String os=System.getProperty("os.name");
+        switch (os){
+            case ENV.MAC:
+                System.setProperty("env","mac");
+        }
+
+        logger.info("set env" +System.getProperty("env"));
 
     }
 

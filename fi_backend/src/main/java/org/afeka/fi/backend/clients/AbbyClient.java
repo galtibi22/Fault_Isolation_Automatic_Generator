@@ -1,6 +1,6 @@
 package org.afeka.fi.backend.clients;
 
-import com.abbyy.FREngine.*;
+//*import com.abbyy.FREngine.*;
 import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.common.FiCommonTest;
 import org.afeka.fi.backend.common.FiProperties;
@@ -22,24 +22,24 @@ public class AbbyClient extends FiCommon {
     }
 
 
-    private IEngine engine = null;
+   //* private IEngine engine = null;
 
     private void unloadEngine() throws Exception {
         logger.info( "Deinitializing Abby Engine..." );
-        engine = null;
-        Engine.DeinitializeEngine();
+        //*   engine = null;
+        //*   Engine.DeinitializeEngine();
     }
 
     private void loadEngine() throws Exception {
         logger.info( "Initializing Engine..." );
-        engine = Engine.InitializeEngine( FiProperties.ABBY_DLL_PATH, FiProperties.ABBY_PROJECTID,
-                ""/*SamplesConfig.GetLicensePath()*/,"" /* SamplesConfig.GetLicensePassword()*/, "", "", false );
+        //*    engine = Engine.InitializeEngine( FiProperties.ABBY_DLL_PATH, FiProperties.ABBY_PROJECTID,
+        //*  ""/*SamplesConfig.GetLicensePath()*/,"" /* SamplesConfig.GetLicensePassword()*/, "", "", false );
     }
 
     private void setupFREngine() {
         String predefined="Version9Compatibility";
         logger.info( "Loading predefined profile "+predefined );
-        engine.LoadPredefinedProfile( predefined );
+        //*      engine.LoadPredefinedProfile( predefined );
         // Possible profile names are:
         //   "DocumentConversion_Accuracy", "DocumentConversion_Speed",
         //   "DocumentArchiving_Accuracy", "DocumentArchiving_Speed",
@@ -65,19 +65,19 @@ public class AbbyClient extends FiCommon {
             }
 */
             // Create document
-            IFRDocument document = engine.CreateFRDocument();
+            //*  IFRDocument document = engine.CreateFRDocument();
 
             try {
                 // Add image file to document
                 logger.info( "Loading image from path="+sourcePath );
-                document.AddImageFile( sourcePath, null, null );
+                //*    document.AddImageFile( sourcePath, null, null );
                 // Process document
                 logger.info( "Start Process the image" );
-                document.Process( null );
+                //*  document.Process( null );
                 // Save results
                 logger.info( "Save results to rtf with default parameters. resultPath="+resultPath );
                // String rtfExportPath =;
-                document.Export( resultPath, FileExportFormatEnum.FEF_RTF, null );
+                //*  document.Export( resultPath, FileExportFormatEnum.FEF_RTF, null );
                 // Save results to pdf using 'balanced' scenario
                // IPDFExportParams pdfParams = engine.CreatePDFExportParams();
                // pdfParams.setScenario( PDFExportScenarioEnum.PES_Balanced );
@@ -86,7 +86,7 @@ public class AbbyClient extends FiCommon {
                 //document.Export( pdfExportPath, FileExportFormatEnum.FEF_PDF, pdfParams );
             } finally {
                 // Close document
-                document.Close();
+                //*   document.Close();
             }
         } catch( Exception ex ) {
             logger.error(ex);

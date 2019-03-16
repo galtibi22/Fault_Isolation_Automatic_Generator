@@ -2,10 +2,13 @@ package org.afeka.fi.backend.pojo.commonstructure;
 
 
 
+import javax.annotation.Generated;
+import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 @XmlRootElement(name = "TRE")
 public class TRE
 {
@@ -41,8 +44,15 @@ public class TRE
     public String lnkCol1tl;
     @XmlAttribute(name="lnkCol2tl")
     public String lnkCol2tl;
+
+    @Transient
     @XmlElement(name="ND")
-    public List<ND> ND=new ArrayList<ND>();
+    public List<NdParent> ndParents=new ArrayList<NdParent>();
+
+    @XmlTransient
+    @Id
+   // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public String ID;
 
   /*  public String getLnkCol0 ()
     {
@@ -233,7 +243,7 @@ public class TRE
                 ", v='" + v + '\'' +
                 ", lnkCol1tl='" + lnkCol1tl + '\'' +
                 ", lnkCol2tl='" + lnkCol2tl + '\'' +
-                ", ND=" + ND +
+                ", ndParents=" + ndParents +
                 '}';
     }
 }

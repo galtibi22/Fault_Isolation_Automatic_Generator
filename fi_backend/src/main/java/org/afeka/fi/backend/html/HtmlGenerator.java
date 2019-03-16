@@ -161,4 +161,10 @@ public class HtmlGenerator extends FiCommon {
     }
 
 
+    public void ndParentDoc(String lbl) {
+        head=ndDocHead();
+        body=body(
+            h2(lbl));
+
+    }
 }

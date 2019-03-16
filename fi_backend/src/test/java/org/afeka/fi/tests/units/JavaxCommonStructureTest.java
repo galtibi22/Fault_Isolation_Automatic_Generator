@@ -29,7 +29,7 @@ public class JavaxCommonStructureTest extends FiCommonTest {
     @Test
         public void testTreXmlToObject() throws Exception {
            TRE tre=treXmlToObject(FiProperties.DATA_PATH+FiProperties.VIEW_DEMO_FITRE_NAME);
-            logger.info(tre);
+            logger.info(tre.toString());
         }
 
         @Test
@@ -47,7 +47,7 @@ public class JavaxCommonStructureTest extends FiCommonTest {
         builder.excludeFieldsWithoutExposeAnnotation();
         builder.setPrettyPrinting();
         Gson gson = builder.create();
-        String json=gson.toJson(tre.ND.get(0).ND.get(0).ND.get(0).FI.get(0), FI.class);
+        String json=gson.toJson(tre.ndParents.get(0).ND.get(0).FI.get(0), FI.class);
         logger.info(json);
     }
         private TRE treXmlToObject(String path) throws JAXBException {
