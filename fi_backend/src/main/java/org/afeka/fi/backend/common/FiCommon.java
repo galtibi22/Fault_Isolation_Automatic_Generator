@@ -4,5 +4,6 @@ import org.apache.logging.log4j.Logger;
 
 public class FiCommon {
 
-    protected Logger logger = FiLogger.getLogger(this.getClass());
+    protected FiLogger logger = new FiLogger();
+            //FiLogger.getLogger(this.getClass());
 }

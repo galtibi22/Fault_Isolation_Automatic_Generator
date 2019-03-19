@@ -2,13 +2,39 @@ package org.afeka.fi.backend.common;
 
 import org.apache.logging.log4j.LogManager;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 public class FiLogger extends LogManager {
 
 
+    public void info(String msg) {
+        getLogger(getCallerClass()).info(msg);
+    }
 
+    public void debug(String msg) {
+        getLogger(getCallerClass()).debug(msg);
+    }
+
+    public void error(String msg) {
+        getLogger(getCallerClass()).error(msg);
+    }
+
+    public void error(Exception e) {
+        getLogger(getCallerClass()).error(e.getMessage(),e);
+    }
+
+    public void start(String method) {
+        getLogger(getCallerClass()).info("Start " + method + " method");
+    }
+
+    public void finish(String method) {
+        getLogger(getCallerClass()).info("Finish " + method + " method");
+    }
+
+    public void called(String method, String with,Object data) {
+        getLogger(getCallerClass()).info(method + " called with " + with+" "+data);
+    }
+
+
+    private String getCallerClass() {
+        return new Exception().getStackTrace()[2].getClassName();
+    }
 }

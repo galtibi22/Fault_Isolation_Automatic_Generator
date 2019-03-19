@@ -1,6 +1,8 @@
 package org.afeka.fi.backend.common;
 
 
+import net.bytebuddy.utility.RandomString;
+
 import java.util.Random;
 import java.util.UUID;
 
@@ -11,6 +13,6 @@ public class Generator {
     }
 
     public static String id(){
-        return UUID.randomUUID().toString();
+        return new RandomString(5).nextString();
     }
 }

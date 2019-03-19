@@ -1,3 +1,4 @@
+/*
 package org.afeka.fi.tests.delete;
 
 import com.abbyy.FREngine.*;
@@ -124,3 +125,4 @@ public class AbbyyHello {
     private IEngine engine = null;
 }
 
+*/

@@ -21,7 +21,7 @@
 		<Logger name="org.afeka.fi" level="debug" additivity="true">
 			<appender-ref ref="fileLogger" level="debug" />
 		</Logger>
-		<Root level="info" additivity="false">
+		<Root level="DEBUG" additivity="false">
 			<appender-ref ref="console" />
 		</Root>
 	</Loggers>

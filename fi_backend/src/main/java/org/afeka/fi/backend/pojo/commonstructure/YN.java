@@ -24,8 +24,8 @@ public class YN
     private String tskNm;
     @Expose(serialize = true,deserialize = true)
     private String rtY;
+    @Expose(serialize = true,deserialize = true)
     private String msg="1";
-
     @XmlAttribute(name="to")
     public String getTo ()
     {
@@ -148,4 +148,10 @@ public class YN
         else
             throw new DataNotValidException("YN.msg can be only 0 - noMessage or 1 - message");
     }
+
+    @Override
+    public String toString() {
+        return "YN{" + "to='" + to + '\'' + ", rtN='" + rtN + '\'' + ", msgRt='" + msgRt + '\'' + ", typ='" + typ + '\'' + ", msgIx='" + msgIx + '\'' + ", msgRtIx='" + msgRtIx + '\'' + ", tskNm='" + tskNm + '\'' + ", rtY='" + rtY + '\'' + ", msg='" + msg + '\'' + '}';
+    }
+
 }

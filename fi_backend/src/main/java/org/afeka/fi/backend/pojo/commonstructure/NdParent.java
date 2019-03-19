@@ -2,7 +2,6 @@ package org.afeka.fi.backend.pojo.commonstructure;
 
 import com.google.gson.annotations.Expose;
 import j2html.tags.ContainerTag;
-import org.hibernate.annotations.Parent;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -12,16 +11,18 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
 @XmlRootElement(name = "ND")
 
 @Entity
-public class ND
+public class NdParent
 {
-    public ND(){
+    public NdParent(){
 
     }
-    public ND(String parentNdId){
-        this.ndParentId=parentNdId;
+
+    public NdParent(String treId){
+        this.treId=treId;
     }
     @XmlAttribute(name="nPg")
     public String nPg;
@@ -39,7 +40,7 @@ public class ND
     public String pdf;
 
     @Id
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @XmlAttribute(name="ID")
     public String ID;
     @XmlAttribute(name="kIdDsp")
@@ -51,15 +52,13 @@ public class ND
     @XmlAttribute(name="pic")
     public String pic;
 
-    @Transient
-    @XmlElement(name="FI")
-    public List<FI> FI=new ArrayList<FI>();
+    @XmlTransient
+    public String treId;
 
- /*   @Transient
+    @Transient
     @XmlElement(name="ND")
-    public List<ND> ND=new ArrayList<ND>();*/
-     @XmlTransient
-    public String ndParentId;
+    public List<ND> ND=new ArrayList<ND>();
+
     @Transient
     @XmlTransient
     @Expose(serialize = false, deserialize = false)
@@ -80,8 +79,7 @@ public class ND
                 ", doc='" + doc + '\'' +
                 ", typ='" + typ + '\'' +
                 ", pic='" + pic + '\'' +
-                ", FI=" + Arrays.toString(FI.toArray()) +
-                //", ND=" + Arrays.toString(ND.toArray()) +
+                ", ND=" + Arrays.toString(ND.toArray()) +
                 '}';
     }
 }

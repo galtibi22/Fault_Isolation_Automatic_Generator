@@ -1,16 +1,14 @@
 package org.afeka.fi.backend.factory;
 
+import org.afeka.fi.backend.common.Generator;
 import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.html.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
+
 import java.io.*;
 
-public class NdFactory  extends ViewFactory {
-     private ND nd=new ND();
+public class NdFactory extends ViewFactory<ND> {
      /**
       *      * <ND lbl="UAV SYSTEM"
       *      ID="0"
@@ -38,103 +36,130 @@ public class NdFactory  extends ViewFactory {
       * pdf=""
       * pd="45">
       */
-     public NdFactory(String lbl,String id){
-          lbl(lbl).
-                  ID(id).
-                  typ("4").
-                  kIdDsp("").
-                  kd("1").
-                  nPg("1").
-                  pic("").
-                  newV("0").
-                  v("-").
-                  pdf("").
-                  pd("60").
-                  doc(id+"-chapter.html");
-     }
-
-     public NdFactory(ND nd){
-          this.nd=nd;
-     }
-     /**
-      * Every time you add new FI you must run generateMdDoc
-      */
-     public void generateNdDoc() throws DataNotValidException {
-          HtmlGenerator htmlGenerator=new HtmlGenerator();
-          if (nd.FI.size()==0)
-               throw new DataNotValidException("Cannot generate ndDoc for nd.fi.size()=0");
-          htmlGenerator.ndDoc(nd.lbl,nd.FI);
-          nd.htmlObject=htmlGenerator.toHtml();
+     public ND newND(String lbl,String ndParentId){
+         logger.called("newND","ndParentId "+ndParentId+" lbl ",lbl);
+         view=new ND();
+         return lbl(lbl).
+                 ID(lbl.replaceAll(" ","")+"_"+ Generator.id()).
+                 ndParentId(ndParentId).
+                 typ("4").
+                 kIdDsp("").
+                 kd("1").
+                 nPg("1").
+                 pic("").
+                 newV("0").
+                 v("-").
+                 pdf("").
+                 pd("60").
+                 doc(view.ID+"-chapter.html").get();
      }
 
 
+
+     private NdFactory ndParentId(String ndParentId) {
+         view.ndParentId=ndParentId;
+        return this;
+     }
      private NdFactory lbl(String lbl){
-          nd.lbl=lbl;
+         view.lbl=lbl;
           return this;
      }
      private NdFactory ID(String ID){
-          nd.ID=ID;
+         view.ID=ID;
           return this;
      }
      private NdFactory typ(String typ){
-          nd.typ=typ;
+         view.typ=typ;
           return this;
      }
      private NdFactory kIdDsp(String kIdDsp){
-          nd.kIdDsp=kIdDsp;
+         view.kIdDsp=kIdDsp;
           return this;
      }
      private NdFactory kd(String kd){
-          nd.kd=kd;
+         view.kd=kd;
           return this;
      }
      private NdFactory nPg(String nPg){
-          nd.nPg=nPg;
+         view.nPg=nPg;
           return this;
      }
      private NdFactory doc(String doc){
-          nd.doc=doc;
+         view.doc=doc;
           return this;
      }
      private NdFactory pic(String pic){
-          nd.pic=pic;
+         view.pic=pic;
           return this;
      }
      private NdFactory newV(String newV){
-          nd.newV=newV;
+         view.newV=newV;
           return this;
      }
 
      private NdFactory v(String v){
-          nd.v=v;
+         view.v=v;
           return this;
      }
 
      private NdFactory pdf(String pdf){
-          nd.v=pdf;
+         view.v=pdf;
           return this;
      }
      private NdFactory pd(String pd){
-          nd.v=pd;
+         view.v=pd;
           return this;
      }
 
 
 
      @Override
-     public void export(String path) throws IOException {
+     public void export(String path,ND nd) throws IOException, DataNotValidException {
          for(FI fi:nd.FI){
-              new FiFactory(fi).export(path);
+              new FiFactory().export(path,fi);
          }
-         save(nd.htmlObject.renderFormatted(),path+nd.doc);
+
+         HtmlGenerator htmlGenerator=new HtmlGenerator();
+         if (nd.FI.size()==0)
+             throw new DataNotValidException("Cannot generate ndDoc for nd.fi.size()=0");
+         htmlGenerator.ndDoc(nd.lbl,nd.FI);
+         save(htmlGenerator.toHtml().renderFormatted(),path+nd.doc);
      }
 
-     @Override
-     public void add(Object o) throws Exception {
+
+/*     @Override
+     public void add(String fiJson) throws Exception {
+          logger.info("add fiJson to ndId="+nd.ID);
+          logger.debug("fiJson="+fiJson);
           String id=nd.ID+"_"+(nd.FI.size()+1);
-          FiFactory fiFactory=new FiFactory(o.toString(),id);
-          nd.FI.add(fiFactory.fi);
-     }
+          FiFactory fiFactory=new FiFactory(fiJson,id);
+          nd.FI.add(fiFactory.get());
+          generateNdDoc();
+     }*/
+
+ /*   public void add(FI fi) throws Exception {
+        logger.info("add fiJson to ndId="+nd.ID);
+        logger.debug("fiJson="+fi);
+        String id=nd.ID+"_"+(nd.FI.size()+1);
+        fi.ID=id;
+        // FiFactory fiFactory=new FiFactory(fi,id);
+        nd.FI.add(fi);
+    }*/
+
+     /*public void addFis(String fiArray) throws Exception {
+         logger.called("addFis",fiArray);
+         logger.debug("fiArray="+fiArray);
+         FI fis[]=  new FI[1];
+         fis= Helpers.initGson().fromJson(fiArray,fis.getClass());
+         Arrays.asList(fis).forEach(fi-> {
+             try {
+                 add(fi);
+             } catch (Exception e) {
+                 logger.error(e);
+             }
+         });
+
+     }*/
 
 }
 
