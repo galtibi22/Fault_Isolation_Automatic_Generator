@@ -4,6 +4,7 @@ import re
 import sys
 import argparse
 import os
+import requests
 from docx import Document
 import win32com.client as win32
 from win32com.client import constants
@@ -113,6 +114,19 @@ def save_as_docx(path):
     return new_file_abs
 
 
+
+def post_api_server(uri, jsondata):
+    # defining the api-endpoint
+    API_ENDPOINT = "http://127.0.0.1/api/figenerator/new/"
+
+    headers = {
+        'content-type' : "application/json"
+    }
+    r = requests.post(API_ENDPOINT+uri, data = jsondata, headers = headers)
+
+
+
+
 #############################################################################################
 #############################################################################################
 ###################################                    ######################################
@@ -204,6 +218,12 @@ for table in tables:
 FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiNegEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
 FI_Num+=1
 FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiPosEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
-# f= open(args.result,"w+")
-# f.write("{\"PG\":"+json.dumps(FI_Array, indent=4, sort_keys=True)+"}")
-print("{\"PG\":"+json.dumps(FI_Array, indent=4, sort_keys=True)+"}")
+
+
+f= open(args.result,"w+")
+jsonrequest = "{\"PG\":"+json.dumps(FI_Array, indent=4, sort_keys=True)+"}"
+f.write(jsonrequest)
+print(jsonrequest)
+
+post_api_server(glob(args.result, recursive=True), jsonrequest)
+
