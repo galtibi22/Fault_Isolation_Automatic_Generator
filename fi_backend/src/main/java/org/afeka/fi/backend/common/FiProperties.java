@@ -42,6 +42,10 @@ public class FiProperties extends FiCommon{
         switch (os){
             case ENV.MAC:
                 System.setProperty("env","mac");
+                return;
+            case ENV.WIN:
+                System.setProperty("env","win");
+
         }
 
         logger.info("set env " +System.getProperty("env"));
