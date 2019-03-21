@@ -1,14 +1,15 @@
 package org.afeka.fi.backend.factory;
 
 import org.afeka.fi.backend.common.*;
-import org.afeka.fi.backend.exception.DataNotFoundException;
+import org.afeka.fi.backend.exception.DataFactoryNotFoundException;
 import org.afeka.fi.backend.html.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.*;
+import org.springframework.stereotype.Component;
+
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
-
+@Component
 public class FiFactory extends ViewFactory<FI> {
     //private FI fi;
 
@@ -34,7 +35,7 @@ public class FiFactory extends ViewFactory<FI> {
 
     }*/
 
-    public FI newFI(List<PG> pgs,String ndId) throws DataNotFoundException {
+    public FI newFI(List<PG> pgs,String ndId) throws DataFactoryNotFoundException {
         view=new FI();
         logger.called("newFI","ndId "+ndId+" pgs ",pgs);
         return findFiLbl(pgs.get(0).htmlObj).
@@ -150,12 +151,12 @@ public class FiFactory extends ViewFactory<FI> {
         return this;
     }
 
-    private FiFactory findFiLbl(HtmlObj htmlObj) throws DataNotFoundException {
+    private FiFactory findFiLbl(HtmlObj htmlObj) throws DataFactoryNotFoundException {
         if (htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiTitle)) {
             view.lbl = htmlObj.getHtmlData()[0].txt;
         }
        else
-            throw new DataNotFoundException("fiTitle",htmlObj.toString());
+            throw new DataFactoryNotFoundException("fiTitle",htmlObj.toString());
         return this;
     }
 

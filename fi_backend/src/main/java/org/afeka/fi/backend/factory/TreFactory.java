@@ -5,12 +5,13 @@ import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
+import org.springframework.stereotype.Component;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.*;
-
+@Component
 public class TreFactory extends ViewFactory <TRE> {
     //private TRE tre;
 
@@ -32,11 +33,16 @@ public class TreFactory extends ViewFactory <TRE> {
      * prnt="000000"
      * ful="1">
      */
-    public TRE newTRE(){
+    public TRE newTRE(String userName){
         view=new TRE();
         return v("0806").mxPgs("10").srch("111101").nLnkCols("3").lnkCol0("manNm").lnkCol0tl("Manual Name").lnkCol0w("30").lnkCol1("chpNm")
                 .lnkCol1tl("Chapter Name").lnkCol1w("30").lnkCol2("nm").lnkCol2tl("Target Name").lnkCol2w("40").fiRigid("0").prnt("000000").ful("1").
-                        ID(Generator.id()).get();
+                        ID(Generator.id()).userEmail(userName).get();
+    }
+
+    private TreFactory userEmail(String userEmail) {
+        view.userEmail=userEmail;
+        return this;
     }
 
     private TreFactory ID(String id) {

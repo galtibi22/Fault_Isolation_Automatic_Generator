@@ -2,6 +2,8 @@ package org.afeka.fi.backend.common;
 
 import org.apache.logging.log4j.LogManager;
 
+import java.util.Arrays;
+
 public class FiLogger extends LogManager {
 
 
@@ -29,8 +31,8 @@ public class FiLogger extends LogManager {
         getLogger(getCallerClass()).info("Finish " + method + " method");
     }
 
-    public void called(String method, String with,Object data) {
-        getLogger(getCallerClass()).info(method + " called with " + with+" "+data);
+    public void called(String method, String with,Object... data) {
+        getLogger(getCallerClass()).info(method + " called with " + with+" "+ Arrays.toString(data));
     }
 
 

@@ -1,10 +1,7 @@
 package org.afeka.fi.backend.factory;
 
 import org.afeka.fi.backend.common.FiCommon;
-import org.afeka.fi.backend.exception.DataNotFoundException;
 
-import javax.xml.bind.JAXBException;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;

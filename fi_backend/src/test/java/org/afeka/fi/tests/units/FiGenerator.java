@@ -14,6 +14,7 @@ public class FiGenerator extends FiCommonTest {
         //FiGeneratorClient client=new FiGeneratorClient();
         //String fiJson=client.runGenerator(source,sourceDoc,result);
         //client.jsonToFiObject(fiJson);
+        System.out.println("please dont wait");
 
     }
 }

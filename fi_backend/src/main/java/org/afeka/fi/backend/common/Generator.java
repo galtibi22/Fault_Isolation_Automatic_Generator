@@ -13,6 +13,6 @@ public class Generator {
     }
 
     public static String id(){
-        return new RandomString(5).nextString();
+        return new RandomString(3).nextString();
     }
 }

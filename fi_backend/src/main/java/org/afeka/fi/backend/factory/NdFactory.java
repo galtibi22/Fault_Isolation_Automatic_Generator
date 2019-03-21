@@ -5,9 +5,10 @@ import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.html.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
-
+@Component
 public class NdFactory extends ViewFactory<ND> {
      /**
       *      * <ND lbl="UAV SYSTEM"

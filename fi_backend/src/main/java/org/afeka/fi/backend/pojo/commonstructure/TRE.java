@@ -54,7 +54,10 @@ public class TRE
    // @GeneratedValue(strategy = GenerationType.IDENTITY)
     public String ID;
 
-  /*  public String getLnkCol0 ()
+    @XmlTransient
+    public String userEmail;
+
+    /*  public String getLnkCol0 ()
     {
         return lnkCol0;
     }

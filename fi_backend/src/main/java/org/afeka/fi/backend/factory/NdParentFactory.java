@@ -6,8 +6,10 @@ import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.html.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+@Component
 
 public class NdParentFactory extends ViewFactory<NdParent> {
 
