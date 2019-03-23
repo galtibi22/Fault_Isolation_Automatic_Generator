@@ -19,7 +19,8 @@ public class FiProperties extends FiCommon{
     public static void init() throws IOException {
         instance = new FiProperties();
         instance.setSystemEnv();
-        String fiPropPath=System.getProperty("user.dir")+"/fi_backend/src/main/resources/"+System.getProperty("env")+".properties";
+        String fiPropPath="C:\\Users\\eden.SPIDERSERVICES\\IdeaProjects\\Fault_Isolation_Automatic_Generator2\\fi_backend\\src\\main\\resources\\win.properties";
+        //System.getProperty("user.dir")+"/fi_backend/src/main/resources/"+System.getProperty("env")+".properties";
         try {
             InputStream input = new FileInputStream(fiPropPath);
             instance.prop.load(input);

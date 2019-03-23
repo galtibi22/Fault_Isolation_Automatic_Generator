@@ -14,7 +14,6 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Optional;
 
-
 @RequestMapping(path = "api/user")
 @RestController
 public class UserApi extends CommonApi {
@@ -62,6 +61,8 @@ public class UserApi extends CommonApi {
         }
         return new RedirectView("/app/dashboard.html");
     }*/
+
+    @CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
     @PostMapping(path="/login",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public GeneralResponse login(HttpServletRequest request) throws Exception {
         User user=securityCheck(request, Role.admin);

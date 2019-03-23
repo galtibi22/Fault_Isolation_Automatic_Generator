@@ -143,6 +143,10 @@ public class RepositoryService extends FiCommon {
         return treRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
+    public List<TRE> findTres() throws ResourceNotFoundException {
+        logger.called("findTres","","");
+        return treRepository.findAll();
+    }
 
 
 }

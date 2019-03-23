@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.List;
 
 @RequestMapping(path = "api/fronted")
 @RestController
@@ -77,6 +78,15 @@ public class FrontedApi extends CommonApi {
             return repositoryService.findTre(treId);
         } catch (ResourceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TRE with id +" + treId + " not found", e);
+        }
+    }
+    @GetMapping(value = "/tre/",headers = HttpHeaders.AUTHORIZATION)
+    public List<TRE> getTres(HttpServletRequest request) {
+        try {
+            securityCheck(request,Role.user);
+            return repositoryService.findTres();
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TRES", e);
         }
     }
 
