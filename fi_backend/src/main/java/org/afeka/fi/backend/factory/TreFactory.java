@@ -1,8 +1,9 @@
 package org.afeka.fi.backend.factory;
 
+import org.afeka.fi.backend.common.FiProperties;
 import org.afeka.fi.backend.common.Generator;
-import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.DataNotValidException;
+import org.afeka.fi.backend.html.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
 import org.springframework.stereotype.Component;
@@ -37,11 +38,11 @@ public class TreFactory extends ViewFactory <TRE> {
         view=new TRE();
         return v("0806").mxPgs("10").srch("111101").nLnkCols("3").lnkCol0("manNm").lnkCol0tl("Manual Name").lnkCol0w("30").lnkCol1("chpNm")
                 .lnkCol1tl("Chapter Name").lnkCol1w("30").lnkCol2("nm").lnkCol2tl("Target Name").lnkCol2w("40").fiRigid("0").prnt("000000").ful("1").
-                        ID(Generator.id()).userEmail(userName).get();
+                        ID(Generator.id()).userName(userName).get();
     }
 
-    private TreFactory userEmail(String userEmail) {
-        view.userEmail=userEmail;
+    private TreFactory userName(String userName) {
+        view.userName=userName;
         return this;
     }
 
@@ -144,6 +145,9 @@ public class TreFactory extends ViewFactory <TRE> {
             NdParentFactory ndParentFactory=new NdParentFactory();
             ndParentFactory.export(path,ndParent);
         }
+        HtmlGenerator htmlGenerator=new HtmlGenerator();
+        htmlGenerator.basicRootPage(tre.lbl,tre.des);
+        save(htmlGenerator.toHtml().renderFormatted(),path+ FiProperties.VIEW_DEMO_TRE_HTML_NAME);
     }
 
 /*    @Override

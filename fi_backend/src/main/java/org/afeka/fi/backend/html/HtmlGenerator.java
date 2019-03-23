@@ -98,14 +98,16 @@ public class HtmlGenerator extends FiCommon {
      *     onclick="toTreeNode('0:(IN)SH-06-7IAF_6.5_1:0');">Pedestal - MOTOR PWR Switch OFF</TD>
      *     </TR>
      */
-    public void ndDoc(String name,List<FI> fis){
+    public void ndDoc(String name,List<FI> fis,String des){
         head=ndDocHead();
         ContainerTag table=ndDocTable(fis);
         body=body(
                 img().
                         withClass("kmiImgToAnimate").
                         withStyle("position:absolute;z-index:99;width:0;height:0;left:0;top:0"),
-                h2(name),
+                h3(name),
+                br(),
+                h1(des),
                 table)
                 .attr("ondragstart","return(false);")
                 .attr("ondrop","return(false);");
@@ -165,6 +167,13 @@ public class HtmlGenerator extends FiCommon {
         head=ndDocHead();
         body=body(
             h2(lbl));
+    }
 
+    public void basicRootPage(String title,String des){
+        head=ndDocHead();
+        body=body(
+                h3(title),
+                br() ,
+                h1(des));
     }
 }

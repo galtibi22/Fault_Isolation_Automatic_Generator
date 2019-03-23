@@ -107,7 +107,7 @@ public class NdParentFactory extends ViewFactory<NdParent> {
               new NdFactory().export(path,nd);
          }
          HtmlGenerator htmlGenerator=new HtmlGenerator();
-         htmlGenerator.ndParentDoc(ndParent.lbl);
+         htmlGenerator.basicRootPage(ndParent.lbl,ndParent.des);
          save(htmlGenerator.toHtml().renderFormatted(),path+ndParent.doc);
      }
 

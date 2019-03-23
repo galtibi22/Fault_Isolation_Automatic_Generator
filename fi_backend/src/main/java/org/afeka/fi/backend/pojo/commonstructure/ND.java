@@ -31,6 +31,8 @@ public class ND
     public String v;
     @XmlAttribute(name="lbl")
     public String lbl;
+    @XmlTransient
+    public String des;
     @XmlAttribute(name="kd")
     public String kd;
     @XmlAttribute(name="newV")
@@ -72,6 +74,7 @@ public class ND
                 ", pd='" + pd + '\'' +
                 ", v='" + v + '\'' +
                 ", lbl='" + lbl + '\'' +
+                ", des='" + des + '\'' +
                 ", kd='" + kd + '\'' +
                 ", newV='" + newV + '\'' +
                 ", pdf='" + pdf + '\'' +

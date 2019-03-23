@@ -14,7 +14,7 @@ public class FiCommonTest {
     protected FiLogger logger = new FiLogger();
 
     @Before
-    public void init() throws IOException, JAXBException {
+    public void init() throws Exception {
         logger.info("Start init method from FiCommonTest");
         FiProperties.init();
     }

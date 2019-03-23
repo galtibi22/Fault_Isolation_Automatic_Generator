@@ -13,10 +13,20 @@ public class ViewCreateRequest {
 
     @Override
     public String toString() {
-        return "NdRequest{" + "lbl='" + lbl + '\'' + '}';
+        return "ViewCreateRequest{" + "lbl='" + lbl + '\'' + ", des='" + des + '\'' + '}';
+    }
+
+    public String getDes() {
+        return des;
+    }
+
+    public void setDes(String des) {
+        this.des = des;
     }
 
     @NotNull
     String lbl;
+    @NotNull
+    String des;
 
 }

@@ -16,18 +16,20 @@ public class FiProperties extends FiCommon{
      * @return
      * @throws IOException
      */
-    public static void init() throws IOException {
+    public static void init() throws Exception {
         instance = new FiProperties();
         instance.setSystemEnv();
-        String fiPropPath="C:\\Users\\eden.SPIDERSERVICES\\IdeaProjects\\Fault_Isolation_Automatic_Generator2\\fi_backend\\src\\main\\resources\\win.properties";
-        //System.getProperty("user.dir")+"/fi_backend/src/main/resources/"+System.getProperty("env")+".properties";
+        //String fiPropPath="C:\\Users\\eden.SPIDERSERVICES\\IdeaProjects\\Fault_Isolation_Automatic_Generator2\\fi_backend\\src\\main\\resources\\win.properties";
+       // String fiPropPath=System.getProperty("user.dir")+"/fi_backend/src/main/resources/"+System.getProperty("env")+".properties";
         try {
-            InputStream input = new FileInputStream(fiPropPath);
+            new FiLogger().called("loadProperties","fiProperties",System.getProperty("env")+".properties");
+            InputStream input = Thread.currentThread().getContextClassLoader().getResourceAsStream(System.getProperty("env")+".properties");
             instance.prop.load(input);
             instance.loadProps();
+            new FiLogger().info("fiProperties "+instance.prop);
         } catch (IOException io) {
             throw new IOException(String.format("Cannot find fi.properties in path=%s. The application cannot start without " +
-                    "the fi.properties file", fiPropPath));
+                    "the "+System.getProperty("env")+".properties file"));
         }
     }
 
@@ -37,17 +39,16 @@ public class FiProperties extends FiCommon{
 
     }
 
-    private void setSystemEnv() {
+    private void setSystemEnv() throws Exception {
         logger.info("start setSystemEnv method");
         String os=System.getProperty("os.name");
-        switch (os){
-            case ENV.MAC:
-                System.setProperty("env","mac");
-                return;
-            case ENV.WIN:
-                System.setProperty("env","win");
+        if (os.contains(ENV.MAC))
+            System.setProperty("env","mac");
+        else if (os.contains(ENV.WIN))
+            System.setProperty("env","win");
+       else
+           throw new Exception("Your os is not configure for the app. os "+os);
 
-        }
 
         logger.info("set env " +System.getProperty("env"));
 
@@ -62,6 +63,7 @@ public class FiProperties extends FiCommon{
     public static String FI_GENERATOR_CLIENT_PATH;
     public static String FI_GENERATOR_MODE;
     public static String WEBAPP_PATH;
+    public static String VIEW_DEMO_TRE_HTML_NAME="mainTre.html";
 
     private void loadProps() throws IOException {
         DATA_PATH = instance.getProperty("data.path").toString();
@@ -75,5 +77,6 @@ public class FiProperties extends FiCommon{
         WEBAPP_PATH=getProperty("webapp.path").toString();
 
     }
+
 
 }

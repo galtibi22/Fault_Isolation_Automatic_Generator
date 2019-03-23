@@ -5,6 +5,7 @@ import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.html.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
+import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
@@ -37,11 +38,11 @@ public class NdFactory extends ViewFactory<ND> {
       * pdf=""
       * pd="45">
       */
-     public ND newND(String lbl,String ndParentId){
-         logger.called("newND","ndParentId "+ndParentId+" lbl ",lbl);
+     public ND newND(ViewCreateRequest viewCreateRequest, String ndParentId){
+         logger.called("newND","ndParentId "+ndParentId+" viewCreateRequest ",viewCreateRequest);
          view=new ND();
-         return lbl(lbl).
-                 ID(lbl.replaceAll(" ","")+"_"+ Generator.id()).
+         return lbl(viewCreateRequest.getLbl()).
+                 ID(viewCreateRequest.getLbl().replaceAll(" ","")+"_"+ Generator.id()).
                  ndParentId(ndParentId).
                  typ("4").
                  kIdDsp("").
@@ -52,7 +53,7 @@ public class NdFactory extends ViewFactory<ND> {
                  v("-").
                  pdf("").
                  pd("60").
-                 doc(view.ID+"-chapter.html").get();
+                 doc(view.ID+"-chapter.html").des(viewCreateRequest.getDes()).get();
      }
 
 
@@ -61,6 +62,11 @@ public class NdFactory extends ViewFactory<ND> {
          view.ndParentId=ndParentId;
         return this;
      }
+
+    private NdFactory des(String des) {
+        view.des=des;
+        return this;
+    }
      private NdFactory lbl(String lbl){
          view.lbl=lbl;
           return this;
@@ -123,7 +129,7 @@ public class NdFactory extends ViewFactory<ND> {
          HtmlGenerator htmlGenerator=new HtmlGenerator();
          if (nd.FI.size()==0)
              throw new DataNotValidException("Cannot generate ndDoc for nd.fi.size()=0");
-         htmlGenerator.ndDoc(nd.lbl,nd.FI);
+         htmlGenerator.ndDoc(nd.lbl,nd.FI,nd.des);
          save(htmlGenerator.toHtml().renderFormatted(),path+nd.doc);
      }
 

@@ -52,7 +52,7 @@ public class FrontedApi extends CommonApi {
         try {
             securityCheck(request,Role.user);
             NdParent ndParent = repositoryService.findNdParent(ndParentId);
-            repositoryService.add(ndFactory.newND(viewCreateRequest.getLbl(), ndParentId));
+            repositoryService.add(ndFactory.newND(viewCreateRequest, ndParentId));
             return repositoryService.getNdParent(ndParentId);
         } catch (ResourceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NdParent with id +" + ndParentId + " not found", e);

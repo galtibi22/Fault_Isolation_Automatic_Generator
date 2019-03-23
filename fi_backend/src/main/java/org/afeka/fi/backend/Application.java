@@ -27,7 +27,7 @@ public class Application extends FiCommon {
     NdFactory ndFactory=new NdFactory();
     FiFactory fiFactory=new FiFactory();
 */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws Exception {
         FiProperties.init();
         SpringApplication.run(Application.class, args);
     }

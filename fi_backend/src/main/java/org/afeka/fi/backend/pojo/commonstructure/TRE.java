@@ -44,7 +44,10 @@ public class TRE
     public String lnkCol1tl;
     @XmlAttribute(name="lnkCol2tl")
     public String lnkCol2tl;
-
+    @XmlTransient
+    public String des;
+    @XmlTransient
+    public String lbl;
     @Transient
     @XmlElement(name="ND")
     public List<NdParent> ndParents=new ArrayList<NdParent>();
@@ -55,7 +58,7 @@ public class TRE
     public String ID;
 
     @XmlTransient
-    public String userEmail;
+    public String userName;
 
     /*  public String getLnkCol0 ()
     {
@@ -229,25 +232,7 @@ public class TRE
 
     @Override
     public String toString() {
-        return "TRE{" +
-                "lnkCol0='" + lnkCol0 + '\'' +
-                ", prnt='" + prnt + '\'' +
-                ", lnkCol0tl='" + lnkCol0tl + '\'' +
-                ", lnkCol2='" + lnkCol2 + '\'' +
-                ", lnkCol1='" + lnkCol1 + '\'' +
-                ", fiRigid='" + fiRigid + '\'' +
-                ", srch='" + srch + '\'' +
-                ", ful='" + ful + '\'' +
-                ", lnkCol2w='" + lnkCol2w + '\'' +
-                ", nLnkCols='" + nLnkCols + '\'' +
-                ", lnkCol1w='" + lnkCol1w + '\'' +
-                ", lnkCol0w='" + lnkCol0w + '\'' +
-                ", mxPgs='" + mxPgs + '\'' +
-                ", v='" + v + '\'' +
-                ", lnkCol1tl='" + lnkCol1tl + '\'' +
-                ", lnkCol2tl='" + lnkCol2tl + '\'' +
-                ", ndParents=" + ndParents +
-                '}';
+        return "TRE{" + "lnkCol0='" + lnkCol0 + '\'' + ", prnt='" + prnt + '\'' + ", lnkCol0tl='" + lnkCol0tl + '\'' + ", lnkCol2='" + lnkCol2 + '\'' + ", lnkCol1='" + lnkCol1 + '\'' + ", fiRigid='" + fiRigid + '\'' + ", srch='" + srch + '\'' + ", ful='" + ful + '\'' + ", lnkCol2w='" + lnkCol2w + '\'' + ", nLnkCols='" + nLnkCols + '\'' + ", lnkCol1w='" + lnkCol1w + '\'' + ", lnkCol0w='" + lnkCol0w + '\'' + ", mxPgs='" + mxPgs + '\'' + ", v='" + v + '\'' + ", lnkCol1tl='" + lnkCol1tl + '\'' + ", lnkCol2tl='" + lnkCol2tl + '\'' + ", des='" + des + '\'' + ", lbl='" + lbl + '\'' + ", ndParents=" + ndParents + ", ID='" + ID + '\'' + ", userName='" + userName + '\'' + '}';
     }
 }
 

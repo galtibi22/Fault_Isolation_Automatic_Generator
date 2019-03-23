@@ -63,7 +63,8 @@ public class NdParent
     @XmlTransient
     @Expose(serialize = false, deserialize = false)
     public ContainerTag htmlObject;
-
+    @XmlTransient
+    public String des;
     @Override
     public String toString() {
         return "ND{" +
@@ -71,6 +72,7 @@ public class NdParent
                 ", pd='" + pd + '\'' +
                 ", v='" + v + '\'' +
                 ", lbl='" + lbl + '\'' +
+                ", lbl='" + des + '\'' +
                 ", kd='" + kd + '\'' +
                 ", newV='" + newV + '\'' +
                 ", pdf='" + pdf + '\'' +
