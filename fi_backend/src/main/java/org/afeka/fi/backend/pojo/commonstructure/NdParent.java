@@ -40,7 +40,6 @@ public class NdParent
     public String pdf;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @XmlAttribute(name="ID")
     public String ID;
     @XmlAttribute(name="kIdDsp")

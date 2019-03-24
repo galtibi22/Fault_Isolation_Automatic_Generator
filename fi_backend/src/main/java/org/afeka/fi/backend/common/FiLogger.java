@@ -32,7 +32,9 @@ public class FiLogger extends LogManager {
     }
 
     public void called(String method, String with,Object... data) {
-        getLogger(getCallerClass()).info(method + " called with " + with+" "+ Arrays.toString(data));
+        if (!with.equals(""))
+            with="with "+with;
+        getLogger(getCallerClass()).info(method + " called " + with+" "+ Arrays.toString(data));
     }
 
 

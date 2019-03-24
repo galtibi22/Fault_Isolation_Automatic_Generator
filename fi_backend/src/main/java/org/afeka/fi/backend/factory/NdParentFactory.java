@@ -6,6 +6,7 @@ import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.html.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
+import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -22,13 +23,13 @@ public class NdParentFactory extends ViewFactory<NdParent> {
      * nPg="1"
      * doc="SEARCHER_MKII.html"
      * pic="SEARCHER_MKII.png" newV="0" v="-" pdf="" pd="0">
-     * @param lbl
      * @param treId
      */
-     public NdParent newNdParent(String lbl,String treId){
+     public NdParent newNdParent(ViewCreateRequest viewCreateRequest,String treId){
          view=new NdParent();
-         return lbl(lbl).
-                 ID(lbl.replaceAll(" ","")+"_"+ Generator.id()).
+         return lbl(viewCreateRequest.getLbl()).
+                 ID(viewCreateRequest.getLbl().replaceAll(" ","")+"_"+ Generator.id()).
+                 des(viewCreateRequest.getDes()).
                  typ("4").
                  kIdDsp("").
                  kd("1").
@@ -45,6 +46,10 @@ public class NdParentFactory extends ViewFactory<NdParent> {
     private NdParentFactory treId(String treId) {
          view.treId=treId;
          return this;
+    }
+    private NdParentFactory des(String des) {
+        view.des=des;
+        return this;
     }
 
 

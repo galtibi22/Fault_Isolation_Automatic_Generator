@@ -42,6 +42,7 @@ public class NdFactory extends ViewFactory<ND> {
          logger.called("newND","ndParentId "+ndParentId+" viewCreateRequest ",viewCreateRequest);
          view=new ND();
          return lbl(viewCreateRequest.getLbl()).
+                 des(viewCreateRequest.getDes()).
                  ID(viewCreateRequest.getLbl().replaceAll(" ","")+"_"+ Generator.id()).
                  ndParentId(ndParentId).
                  typ("4").

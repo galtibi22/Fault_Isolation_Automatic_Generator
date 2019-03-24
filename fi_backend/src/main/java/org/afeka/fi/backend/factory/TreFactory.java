@@ -6,6 +6,7 @@ import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.html.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
+import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
 import org.springframework.stereotype.Component;
 
 import javax.xml.bind.JAXBContext;
@@ -34,9 +35,9 @@ public class TreFactory extends ViewFactory <TRE> {
      * prnt="000000"
      * ful="1">
      */
-    public TRE newTRE(String userName){
+    public TRE newTRE(String userName, ViewCreateRequest viewCreateRequest){
         view=new TRE();
-        return v("0806").mxPgs("10").srch("111101").nLnkCols("3").lnkCol0("manNm").lnkCol0tl("Manual Name").lnkCol0w("30").lnkCol1("chpNm")
+        return v("0806").lbl(viewCreateRequest.getLbl()).des(viewCreateRequest.getDes()).mxPgs("10").srch("111101").nLnkCols("3").lnkCol0("manNm").lnkCol0tl("Manual Name").lnkCol0w("30").lnkCol1("chpNm")
                 .lnkCol1tl("Chapter Name").lnkCol1w("30").lnkCol2("nm").lnkCol2tl("Target Name").lnkCol2w("40").fiRigid("0").prnt("000000").ful("1").
                         ID(Generator.id()).userName(userName).get();
     }
@@ -127,6 +128,16 @@ public class TreFactory extends ViewFactory <TRE> {
 
     private TreFactory ful(String ful){
         view.ful=ful;
+        return this;
+    }
+
+    private TreFactory lbl(String lbl){
+        view.lbl=lbl;
+        return this;
+    }
+
+    private TreFactory des(String des){
+        view.des=des;
         return this;
     }
 

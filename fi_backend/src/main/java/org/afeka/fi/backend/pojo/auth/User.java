@@ -1,6 +1,9 @@
 package org.afeka.fi.backend.pojo.auth;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
 import org.afeka.fi.backend.validator.Email;
 import org.afeka.fi.backend.validator.Password;
@@ -39,6 +42,8 @@ public class User {
     @Expose
     @Password
     @Size(min = 8,max=15,message = "Password must be 8 - 15 characters long")
+    @JsonProperty( value = "password", access = JsonProperty.Access.WRITE_ONLY)
+    @SerializedName("password")
     public String password;
     @NotNull
     @Expose
@@ -66,8 +71,7 @@ public class User {
     public String toString() {
         return "User{" + "password='" + password + '\'' + ", role=" + role + ", firstName='" + firstName + '\'' + ", lastName='" + lastName + '\'' + ", userName='" + userName + '\'' + ", tres=" + tres + '}';
     }
-
-    public String getPassword() {
+/*    public String getPassword() {
         return password;
     }
 
@@ -114,6 +118,6 @@ public class User {
 
     public void setUserName(String userName) {
         this.userName = userName;
-    }
+    }*/
 
 }
