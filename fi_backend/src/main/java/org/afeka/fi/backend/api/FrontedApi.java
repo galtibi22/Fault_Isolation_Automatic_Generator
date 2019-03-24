@@ -12,6 +12,7 @@ import org.afeka.fi.backend.pojo.fiGenerator.FiGeneratorType;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -136,8 +137,54 @@ public class FrontedApi extends CommonApi {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "FI with id +" + fiId + " not found", e);
         }
     }
+    @DeleteMapping(value = "/fi/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    public ND deleteFi(HttpServletRequest request, @PathVariable String id) {
+        try {
+            logger.called("deleteFi","id",id);
+            securityCheck(request,Role.user);
+            return repositoryService.deleteFi(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }
+    }
+    @DeleteMapping(value = "/nd/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    public NdParent deleteNd(HttpServletRequest request, @PathVariable String id) {
+        try {
+            logger.called("deleteNd","id",id);
+            securityCheck(request,Role.user);
+            return repositoryService.deleteNd(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }
+    }
 
-
-
+    @DeleteMapping(value = "/ndparent/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    public TRE deleteNdParent(HttpServletRequest request, @PathVariable String id) {
+        try {
+            logger.called("deleteNdParent","id",id);
+            securityCheck(request,Role.user);
+            return repositoryService.deleteNdParent(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }
+    }
+    @DeleteMapping(value = "/tre/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    public List<TRE> deleteTre(HttpServletRequest request, @PathVariable String id) {
+        try {
+            logger.called("deleteTre","id",id);
+            securityCheck(request,Role.user);
+            return repositoryService.deleteTre(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }
+    }
 
 }

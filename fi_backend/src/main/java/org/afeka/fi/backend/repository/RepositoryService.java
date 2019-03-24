@@ -3,12 +3,14 @@ package org.afeka.fi.backend.repository;
 import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.DataFactoryNotFoundException;
+import org.afeka.fi.backend.exception.DeleteNotSuccessException;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
@@ -152,7 +154,40 @@ public class RepositoryService extends FiCommon {
         return tres;
     }
 
+    public ND deleteFi(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+        logger.called("deleteFi","id",id);
+        FI fiToDelete=getFi(id);
+        fiRepository.deleteById(id);
+        return getNd(fiToDelete.ndId);
 
+    }
+
+    public NdParent deleteNd(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+        logger.called("deleteNd","id",id);
+        ND ndToDelete=getNd(id);
+        for (FI fi:ndToDelete.FI)
+            deleteFi(fi.ID);
+        ndRepository.deleteById(id);
+        return getNdParent(ndToDelete.ndParentId);
+
+    }
+    public TRE deleteNdParent(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+        logger.called("deleteNdParent","id",id);
+        NdParent ndParentToDelete=getNdParent(id);
+        for (ND nd:ndParentToDelete.ND)
+            deleteNd(nd.ID);
+        ndParentRepository.deleteById(id);
+        return getTre(ndParentToDelete.treId);
+    }
+
+    public List<TRE> deleteTre(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+        logger.called("deleteNdParent","id",id);
+        TRE treToDelete=getTre(id);
+        for (NdParent ndParent:treToDelete.ndParents)
+            deleteNdParent(ndParent.ID);
+       treRepository.deleteById(id);
+       return getTres();
+    }
 }
 
 

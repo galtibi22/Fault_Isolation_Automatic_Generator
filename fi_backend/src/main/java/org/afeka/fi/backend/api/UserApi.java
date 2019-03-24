@@ -1,7 +1,5 @@
 package org.afeka.fi.backend.api;
 
-import com.sun.deploy.net.HttpResponse;
-import com.sun.org.apache.xpath.internal.XPathVisitable;
 import org.afeka.fi.backend.common.CommonApi;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
@@ -15,8 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpServletResponseWrapper;
 import java.util.List;
 import java.util.Optional;
 
