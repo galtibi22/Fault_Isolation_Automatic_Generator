@@ -98,30 +98,29 @@ def fiTaskYes(str, yesOption, noOption):
 
 
 def save_as_docx_win(path):
-    # Opening MS Word
-    word = win32.gencache.EnsureDispatch('Word.Application')
-    doc = word.Documents.Open(path)
-    doc.Activate ()
+        # Opening MS Word
+        word = win32.gencache.EnsureDispatch('Word.Application')
+        doc = word.Documents.Open(path)
+        doc.Activate ()
 
-    # Rename path with .docx
-    new_file_abs = os.path.abspath(path)
-    new_file_abs = re.sub(r'\.\w+$', '.docx', new_file_abs)
+        # Rename path with .docx
+        new_file_abs = os.path.abspath(path)
+        new_file_abs = re.sub(r'\.\w+$', '.docx', new_file_abs)
 
-    # Save and Close
-    word.ActiveDocument.SaveAs(
-        new_file_abs, FileFormat=constants.wdFormatXMLDocument
-    )
-    doc.Close(False)
-    return subprocess.call([SOFFICE_PATH, '--headless', '--convert-to', 'docx', path, path.replace("doc","docx")])
-    path=path.replace("doc","docx")
-    return path
+        # Save and Close
+        word.ActiveDocument.SaveAs(
+            new_file_abs, FileFormat=constants.wdFormatXMLDocument
+        )
+        doc.Close(False)
+
+        return new_file_abs
+
 
 def save_as_docx_mac(path):
     #print("path",path)
     SOFFICE_PATH='../../Office.app/Contents/MacOS/soffice'
     subprocess.call([SOFFICE_PATH, '--headless', '--convert-to', 'docx', path])
     f = open(path)
-    time.sleep(10)
     return os.path.basename(f.name).replace("doc","docx")
 
 
@@ -163,14 +162,15 @@ path = glob(args.source, recursive=True)
 
 
 if(path[0].endswith('docx')):
+    print([path[0]])
     document = Document(path[0])
 else:
     if (path[0].endswith('doc')):
         if (os.name == 'posix'):
             print("use save_as_docx_mac")
-            pathUrl=save_as_docx_mac(path[0])
+            pathUrl=[save_as_docx_mac(path[0])]
             print("pathUrl retrun from save_as_docx is ",pathUrl)
-            document = Document(save_as_docx_mac(pathUrl))
+            document = Document(pathUrl)
         else:
             print("use save_as_docx_win")
             document = Document(save_as_docx_win(path[0]))
