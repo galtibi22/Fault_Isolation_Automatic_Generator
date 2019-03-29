@@ -3,80 +3,7 @@ import re
 import sys
 import argparse
 from docx import Document
-
-# Method return to Step description and question from string
-def fiStepDescriptionQuestion(str):
-    htmlDataObj = {}
-    htmlDataObjAraay = []
-
-    arrDesQue = str.split('.')
-
-    if('?' not in str):
-        objDes = {'htmlType':'fiStpDsc', 'txt' : str}
-        htmlDataObjAraay.append(objDes)
-    else:
-        newDes = ""
-        for description in arrDesQue[:-1]:
-            newDes += description+"."
-        objDes = {'htmlType':'fiStpDsc', 'txt' : newDes}
-        htmlDataObjAraay.append(objDes)
-        objQue = {'fiStpQst':'fiStpDsc', 'txt' : arrDesQue[-1]}
-        htmlDataObjAraay.append(objQue)
-
-    htmlDataObj['htmlData'] = htmlDataObjAraay
-    return htmlDataObj
-
-
-# Method return description about FI flow
-def fiMainDescription(Header_Name, Header_Description):
-
-    FI_Descriptoin = ""
-    FI_Main_HTML_Data = []
-    FI_Main_HTML_Data_Obj = {}
-    FI_Main_HTML_Obj = {}
-
-    for i in range(1,4):
-        FI_Descriptoin += Header_Name[i] + ": " + Header_Description[i] + "\n"
-
-    FI_Main_HTML_Data_Obj['htmlType'] = 'fiTitle'
-    FI_Main_HTML_Data_Obj['txt'] = Header_Name[0] + ": " + Header_Description[0]
-    FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
-
-    FI_Main_HTML_Data_Obj = {}
-    FI_Main_HTML_Data_Obj['htmlType'] = 'fiStpDes'
-    FI_Main_HTML_Data_Obj['txt'] = FI_Descriptoin
-    FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
-
-    FI_Main_HTML_Obj['htmlData'] = FI_Main_HTML_Data
-
-    return FI_Main_HTML_Obj
-
-
-# Method return remove characters
-def removeCharsFunc(str):
-    for rchar in removeCharacters:
-        str = str.replace(rchar,'')
-    return removeRegexFunc(str)
-
-# Method return remove start characters with regex
-def removeRegexFunc(str):
-    return re.sub(r'(^ |^[0-9]{2}[A-Z])', '', str)
-
-
-# Method return Task Object to 'Y' (Yes option only)
-def fiTaskYes2(str, yesOption, noOption):
-    yesObj = {}
-
-    yesObj['to'] = removeCharsFunc(str)
-    yesObj['rtN'] = removeCharsFunc(noOption)
-    yesObj['msgRt'] = "1"
-    yesObj['typ'] = "1"
-    yesObj['msgRtIx'] = "0"
-    yesObj['tskNm'] = removeCharsFunc(str)
-    yesObj['rtY'] = removeCharsFunc(yesOption)
-
-    return yesObj
-
+import common_functions as cf
 
 #############################################################################################
 #############################################################################################
@@ -86,7 +13,6 @@ def fiTaskYes2(str, yesOption, noOption):
 #############################################################################################
 #############################################################################################
 
-removeCharacters = ['\n','\t','\u200e']
 FI_Label = True
 FI_Num = 0
 
@@ -126,7 +52,7 @@ for table in tables:
                         newNumberObj = {}
                         newNumberObj['n'] = str(FI_Num)
                         FI_Num+=1
-                        newNumberObj['htmlObj'] = fiMainDescription(FI_Txt_Header, FI_row)
+                        newNumberObj['htmlObj'] = cf.fiMainDescription(FI_Txt_Header, FI_row)
                         FI_Array.append(newNumberObj)
                         Number_Of_Actions = 0
 
@@ -144,9 +70,9 @@ for table in tables:
                                     newNumberObj['N'] = {'to' : str(FI_Num+1), 'typ' : '0'}
                                 else:
                                     # Task
-                                    newNumberObj['Y'] = fiTaskYes2(FI_row[i], str(Number_Of_Actions+1), str(FI_Num+1))
+                                    newNumberObj['Y'] = cf.fiTaskYes2(FI_row[i], str(Number_Of_Actions+1), str(FI_Num+1))
                                     newNumberObj['N'] = { 'typ' : '4' }
-                                newNumberObj['htmlObj'] = fiStepDescriptionQuestion(FI_Txt_Header[i] + ": " + FI_row[i])
+                                newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(FI_Txt_Header[i] + ": " + FI_row[i])
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
 
