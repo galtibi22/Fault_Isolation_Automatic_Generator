@@ -12,6 +12,7 @@ import time
 #from win32com.client import constants
 
 # Method check if string has Yes/No
+
 def checkYesNo(str):
     if (str == "Yes" or str == "yes" or str == "No" or str == "no"):
         return True
@@ -118,7 +119,8 @@ def save_as_docx_win(path):
 
 def save_as_docx_mac(path):
     #print("path",path)
-    SOFFICE_PATH='../../Office.app/Contents/MacOS/soffice'
+    #SOFFICE_PATH='../../Office.app/Contents/MacOS/soffice'
+    SOFFICE_PATH="C:\Program Files\LibreOffice\program\soffice.exe"
     subprocess.call([SOFFICE_PATH, '--headless', '--convert-to', 'docx', path])
     f = open(path)
     return os.path.basename(f.name).replace("doc","docx")
@@ -166,14 +168,16 @@ if(path[0].endswith('docx')):
     document = Document(path[0])
 else:
     if (path[0].endswith('doc')):
-        if (os.name == 'posix'):
+       # if (os.name == 'posix'):
             print("use save_as_docx_mac")
             pathUrl=[save_as_docx_mac(path[0])]
+            f=open(pathUrl[0])
+            f.close()
             print("pathUrl retrun from save_as_docx is ",pathUrl)
             document = Document(pathUrl)
-        else:
-            print("use save_as_docx_win")
-            document = Document(save_as_docx_win(path[0]))
+        #else:
+         #   print("use save_as_docx_win")
+          #  document = Document(save_as_docx_win(path[0]))
 
 
 FI_Array = []
