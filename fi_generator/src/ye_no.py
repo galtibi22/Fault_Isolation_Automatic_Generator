@@ -5,9 +5,11 @@ import sys
 import argparse
 import os
 import requests
+import subprocess
 from docx import Document
-import win32com.client as win32
-from win32com.client import constants
+import time
+#import win32com.client as win32
+#from win32com.client import constants
 
 # Method check if string has Yes/No
 def checkYesNo(str):
@@ -95,7 +97,7 @@ def fiTaskYes(str, yesOption, noOption):
     return yesObj
 
 
-def save_as_docx(path):
+def save_as_docx_win(path):
     # Opening MS Word
     word = win32.gencache.EnsureDispatch('Word.Application')
     doc = word.Documents.Open(path)
@@ -110,8 +112,17 @@ def save_as_docx(path):
         new_file_abs, FileFormat=constants.wdFormatXMLDocument
     )
     doc.Close(False)
+    return subprocess.call([SOFFICE_PATH, '--headless', '--convert-to', 'docx', path, path.replace("doc","docx")])
+    path=path.replace("doc","docx")
+    return path
 
-    return new_file_abs
+def save_as_docx_mac(path):
+    #print("path",path)
+    SOFFICE_PATH='../../Office.app/Contents/MacOS/soffice'
+    subprocess.call([SOFFICE_PATH, '--headless', '--convert-to', 'docx', path])
+    f = open(path)
+    time.sleep(10)
+    return os.path.basename(f.name).replace("doc","docx")
 
 
 
@@ -150,11 +161,19 @@ path = glob(args.source, recursive=True)
 
 # path = glob('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\test\\DOC-Left-Wagon.doc', recursive=True)
 
+
 if(path[0].endswith('docx')):
     document = Document(path[0])
 else:
     if (path[0].endswith('doc')):
-        document = Document(save_as_docx(path[0]))
+        if (os.name == 'posix'):
+            print("use save_as_docx_mac")
+            pathUrl=save_as_docx_mac(path[0])
+            print("pathUrl retrun from save_as_docx is ",pathUrl)
+            document = Document(save_as_docx_mac(pathUrl))
+        else:
+            print("use save_as_docx_win")
+            document = Document(save_as_docx_win(path[0]))
 
 
 FI_Array = []
