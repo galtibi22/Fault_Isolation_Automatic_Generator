@@ -1,6 +1,8 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.annotations.Expose;
 import j2html.tags.ContainerTag;
 import org.afeka.fi.backend.common.Helpers;
@@ -15,8 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-//@Table(name="FI")
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class FI
 {
     public FI(){
@@ -88,8 +89,7 @@ public class FI
     public String ndId;
     @Transient
     @XmlTransient
-
-    @Expose(serialize = true, deserialize = true)
+    @Expose(serialize = false, deserialize = false)
     public ContainerTag htmlObject;
     @Transient
     @XmlTransient

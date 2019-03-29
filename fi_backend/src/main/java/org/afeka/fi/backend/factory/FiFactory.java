@@ -39,7 +39,7 @@ public class FiFactory extends ViewFactory<FI> {
         view=new FI();
         logger.called("newFI","ndId "+ndId+" pgs ",pgs);
         return findFiLbl(pgs.get(0).htmlObj).
-                ID(view.lbl.replaceAll(" ","")+"_"+ Generator.id()).
+                ID(view.lbl.replaceAll("\"[\\\\-\\\\+\\\\.\\\\^:,]\",\"\"","").replaceAll(" ","")+"_"+ Generator.id()).
                 type("10").kd("0").
                 doc(pgs.get(0).htmlObj).
                 pgs(pgs.subList(1,pgs.size())).

@@ -1,10 +1,11 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.annotations.Expose;
 import j2html.tags.ContainerTag;
 
 import java.util.Arrays;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class HtmlObj {
 
     @Expose(serialize = true, deserialize = true)

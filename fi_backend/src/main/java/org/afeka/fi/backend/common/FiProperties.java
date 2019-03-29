@@ -2,7 +2,6 @@ package org.afeka.fi.backend.common;
 
 import org.afeka.fi.backend.pojo.internal.ENV;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -64,6 +63,7 @@ public class FiProperties extends FiCommon{
     public static String FI_GENERATOR_MODE;
     public static String WEBAPP_PATH;
     public static String VIEW_DEMO_TRE_HTML_NAME="mainTre.html";
+    public static String PYTHON_COMMAND_START;
 
     private void loadProps() throws IOException {
         DATA_PATH = instance.getProperty("data.path").toString();
@@ -73,6 +73,8 @@ public class FiProperties extends FiCommon{
         ABBY_DLL_PATH=instance.getProperty("abby.dll.path").toString();
         ABBY_PROJECTID=instance.getProperty("abby.projectId").toString();
         FI_GENERATOR_CLIENT_PATH=getProperty("fiGenerator.client.path").toString();
+        PYTHON_COMMAND_START =getProperty("fiGenerator.python.start").toString();
+
         FI_GENERATOR_MODE= getProperty("fiGenerator.mode").toString();
         WEBAPP_PATH=getProperty("webapp.path").toString();
 

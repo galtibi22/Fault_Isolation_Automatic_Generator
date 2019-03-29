@@ -18,10 +18,11 @@ public class FiGeneratorApi extends CommonApi {
     @PostMapping(path="/new/{id}", produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
 
     public GeneralResponse newFis(HttpServletRequest request,@PathVariable String id, @RequestBody FI[] fis) throws Exception {
+        logger.called("newFis post request","ndId",id);
         securityCheck(request, Role.generator);
         ND nd=repositoryService.getNd(id);
         for (FI fi:fis){
-            fiFactory.newFI(fi.PG,id);
+            fi=fiFactory.newFI(fi.PG,id);
             repositoryService.add(fi);
         }
         return new GeneralResponse("success to add "+fis.length+ " fis to ndId="+id);

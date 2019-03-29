@@ -1,11 +1,15 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.annotations.Expose;
 import org.afeka.fi.backend.exception.DataNotValidException;
 
 import javax.xml.bind.annotation.XmlAttribute;
 
+
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class YN
 {
 
@@ -45,7 +49,7 @@ public class YN
 
     public void setRtN (String rtN) throws DataNotValidException {
         try{
-            if (!rtN.isEmpty())
+            if (!rtN.isEmpty() && !rtN.equals("-"))
                 Integer.parseInt(rtN);
             this.rtN = rtN;
         }catch (Exception e){
@@ -124,7 +128,7 @@ public class YN
 
     public void setRtY (String rtY) throws DataNotValidException {
         try{
-            if (!rtY.isEmpty())
+            if (!rtY.isEmpty()&& !rtN.equals("-"))
                 Integer.parseInt(rtY);
             this.rtY = rtY;
         }catch (Exception e){

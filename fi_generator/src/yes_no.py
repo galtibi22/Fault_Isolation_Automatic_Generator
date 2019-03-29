@@ -41,7 +41,6 @@ path = glob(args.source, recursive=True)
 
 
 if(path[0].endswith('docx')):
-    print([path[0]])
     document = Document(path[0])
 else:
     if (path[0].endswith('doc')):
@@ -119,10 +118,13 @@ FI_Num+=1
 FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiPosEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
 
 
-f= open(args.result,"w+")
-jsonrequest = "{\"PG\":"+json.dumps(FI_Array, indent=4, sort_keys=True)+"}"
-f.write(jsonrequest)
-print(jsonrequest)
-
-cf.post_api_server(glob(args.result, recursive=True), jsonrequest)
+#f= open(args.result,"w+")
+fi={
+    'PG':FI_Array
+}
+fis=[fi]
+#jsonrequest = ["{\"PG\":"+json.dumps(FI_Array, indent=4, sort_keys=True)+"}"]
+#f.write(jsonrequest)
+#print(jsonrequest)
+cf.post_api_server(args.result, fis)
 

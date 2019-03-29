@@ -2,12 +2,14 @@ package org.afeka.fi.backend.pojo.commonstructure;
 
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import javax.annotation.Generated;
 import javax.persistence.*;
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 @XmlRootElement(name = "TRE")
 public class TRE

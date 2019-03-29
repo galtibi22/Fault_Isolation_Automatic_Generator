@@ -1,5 +1,6 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.annotations.Expose;
 import j2html.tags.ContainerTag;
 
@@ -13,7 +14,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @XmlRootElement(name = "ND")
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 @Entity
 public class NdParent
 {

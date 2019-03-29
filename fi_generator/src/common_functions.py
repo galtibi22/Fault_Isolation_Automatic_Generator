@@ -173,12 +173,10 @@ def save_as_docx_mac(path):
 
 
 
-def post_api_server(uri, jsondata):
+def post_api_server(id, jsondata):
     # defining the api-endpoint
-    API_ENDPOINT = "http://127.0.0.1/api/figenerator/new/"
-
-    headers = {
-        'content-type' : "application/json",
-        'Authorization' : "Basic ZmlnZW5lcmF0b3I6QWExMjM0NTY="
-    }
-    r = requests.post(API_ENDPOINT+uri, data = jsondata, headers = headers)
+    API_ENDPOINT = "http://127.0.0.1:8080/api/figenerator/new/"+id
+    headers = { 'content-type' : 'application/json', 'Authorization' : 'Basic ZmlnZW5lcmF0b3I6QWExMjM0NTY='}
+    print("send fi","to",API_ENDPOINT,"with headers",headers)
+    r=requests.post(API_ENDPOINT,data=json.dumps(jsondata),headers = headers)
+    print(r)

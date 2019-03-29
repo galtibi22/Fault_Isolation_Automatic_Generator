@@ -15,9 +15,9 @@ public class FiGeneratorClientLocal implements FiGeneratorClientInterface {
     public void runFiGenerator(MultipartFile fiDoc, FiGeneratorType fiGeneratorType, String ndId) throws IOException {
         logger.called("runFiGeneratorLocal","type",fiGeneratorType);
         String path= FiProperties.FI_GENERATOR_CLIENT_PATH;
-        String fiDocPath=path+ndId+fiDoc.getName();
+        String fiDocPath=path+ndId+fiDoc.getOriginalFilename();
         Helpers.saveFile(fiDocPath,fiDoc);
-        String command = String.format("python %s %s %s",path+fiGeneratorType+".py",fiDocPath,ndId);
+        String command = String.format(FiProperties.PYTHON_COMMAND_START+" %s %s %s",path+fiGeneratorType+".py",fiDocPath,ndId);
         logger.called("fiGeneratorLocal","command",command);
         Process p = Runtime.getRuntime().exec(command);
 
