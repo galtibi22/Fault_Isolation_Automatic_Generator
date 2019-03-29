@@ -45,7 +45,8 @@ public class YN
 
     public void setRtN (String rtN) throws DataNotValidException {
         try{
-            Integer.parseInt(rtN);
+            if (!rtN.isEmpty())
+                Integer.parseInt(rtN);
             this.rtN = rtN;
         }catch (Exception e){
             throw new DataNotValidException("YN.rtN can be only Integer");
@@ -123,7 +124,8 @@ public class YN
 
     public void setRtY (String rtY) throws DataNotValidException {
         try{
-            Integer.parseInt(rtY);
+            if (!rtY.isEmpty())
+                Integer.parseInt(rtY);
             this.rtY = rtY;
         }catch (Exception e){
             throw new DataNotValidException("YN.rtY can be only Integer");

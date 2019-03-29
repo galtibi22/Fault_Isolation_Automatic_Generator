@@ -132,7 +132,8 @@ def post_api_server(uri, jsondata):
     API_ENDPOINT = "http://127.0.0.1/api/figenerator/new/"
 
     headers = {
-        'content-type' : "application/json"
+        'content-type' : "application/json",
+        'Authorization' : "Basic ZmlnZW5lcmF0b3I6QWExMjM0NTY="
     }
     r = requests.post(API_ENDPOINT+uri, data = jsondata, headers = headers)
 
@@ -173,7 +174,6 @@ else:
             pathUrl=[save_as_docx_mac(path[0])]
             f=open(pathUrl[0])
             f.close()
-            print("pathUrl retrun from save_as_docx is ",pathUrl)
             document = Document(pathUrl)
         #else:
          #   print("use save_as_docx_win")
