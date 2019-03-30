@@ -14,6 +14,11 @@ import java.util.List;
 @XmlRootElement(name = "TRE")
 public class TRE
 {
+    public TRE(){
+    }
+    public TRE(String userName){
+        this.userName=userName;
+    }
     @XmlAttribute(name="lnkCol0")
     public String lnkCol0;
     @XmlAttribute(name="prnt")

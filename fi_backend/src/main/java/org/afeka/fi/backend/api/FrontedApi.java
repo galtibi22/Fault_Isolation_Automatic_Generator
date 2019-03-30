@@ -97,8 +97,8 @@ public class FrontedApi extends CommonApi {
     public List<TRE> getTres(HttpServletRequest request) {
         try {
             logger.called("getTres","","");
-            securityCheck(request,Role.user);
-            return repositoryService.getTres();
+            User user=securityCheck(request,Role.user);
+            return repositoryService.getTres(user);
         } catch (ResourceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TRES", e);
         }
@@ -178,8 +178,8 @@ public class FrontedApi extends CommonApi {
     public List<TRE> deleteTre(HttpServletRequest request, @PathVariable String id) {
         try {
             logger.called("deleteTre","id",id);
-            securityCheck(request,Role.user);
-            return repositoryService.deleteTre(id);
+            User user=securityCheck(request,Role.user);
+            return repositoryService.deleteTre(id,user);
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
         } catch (ResourceNotFoundException e) {

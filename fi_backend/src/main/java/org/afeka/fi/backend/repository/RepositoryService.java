@@ -2,9 +2,8 @@ package org.afeka.fi.backend.repository;
 
 import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.common.Helpers;
-import org.afeka.fi.backend.exception.DataFactoryNotFoundException;
-import org.afeka.fi.backend.exception.DeleteNotSuccessException;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
+import org.afeka.fi.backend.pojo.auth.User;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
@@ -145,9 +144,9 @@ public class RepositoryService extends FiCommon {
         return treRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
     }
 
-    public List<TRE> getTres() throws ResourceNotFoundException {
+    public List<TRE> getTres(User user) throws ResourceNotFoundException {
         logger.called("getTres","","");
-        List<TRE> tres=treRepository.findAll();
+        List<TRE> tres=treRepository.findAll(Example.of(new TRE(user.userName)));
         for (TRE tre:tres){
             tre=getTre(tre.ID);
         }
@@ -180,13 +179,13 @@ public class RepositoryService extends FiCommon {
         return getTre(ndParentToDelete.treId);
     }
 
-    public List<TRE> deleteTre(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+    public List<TRE> deleteTre(String id,User user) throws EmptyResultDataAccessException, ResourceNotFoundException {
         logger.called("deleteNdParent","id",id);
         TRE treToDelete=getTre(id);
         for (NdParent ndParent:treToDelete.ndParents)
             deleteNdParent(ndParent.ID);
        treRepository.deleteById(id);
-       return getTres();
+       return getTres(user);
     }
 }
 
