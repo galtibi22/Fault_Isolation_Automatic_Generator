@@ -26,4 +26,3 @@ def save_as_docx(path):
 path = glob('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\test\\*.doc', recursive=True)
 print(path[0])
 save_as_docx(path[0])
-
