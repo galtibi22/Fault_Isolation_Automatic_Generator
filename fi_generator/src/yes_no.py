@@ -29,30 +29,11 @@ FI_Label = True
 FI_Descriptoin = ""
 FI_Num = 0
 
-parser = argparse.ArgumentParser()
-parser.add_argument("source")
-parser.add_argument("result")
-args = parser.parse_args()
-path = glob(args.source, recursive=True)
-# document = Document(args.source)
 
 
-# path = glob('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\test\\DOC-Left-Wagon.doc', recursive=True)
-
-
-if(path[0].endswith('docx')):
-    document = Document(path[0])
-else:
-    if (path[0].endswith('doc')):
-       # if (os.name == 'posix'):
-            print("use save_as_docx_mac")
-            pathUrl=[cf.save_as_docx_mac(path[0])]
-            f=open(pathUrl[0])
-            f.close()
-            document = Document(pathUrl)
-        #else:
-         #   print("use save_as_docx_win")
-          #  document = Document(save_as_docx_win(path[0]))
+path=cf.init()
+pathUrl=cf.generate_fi_doc_path(path[0])
+document = Document(pathUrl)
 
 
 FI_Array = []
@@ -118,13 +99,9 @@ FI_Num+=1
 FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiPosEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
 
 
-#f= open(args.result,"w+")
-fi={
+fis=[{
     'PG':FI_Array
-}
-fis=[fi]
-#jsonrequest = ["{\"PG\":"+json.dumps(FI_Array, indent=4, sort_keys=True)+"}"]
-#f.write(jsonrequest)
-#print(jsonrequest)
-cf.post_api_server(args.result, fis)
+}]
+os.remove(pathUrl)
+cf.post_api_server(cf.args.result, fis)
 

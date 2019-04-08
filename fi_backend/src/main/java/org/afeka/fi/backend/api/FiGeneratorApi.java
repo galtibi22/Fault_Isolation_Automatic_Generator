@@ -1,6 +1,7 @@
 package org.afeka.fi.backend.api;
 
 import org.afeka.fi.backend.common.CommonApi;
+import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
@@ -14,11 +15,30 @@ import javax.servlet.http.HttpServletRequest;
 @RestController
 public class FiGeneratorApi extends CommonApi {
 
+/*
 
     @PostMapping(path="/new/{id}", produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
 
     public GeneralResponse newFis(HttpServletRequest request,@PathVariable String id, @RequestBody FI[] fis) throws Exception {
+        logger.debug("call newFis api with request"+request.toString());
         logger.called("newFis post request","ndId",id);
+        securityCheck(request, Role.generator);
+        ND nd=repositoryService.getNd(id);
+        for (FI fi:fis){
+            fi=fiFactory.newFI(fi.PG,id);
+            repositoryService.add(fi);
+        }
+        return new GeneralResponse("success to add "+fis.length+ " fis to ndId="+id);
+    }
+*/
+
+    @PostMapping(path="/new/{id}", produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
+
+    public GeneralResponse newFis(HttpServletRequest request,@PathVariable String id, @RequestBody String str) throws Exception {
+        logger.debug("call newFis api with request"+request.toString());
+        logger.called("newFis post request","ndId",id);
+        FI[]fis=new FI[1];
+        fis=Helpers.initGson().fromJson(str,fis.getClass());
         securityCheck(request, Role.generator);
         ND nd=repositoryService.getNd(id);
         for (FI fi:fis){

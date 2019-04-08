@@ -4,6 +4,7 @@ import sys
 import argparse
 from docx import Document
 import common_functions as cf
+import os
 
 #############################################################################################
 #############################################################################################
@@ -24,7 +25,9 @@ FI_Txt_Header_Exist = False
 # args = parser.parse_args()
 # document = Document(args.file)
 
-document = Document('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\DOC-Troubleshooting_table_testing.docx')
+path=cf.init()
+pathUrl=cf.generate_fi_doc_path(path[0])
+document = Document(pathUrl)
 
 FI_Array_List = []
 FI_Array = []
@@ -83,9 +86,11 @@ for table in tables:
                         FI_Num += 1
                         FI_Array.append({"n": str(FI_Num), "htmlObj": {"htmlData": [{"htmlType": "fiPosEnd"}]},
                                          "N": {"typ": "4"}, "Y": {"typ": "4"}})
-                        FI_Array_List.append(FI_Array)
+                        FI={"PG":FI_Array}
+                        FI_Array_List.append(FI)
                         FI_Array = []
 
 
-
-print(json.dumps(FI_Array_List, indent=4, sort_keys=True))
+os.remove(pathUrl)
+cf.post_api_server(cf.args.result, FI_Array_List)
+#print(json.dumps(FI_Array_List, indent=4, sort_keys=True))

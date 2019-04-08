@@ -83,7 +83,7 @@ public class FI
     @Expose(serialize = true,deserialize = true)
     @XmlElement(name="PG")
     public List<PG> PG;//=new ArrayList();
-    @Transient
+    //@Transient
     @XmlTransient
     @Expose(serialize = true, deserialize = true)
     public String ndId;

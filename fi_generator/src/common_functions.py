@@ -8,7 +8,7 @@ import requests
 import subprocess
 import time
 from docx import Document
-
+from shutil import copyfile
 
 # Method check if string has Yes/No
 def checkYesNo(str):
@@ -58,7 +58,7 @@ def fiMainDescription(Header_Name, Header_Description):
     FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
 
     FI_Main_HTML_Data_Obj = {}
-    FI_Main_HTML_Data_Obj['htmlType'] = 'fiStpDes'
+    FI_Main_HTML_Data_Obj['htmlType'] = 'fiStpDsc'
     FI_Main_HTML_Data_Obj['txt'] = FI_Descriptoin
     FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
 
@@ -165,11 +165,18 @@ def save_as_docx_win(path):
 
 def save_as_docx_mac(path):
     #print("path",path)
-    #SOFFICE_PATH='../../Office.app/Contents/MacOS/soffice'
-    SOFFICE_PATH="C:\Program Files\LibreOffice\program\soffice.exe"
+    SOFFICE_PATH='/Users/gal.tibi/afekaProjects/Fault_Isolation_Automatic_Generator/Contents/MacOS/soffice'
+    #SOFFICE_PATH="C:\Program Files\LibreOffice\program\soffice.exe"
     subprocess.call([SOFFICE_PATH, '--headless', '--convert-to', 'docx', path])
     f = open(path)
-    return os.path.basename(f.name).replace("doc","docx")
+    name=os.path.basename(f.name).replace("doc","docx")
+    f.close()
+    os.remove(path)
+    newPath=path.replace("doc","docx")
+    copyfile(name,newPath)
+    os.remove(name)
+    print("finish to convert doc to docx source path=",path,"result path=",newPath)
+    return newPath
 
 
 
@@ -177,6 +184,29 @@ def post_api_server(id, jsondata):
     # defining the api-endpoint
     API_ENDPOINT = "http://127.0.0.1:8080/api/figenerator/new/"+id
     headers = { 'content-type' : 'application/json', 'Authorization' : 'Basic ZmlnZW5lcmF0b3I6QWExMjM0NTY='}
-    print("send fi","to",API_ENDPOINT,"with headers",headers)
+    print("send fi","to",API_ENDPOINT,"with headers",headers,"data",jsondata)
     r=requests.post(API_ENDPOINT,data=json.dumps(jsondata),headers = headers)
     print(r)
+
+def generate_fi_doc_path(path):
+    pathUrl=""
+    if(path.endswith('docx')):
+        pathUrl=path
+    else:
+        if (path.endswith('doc')):
+            if (os.name == 'posix'):
+                print("use save_as_docx_mac")
+                pathUrl=save_as_docx_mac(path)
+        else:
+            print("use save_as_docx_win")
+            pathUrl=save_as_docx_win(path)
+    return pathUrl
+
+def init():
+    global args
+    parser = argparse.ArgumentParser()
+    parser.add_argument("source")
+    parser.add_argument("result")
+    args = parser.parse_args()
+    path = glob(args.source, recursive=True)
+    return path
