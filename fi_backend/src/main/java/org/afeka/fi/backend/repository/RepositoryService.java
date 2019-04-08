@@ -153,39 +153,39 @@ public class RepositoryService extends FiCommon {
         return tres;
     }
 
-    public ND deleteFi(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+    public void deleteFi(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
         logger.called("deleteFi","id",id);
         FI fiToDelete=getFi(id);
         fiRepository.deleteById(id);
-        return getNd(fiToDelete.ndId);
+       // return getNd(fiToDelete.ndId);
 
     }
 
-    public NdParent deleteNd(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+    public void deleteNd(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
         logger.called("deleteNd","id",id);
         ND ndToDelete=getNd(id);
         for (FI fi:ndToDelete.FI)
             deleteFi(fi.ID);
         ndRepository.deleteById(id);
-        return getNdParent(ndToDelete.ndParentId);
+       // return getNdParent(ndToDelete.ndParentId);
 
     }
-    public TRE deleteNdParent(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+    public void deleteNdParent(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
         logger.called("deleteNdParent","id",id);
         NdParent ndParentToDelete=getNdParent(id);
         for (ND nd:ndParentToDelete.ND)
             deleteNd(nd.ID);
         ndParentRepository.deleteById(id);
-        return getTre(ndParentToDelete.treId);
+       // return getTre(ndParentToDelete.treId);
     }
 
-    public List<TRE> deleteTre(String id,User user) throws EmptyResultDataAccessException, ResourceNotFoundException {
+    public void deleteTre(String id,User user) throws EmptyResultDataAccessException, ResourceNotFoundException {
         logger.called("deleteNdParent","id",id);
         TRE treToDelete=getTre(id);
         for (NdParent ndParent:treToDelete.ndParents)
             deleteNdParent(ndParent.ID);
        treRepository.deleteById(id);
-       return getTres(user);
+      // return getTres(user);
     }
 }
 

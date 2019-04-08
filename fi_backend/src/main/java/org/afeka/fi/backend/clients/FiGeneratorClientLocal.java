@@ -20,6 +20,13 @@ public class FiGeneratorClientLocal implements FiGeneratorClientInterface {
         String command = String.format(FiProperties.PYTHON_COMMAND_START+" %s %s %s",path+fiGeneratorType+".py",fiDocPath,ndId);
         logger.called("fiGeneratorLocal","command",command);
         Process p = Runtime.getRuntime().exec(command);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        logger.info("fiGeneratorLocal results:"+Helpers.inputStreamToString(p.getInputStream()));
+        logger.error("fiGeneratorLocal results error:"+Helpers.inputStreamToString(p.getErrorStream()));
 
 
     }

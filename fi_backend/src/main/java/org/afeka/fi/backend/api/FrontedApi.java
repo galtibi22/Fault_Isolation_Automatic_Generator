@@ -142,7 +142,9 @@ public class FrontedApi extends CommonApi {
         try {
             logger.called("deleteFi","id",id);
             securityCheck(request,Role.user);
-            return repositoryService.deleteFi(id);
+            String parentId=repositoryService.findFI(id).ndId;
+            repositoryService.deleteFi(id);
+            return repositoryService.getNd(parentId);
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
         } catch (ResourceNotFoundException e) {
@@ -154,7 +156,9 @@ public class FrontedApi extends CommonApi {
         try {
             logger.called("deleteNd","id",id);
             securityCheck(request,Role.user);
-            return repositoryService.deleteNd(id);
+            String parentId=repositoryService.findNd(id).ndParentId;
+            repositoryService.deleteNd(id);
+            return repositoryService.getNdParent(parentId);
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
         } catch (ResourceNotFoundException e) {
@@ -167,7 +171,9 @@ public class FrontedApi extends CommonApi {
         try {
             logger.called("deleteNdParent","id",id);
             securityCheck(request,Role.user);
-            return repositoryService.deleteNdParent(id);
+            String parentId=repositoryService.findNdParent(id).treId;
+            repositoryService.deleteNdParent(id);
+            return repositoryService.getTre(parentId);
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
         } catch (ResourceNotFoundException e) {
@@ -179,7 +185,8 @@ public class FrontedApi extends CommonApi {
         try {
             logger.called("deleteTre","id",id);
             User user=securityCheck(request,Role.user);
-            return repositoryService.deleteTre(id,user);
+            repositoryService.deleteTre(id,user);
+            return repositoryService.getTres(user);
         } catch (EmptyResultDataAccessException e) {
             throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
         } catch (ResourceNotFoundException e) {
