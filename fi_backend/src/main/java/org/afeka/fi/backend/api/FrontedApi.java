@@ -1,6 +1,7 @@
 package org.afeka.fi.backend.api;
 
 import org.afeka.fi.backend.common.CommonApi;
+import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.FileNotSupportExption;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
 import org.afeka.fi.backend.pojo.auth.Role;
@@ -191,6 +192,65 @@ public class FrontedApi extends CommonApi {
             throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
         } catch (ResourceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage());
+        }
+    }
+
+
+    @PutMapping(value = "/fi/{fiId}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    public FI updateFi(HttpServletRequest request, @RequestBody FI fi, @PathVariable String fiId) {
+        try {
+            securityCheck(request, Role.user);
+            logger.called("updateFi", "FI",fi);
+            repositoryService.findFI(fiId);
+            FI fiUpdated=repositoryService.updateFi(fi);
+            return Helpers.initGson().fromJson(fiUpdated.fiJson,FI.class);
+
+        }catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Cannot find FI with id "+fiId,e);
+        }
+    }
+
+    @PutMapping(value = "/nd/{ndId}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    public ND updateND(HttpServletRequest request, @RequestBody ND nd, @PathVariable String ndId) {
+        try {
+            securityCheck(request, Role.user);
+            logger.called("updateND", "ND",nd);
+            repositoryService.findNd(ndId);
+            return repositoryService.updateND(nd);
+        }catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Cannot find FI with id "+ndId,e);
+        }
+    }
+
+    @PutMapping(value = "/ndparent/{ndparentId}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    public NdParent updateNdParent(HttpServletRequest request, @RequestBody NdParent ndParent, @PathVariable String ndparentId) {
+        try {
+            securityCheck(request, Role.user);
+            logger.called("updateNdParent", "ndParent",ndParent);
+            repositoryService.findNdParent(ndparentId);
+            return repositoryService.updateNdParent(ndParent);
+        }catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Cannot find ndparent with id "+ndparentId,e);
+        }
+    }
+
+    @PutMapping(value = "/tre/{treId}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    public TRE updateTre(HttpServletRequest request, @RequestBody TRE tre, @PathVariable String treId) {
+        try {
+            securityCheck(request, Role.user);
+            logger.called("updateTre", "tre",tre);
+            repositoryService.findTre(treId);
+            return repositoryService.updateTre(tre);
+        }catch (EmptyResultDataAccessException e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_FAILURE, e.getMessage());
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"Cannot find tre with id "+treId,e);
         }
     }
 

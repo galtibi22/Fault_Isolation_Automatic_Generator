@@ -187,6 +187,27 @@ public class RepositoryService extends FiCommon {
        treRepository.deleteById(id);
       // return getTres(user);
     }
+
+    public FI updateFi(FI fi) throws ResourceNotFoundException {
+        logger.called("updateFi","fi",fi);
+        fi.fiJson=Helpers.initGson().toJson(fi);
+        return fiRepository.save(fi);
+    }
+
+    public ND updateND(ND nd) throws ResourceNotFoundException {
+        logger.called("updateND","nd",nd);
+        return ndRepository.save(nd);
+    }
+
+    public NdParent updateNdParent(NdParent ndParent) throws ResourceNotFoundException {
+        logger.called("updateNdParent","ndParent",ndParent);
+        return ndParentRepository.save(ndParent);
+    }
+
+    public TRE updateTre(TRE tre) throws ResourceNotFoundException {
+        logger.called("updateTre","tre",tre);
+        return treRepository.save(tre);
+    }
 }
 
 
