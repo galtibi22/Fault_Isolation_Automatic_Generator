@@ -100,7 +100,8 @@ FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fi
 
 
 fis=[{
-    'PG':FI_Array
+    'PG':FI_Array,
+    "status":"success"
 }]
 os.remove(pathUrl)
 cf.post_api_server(cf.args.result,cf.args.fiDocId,fis)

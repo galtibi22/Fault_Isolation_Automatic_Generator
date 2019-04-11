@@ -13,27 +13,32 @@ import java.util.List;
 
 @Component
 public class FiFactory extends ViewFactory<FI> {
-    public FI newFI(List<PG> pgs,String ndId,Long fiDocId) throws DataFactoryNotFoundException {
+    public FI newFI(FI fiSource,String ndId,Long fiDocId) throws DataFactoryNotFoundException {
         view=new FI();
-        logger.called("newFI","ndId "+ndId+" pgs ",pgs);
-        PG pgZero=pgs.stream().filter(pgi -> pgi._n.equals("0")).findAny().orElseThrow(() -> new DataFactoryNotFoundException("Cannot find PG with n=0"));
+        logger.called("newFI","ndId "+ndId+" pgs ",fiSource.PG);
+        PG pgZero=fiSource.PG.stream().filter(pgi -> pgi._n.equals("0")).findAny().orElseThrow(() -> new DataFactoryNotFoundException("Cannot find PG with n=0"));
         return findFiLbl(pgZero.htmlObj).
                 ID(Helpers.removeSpecialChars(view.lbl)+"_"+ Generator.id()).
                 type("10").kd("0").
                 doc(pgZero.htmlObj).
-                pgs(pgs.subList(1,pgs.size())).
+                pgs(fiSource.PG.subList(1,fiSource.PG.size())).
                 newV("0").
                 v("-").
                 pd("60").
-                nPg(pgs.size()-1+"").
+                nPg(fiSource.PG.size()-1+"").
                 ndId(ndId).
                 fiDocId(fiDocId).
+                status(fiSource.status).
                 fiJson().
                 get();
     }
 
     private FiFactory ndId(String ndId) {
         view.ndId=ndId;
+        return this;
+    }
+    private FiFactory status(Status status) {
+        view.status=status;
         return this;
     }
 
@@ -126,7 +131,7 @@ private FiFactory pgs(List<PG> pgs) {
 
     private FiFactory findFiLbl(HtmlObj htmlObj) throws DataFactoryNotFoundException {
         if (htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiTitle)) {
-            view.lbl = Helpers.removeSpecialChars(htmlObj.getHtmlData()[0].txt);
+            view.lbl = htmlObj.getHtmlData()[0].txt;
         }
        else
             throw new DataFactoryNotFoundException("fiTitle",htmlObj.toString());

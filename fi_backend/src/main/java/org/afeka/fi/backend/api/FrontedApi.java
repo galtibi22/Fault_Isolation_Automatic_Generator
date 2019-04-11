@@ -49,7 +49,7 @@ public class FrontedApi extends CommonApi {
             fiGeneratorClient.fiDocumentValidator(fiDoc);
             String fiDocId=repositoryService.save(fiDoc);
             fiGeneratorClient.executeFiGenerator(fiDoc,fiDocId,ndId,FiGeneratorType.valueOf(type) );
-            return new GeneralResponse("Success to execute FiGeneratorClient for with new fiDoc " + fiDoc.getName() + " for ndId " + ndId);
+            return new GeneralResponse("Success to execute FiGeneratorClient for with new fiDoc " + fiDoc.getOriginalFilename() + " for ndId " + ndId);
         }catch (NullPointerException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "fiDoc not exist in the request or the key name is not fiDoc", e);
         }

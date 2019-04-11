@@ -86,7 +86,8 @@ for table in tables:
                         FI_Num += 1
                         FI_Array.append({"n": str(FI_Num), "htmlObj": {"htmlData": [{"htmlType": "fiPosEnd"}]},
                                          "N": {"typ": "4"}, "Y": {"typ": "4"}})
-                        FI={"PG":FI_Array}
+                        FI={"PG":FI_Array,
+                            "status":"success"}
                         FI_Array_List.append(FI)
                         FI_Array = []
 

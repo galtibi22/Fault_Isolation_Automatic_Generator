@@ -23,10 +23,20 @@ public class FiGeneratorClientLocal implements FiGeneratorClientInterface {
         try {
             Thread.sleep(2000);
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.error(e);
         }
-        logger.info("fiGeneratorLocal results:"+Helpers.inputStreamToString(p.getInputStream()));
-        logger.error("fiGeneratorLocal results error:"+Helpers.inputStreamToString(p.getErrorStream()));
+        new Thread(() -> {
+            try {
+                logger.info("fiGeneratorLocal results:"+Helpers.inputStreamToString(p.getInputStream()));
+                String errors=Helpers.inputStreamToString(p.getErrorStream());
+                if (!errors.isEmpty())
+                    logger.error("fiGeneratorLocal results error:"+Helpers.inputStreamToString(p.getErrorStream()));
+
+            } catch (IOException e) {
+               logger.error(e);
+            }
+        }).start();
+
 
 
     }

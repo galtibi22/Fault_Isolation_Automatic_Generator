@@ -33,20 +33,20 @@ public class FiGeneratorApi extends CommonApi {
     }
 */
 
-    @PostMapping(path="/new/{id}/{fiDocId}", produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
+    @PostMapping(path="/new/{ndId}/{fiDocId}", produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
 
-    public GeneralResponse newFis(HttpServletRequest request, @PathVariable String id, @RequestBody String str, @PathVariable Long fiDocId) throws Exception {
+    public GeneralResponse newFis(HttpServletRequest request, @PathVariable String ndId, @RequestBody String str, @PathVariable Long fiDocId) throws Exception {
         logger.debug("call newFis api with request"+request.toString());
-        logger.called("newFis post request","ndId",id);
+        logger.called("newFis post request","ndId",ndId);
         FI[]fis=new FI[1];
         fis=Helpers.initGson().fromJson(str,fis.getClass());
         securityCheck(request, Role.generator);
-        ND nd=repositoryService.getNd(id);
+        ND nd=repositoryService.getNd(ndId);
         for (FI fi:fis){
-            fi=fiFactory.newFI(fi.PG,id,fiDocId);
+            fi=fiFactory.newFI(fi,ndId,fiDocId);
             repositoryService.add(fi);
         }
-        return new GeneralResponse("success to add "+fis.length+ " fis to ndId="+id);
+        return new GeneralResponse("success to add "+fis.length+ " fis to ndId="+ndId);
     }
 
    /* @PostMapping(path= "/", consumes = "application/json", produces = "application/json")

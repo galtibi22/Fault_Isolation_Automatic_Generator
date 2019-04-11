@@ -87,7 +87,7 @@ public class Helpers {
     }
 
     public static String removeSpecialChars(String lbl) {
-        return lbl.replaceAll("\"[\\\\-\\\\+\\\\.\\\\^:,]\",\"\"","").replaceAll(" ","");
+        return lbl.replaceAll("[-+.^:,]","").replaceAll(" ","");
     }
 
 /*    public static void zip(Path source,Path result) throws IOException {
