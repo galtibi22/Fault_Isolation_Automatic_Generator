@@ -206,6 +206,7 @@ public class RepositoryService extends FiCommon {
 
     public TRE updateTre(TRE tre) throws ResourceNotFoundException {
         logger.called("updateTre","tre",tre);
+
         return treRepository.save(tre);
     }
 }

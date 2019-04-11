@@ -123,6 +123,9 @@ def fiTaskYes(str, yesOption, noOption):
     yesObj['typ'] = "1"
     yesObj['tskNm'] = removeCharsFunc(newDes[:newDes.find("(")])
     yesObj['rtY'] = removeCharsFunc(yesOption)
+    yesObj['msg'] = "1"
+    yesObj['msgIx'] = "0"
+
 
     return yesObj
 
@@ -138,6 +141,8 @@ def fiTaskYes2(str, yesOption, noOption):
     yesObj['msgRtIx'] = "0"
     yesObj['tskNm'] = removeCharsFunc(str)
     yesObj['rtY'] = removeCharsFunc(yesOption)
+    yesObj['msg'] = "1"
+    yesObj['msgIx'] = "0"
 
     return yesObj
 

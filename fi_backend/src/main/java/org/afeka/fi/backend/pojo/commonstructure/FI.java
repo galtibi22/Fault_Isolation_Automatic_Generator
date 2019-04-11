@@ -89,12 +89,11 @@ public class FI
     public String ndId;
     @Transient
     @XmlTransient
-    @Expose(serialize = false, deserialize = false)
-    public ContainerTag htmlObject;
+    @Expose(serialize = true, deserialize = true)
+
+    public HtmlObj htmlObject;
     @Transient
     @XmlTransient
-    //@Expose(serialize = false, deserialize = false)
-
     @Expose(serialize = true, deserialize = true)
     public ErrorReport errorReport;
 

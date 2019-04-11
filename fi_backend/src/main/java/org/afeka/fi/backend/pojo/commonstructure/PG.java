@@ -1,5 +1,6 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -14,9 +15,11 @@ import javax.xml.bind.annotation.XmlTransient;
 public class PG
 {
     @Expose(serialize = true,deserialize = true)
+    @JsonIgnore
     @XmlAttribute(name="dwgID")
     public String dwgID="";
     @Expose(serialize = true,deserialize = true)
+    @JsonIgnore
     @XmlAttribute(name="doc")
     public String doc;
     @SerializedName("n")

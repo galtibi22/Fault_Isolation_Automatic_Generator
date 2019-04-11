@@ -9,8 +9,11 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class Helpers {
     public static String inputStreamToString(InputStream inputStream) throws IOException {
@@ -64,4 +67,44 @@ public class Helpers {
         String email=values[0];String password=values[1];
         return new User(values[0],values[1]);
     }
+
+    public static void zip(Path sourceDirPath, Path zipFilePath) throws IOException {
+//        Path p = Files.createFile(zipFilePath);
+        try (ZipOutputStream zs = new ZipOutputStream(Files.newOutputStream(zipFilePath))) {
+            Files.walk(sourceDirPath)
+                    .filter(path -> !Files.isDirectory(path))
+                    .forEach(path -> {
+                        ZipEntry zipEntry = new ZipEntry(sourceDirPath.relativize(path).toString());
+                        try {
+                            zs.putNextEntry(zipEntry);
+                            Files.copy(path, zs);
+                            zs.closeEntry();
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    });
+        }
+    }
+
+/*    public static void zip(Path source,Path result) throws IOException {
+        FileOutputStream fos = new FileOutputStream(result.toFile());
+        ZipOutputStream zipOut = new ZipOutputStream(fos);
+        File fileToZip = source.toFile();
+        for (File file : fileToZip.listFiles()) {
+            FileInputStream fis = new FileInputStream(file);
+            ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
+            zipOut.putNextEntry(zipEntry);
+            byte[] bytes = new byte[1024];
+            int length;
+            while ((length = fis.read(bytes)) >= 0) {
+                zipOut.write(bytes, 0, length);
+            }
+            fis.close();
+        }
+        zipOut.close();
+
+    }*/
+       // fis.close();
+       // fos.close();
+    //}
 }

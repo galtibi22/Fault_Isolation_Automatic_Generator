@@ -2,8 +2,10 @@ package org.afeka.fi.backend.api;
 
 import org.afeka.fi.backend.common.CommonApi;
 import org.afeka.fi.backend.common.Helpers;
+import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.exception.FileNotSupportExption;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
+import org.afeka.fi.backend.factory.TreFactory;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.auth.User;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
@@ -13,15 +15,25 @@ import org.afeka.fi.backend.pojo.fiGenerator.FiGeneratorType;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.bind.JAXBException;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 
 @RequestMapping(path = "api/fronted")
@@ -59,26 +71,24 @@ public class FrontedApi extends CommonApi {
     }
 
     @PostMapping(value = "/nd/new/{ndParentId}",produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
-    public NdParent ndNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String ndParentId) {
+    public ND ndNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String ndParentId) {
         try {
             logger.called("ndNew","viewCreateRequest",viewCreateRequest);
             securityCheck(request,Role.user);
             NdParent ndParent = repositoryService.findNdParent(ndParentId);
-            repositoryService.add(ndFactory.newND(viewCreateRequest, ndParentId));
-            return repositoryService.getNdParent(ndParentId);
+            return repositoryService.add(ndFactory.newND(viewCreateRequest, ndParentId));
         } catch (ResourceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NdParent with id +" + ndParentId + " not found", e);
         }
     }
 
     @PostMapping(value = "/ndparent/new/{treId}",produces = "application/json")
-    public TRE ndParentNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String treId) {
+    public NdParent ndParentNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String treId) {
         try {
             logger.called("ndParentNew","viewCreateRequest",viewCreateRequest);
             securityCheck(request,Role.user);
             repositoryService.findTre(treId);
-            repositoryService.add(ndParentFactory.newNdParent(viewCreateRequest, treId));
-            return repositoryService.getTre(treId);
+            return repositoryService.add(ndParentFactory.newNdParent(viewCreateRequest, treId));
         } catch (ResourceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "TRE with id +" + treId + " not found", e);
         }
@@ -254,4 +264,30 @@ public class FrontedApi extends CommonApi {
         }
     }
 
+    @PostMapping(value="/export",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    public ResponseEntity<Resource> export(HttpServletRequest request, @RequestBody TRE tre) throws ResourceNotFoundException, IOException, JAXBException, DataNotValidException {
+        TRE treToExport=repositoryService.findTre(tre.ID);
+        for(NdParent ndParent:tre.ndParents){
+            NdParent ndParentToExport=repositoryService.findNdParent(ndParent.ID);
+            treToExport.ndParents.add(ndParentToExport);
+            for(ND nd:ndParent.ND){
+               ND ndToExport=repositoryService.findNd(nd.ID);
+               ndParentToExport.ND.add(ndToExport);
+               for (FI fi:nd.FI){
+                   ndToExport.FI.add(repositoryService.getFi(fi.ID));
+               }
+            }
+        }
+        TreFactory treFactory=new TreFactory();
+        Path resultPath=Files.createTempDirectory("results").toAbsolutePath();
+        treFactory.export(resultPath,treToExport);
+        Path zipPath=Files.createTempFile("export",".zip");
+        Helpers.zip(resultPath,zipPath);
+        InputStreamResource inputStream= new InputStreamResource(new FileInputStream(zipPath.toFile()));
+        return ResponseEntity.ok().header("Content-Disposition", "attachment;filename=download.zip")
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .contentLength(zipPath.toFile().length())
+                .body(inputStream);
+
+    }
 }

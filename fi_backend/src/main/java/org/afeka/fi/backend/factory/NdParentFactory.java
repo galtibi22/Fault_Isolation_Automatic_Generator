@@ -10,6 +10,9 @@ import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Component
 
 public class NdParentFactory extends ViewFactory<NdParent> {
@@ -107,13 +110,13 @@ public class NdParentFactory extends ViewFactory<NdParent> {
 
 
      @Override
-     public void export(String path,NdParent ndParent) throws IOException, DataNotValidException {
+     public void export(Path path, NdParent ndParent) throws IOException, DataNotValidException {
          for(ND nd:ndParent.ND){
               new NdFactory().export(path,nd);
          }
          HtmlGenerator htmlGenerator=new HtmlGenerator();
          htmlGenerator.basicRootPage(ndParent.lbl,ndParent.des);
-         save(htmlGenerator.toHtml().renderFormatted(),path+ndParent.doc);
+         save(htmlGenerator.toHtml().renderFormatted(), Paths.get(path+"/"+ndParent.doc));
      }
 
    /*  @Override

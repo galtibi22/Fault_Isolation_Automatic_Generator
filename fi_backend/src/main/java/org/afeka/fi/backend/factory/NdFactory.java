@@ -9,6 +9,9 @@ import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Component
 public class NdFactory extends ViewFactory<ND> {
      /**
@@ -122,7 +125,7 @@ public class NdFactory extends ViewFactory<ND> {
 
 
      @Override
-     public void export(String path,ND nd) throws IOException, DataNotValidException {
+     public void export(Path path, ND nd) throws IOException, DataNotValidException {
          for(FI fi:nd.FI){
               new FiFactory().export(path,fi);
          }
@@ -131,7 +134,7 @@ public class NdFactory extends ViewFactory<ND> {
          if (nd.FI.size()==0)
              throw new DataNotValidException("Cannot generate ndDoc for nd.fi.size()=0");
          htmlGenerator.ndDoc(nd.lbl,nd.FI,nd.des);
-         save(htmlGenerator.toHtml().renderFormatted(),path+nd.doc);
+         save(htmlGenerator.toHtml().renderFormatted(), Paths.get(path+"/"+nd.doc));
      }
 
 

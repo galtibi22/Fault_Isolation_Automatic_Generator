@@ -130,10 +130,10 @@ public class HtmlGenerator extends FiCommon {
                 attr("cellpadding","2").
                 attr("cellspacing","3").
                 attr("border","0");
-        for (FI fi:fis){
+        for (int i=0;i<fis.size();i++){
+            FI fi=fis.get(i);
             String color;
-
-            if (Integer.parseInt(fi.ID.substring(fi.ID.length()-1))%2==0)
+            if (i%2==0)
                 color="#A9A9A9";
             else
                 color="#808080";

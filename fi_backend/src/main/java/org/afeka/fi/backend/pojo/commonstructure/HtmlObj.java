@@ -11,9 +11,6 @@ public class HtmlObj {
     @Expose(serialize = true, deserialize = true)
     private HtmlData[] htmlData;
 
-    @Expose(serialize = false, deserialize = false)
-    public ContainerTag htmlObject;
-
     public HtmlData[] getHtmlData() {
         return htmlData;
     }

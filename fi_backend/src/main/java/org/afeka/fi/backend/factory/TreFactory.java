@@ -13,6 +13,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 @Component
 public class TreFactory extends ViewFactory <TRE> {
     //private TRE tre;
@@ -144,13 +147,13 @@ public class TreFactory extends ViewFactory <TRE> {
 
 
     @Override
-    public void export(String path,TRE tre) throws JAXBException, IOException, DataNotValidException {
+    public void export(Path path, TRE tre) throws JAXBException, IOException, DataNotValidException {
         StringWriter sw = new StringWriter();
         JAXBContext jaxbContext= JAXBContext.newInstance(TRE.class);
         Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
         jaxbMarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         jaxbMarshaller.marshal(tre,
-                new FileOutputStream(new File(path+"fiTre.xml")));
+                new FileOutputStream(new File(path+"/"+"fiTre.xml")));
 
         for (NdParent ndParent:tre.ndParents){
             NdParentFactory ndParentFactory=new NdParentFactory();
@@ -158,7 +161,7 @@ public class TreFactory extends ViewFactory <TRE> {
         }
         HtmlGenerator htmlGenerator=new HtmlGenerator();
         htmlGenerator.basicRootPage(tre.lbl,tre.des);
-        save(htmlGenerator.toHtml().renderFormatted(),path+ FiProperties.VIEW_DEMO_TRE_HTML_NAME);
+        save(htmlGenerator.toHtml().renderFormatted(),Paths.get(path+ FiProperties.VIEW_DEMO_TRE_HTML_NAME));
     }
 
 /*    @Override

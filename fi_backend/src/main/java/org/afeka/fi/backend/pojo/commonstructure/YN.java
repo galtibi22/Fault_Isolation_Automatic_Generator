@@ -1,6 +1,7 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.annotations.Expose;
 import org.afeka.fi.backend.exception.DataNotValidException;
@@ -19,8 +20,11 @@ public class YN
     private String rtN;
     @Expose(serialize = true,deserialize = true)
     private String msgRt;
+    @JsonIgnore
     @Expose(serialize = true,deserialize = true)
     private String typ;
+    @JsonIgnore
+    @Expose(serialize = true,deserialize = true)
     private String msgIx;
     @Expose(serialize = true,deserialize = true)
     private String msgRtIx;
@@ -29,7 +33,7 @@ public class YN
     @Expose(serialize = true,deserialize = true)
     private String rtY;
     @Expose(serialize = true,deserialize = true)
-    private String msg="1";
+    private String msg;
     @XmlAttribute(name="to")
     public String getTo ()
     {
