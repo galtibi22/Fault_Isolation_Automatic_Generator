@@ -8,6 +8,7 @@ import j2html.tags.ContainerTag;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.pojo.report.ErrorReport;
 import org.hibernate.annotations.Type;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -62,8 +63,7 @@ public class FI
 
     @Expose(serialize = true, deserialize = true)
     @Id
-    //@GeneratedValue(strategy = GenerationType.IDENTITY)
-   @XmlAttribute(name="ID")
+    @XmlAttribute(name="ID")
    public String ID;
     @Expose(serialize = true, deserialize = true)
     @Transient
@@ -73,17 +73,18 @@ public class FI
     @Expose(serialize = true, deserialize = true)
     @Transient
     @XmlAttribute(name="doc")
-   public String doc;
+
+    public String doc;
     @Expose(serialize = true, deserialize = true)
     @Transient
     @XmlAttribute(name="typ")
-   public String typ;
 
+    public String typ;
     @Transient
     @Expose(serialize = true,deserialize = true)
     @XmlElement(name="PG")
-    public List<PG> PG;//=new ArrayList();
-    //@Transient
+    public List<PG> PG;
+
     @XmlTransient
     @Expose(serialize = true, deserialize = true)
     public String ndId;
@@ -94,12 +95,12 @@ public class FI
     public HtmlObj htmlObject;
     @Transient
     @XmlTransient
-    @Expose(serialize = true, deserialize = true)
+    @Expose
     public ErrorReport errorReport;
 
     @Transient
     @XmlTransient
-   // @Expose(serialize = true, deserialize = true)
+    @Expose
     public String version;
 
     @Column(columnDefinition="varchar(20000)")
@@ -107,9 +108,15 @@ public class FI
     @XmlTransient
     public String fiJson;
 
-    @Override
-    public String toString() {
-        return "FI{" + "nPg='" + nPg + '\'' + ", pd='" + pd + '\'' + ", v='" + v + '\'' + ", lbl='" + lbl + '\'' + ", kd='" + kd + '\'' + ", newV='" + newV + '\'' + ", pdf='" + pdf + '\'' + ", ID='" + ID + '\'' + ", kIdDsp='" + kIdDsp + '\'' + ", doc='" + doc + '\'' + ", typ='" + typ + '\'' + ", PG=" + PG + ", ndId='" + ndId + '\'' + ", htmlObject=" + htmlObject + ", errorReport=" + errorReport + ", version='" + version + '\'' + '}';
-    }
+    @Transient
+    @XmlTransient
+    @Expose
+    public Status status;
+
+    @Expose
+    @XmlTransient
+    public Long fiDocId;
+
+
 }
 

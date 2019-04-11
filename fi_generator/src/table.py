@@ -92,5 +92,5 @@ for table in tables:
 
 
 os.remove(pathUrl)
-cf.post_api_server(cf.args.result, FI_Array_List)
+cf.post_api_server(cf.args.result,cf.args.fiDocId,FI_Array_List)
 #print(json.dumps(FI_Array_List, indent=4, sort_keys=True))

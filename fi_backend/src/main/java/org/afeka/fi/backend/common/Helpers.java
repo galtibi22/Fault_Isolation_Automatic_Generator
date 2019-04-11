@@ -86,6 +86,10 @@ public class Helpers {
         }
     }
 
+    public static String removeSpecialChars(String lbl) {
+        return lbl.replaceAll("\"[\\\\-\\\\+\\\\.\\\\^:,]\",\"\"","").replaceAll(" ","");
+    }
+
 /*    public static void zip(Path source,Path result) throws IOException {
         FileOutputStream fos = new FileOutputStream(result.toFile());
         ZipOutputStream zipOut = new ZipOutputStream(fos);

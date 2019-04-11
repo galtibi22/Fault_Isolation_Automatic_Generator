@@ -103,5 +103,5 @@ fis=[{
     'PG':FI_Array
 }]
 os.remove(pathUrl)
-cf.post_api_server(cf.args.result, fis)
+cf.post_api_server(cf.args.result,cf.args.fiDocId,fis)
 

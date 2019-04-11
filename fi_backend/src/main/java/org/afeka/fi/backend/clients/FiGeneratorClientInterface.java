@@ -16,7 +16,7 @@ public interface FiGeneratorClientInterface{
 
     FiLogger logger = new FiLogger();
 
-    void runFiGenerator(MultipartFile fiDoc,FiGeneratorType fiGeneratorType,String ndId) throws Exception;
+    void runFiGenerator(MultipartFile fiDoc,String fiDocId,FiGeneratorType fiGeneratorType,String ndId) throws Exception;
 
     default void fiDocumentValidator(MultipartFile file) throws FileNotSupportExption{
         logger.called("fiDocumentValidator", "fiDoc", file.getName());
@@ -26,10 +26,10 @@ public interface FiGeneratorClientInterface{
         }
     }
 
-    default void executeFiGenerator(MultipartFile fiDoc,String ndId,FiGeneratorType fiGeneratorType) throws IOException {
+    default void executeFiGenerator(MultipartFile fiDoc,String fiDocId,String ndId,FiGeneratorType fiGeneratorType) throws IOException {
         switch (FiProperties.FI_GENERATOR_MODE){
             case FiGeneratorMode.LOCAL:
-                new FiGeneratorClientLocal().runFiGenerator(fiDoc,fiGeneratorType,ndId);
+                new FiGeneratorClientLocal().runFiGenerator(fiDoc,fiDocId,fiGeneratorType,ndId);
                 break;
             }
         }

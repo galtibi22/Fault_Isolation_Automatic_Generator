@@ -4,15 +4,14 @@ import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
 import org.afeka.fi.backend.pojo.auth.User;
-import org.afeka.fi.backend.pojo.commonstructure.FI;
-import org.afeka.fi.backend.pojo.commonstructure.ND;
-import org.afeka.fi.backend.pojo.commonstructure.NdParent;
-import org.afeka.fi.backend.pojo.commonstructure.TRE;
+import org.afeka.fi.backend.pojo.commonstructure.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -27,6 +26,8 @@ public class RepositoryService extends FiCommon {
     @Autowired
     TreRepository treRepository;
 
+    @Autowired
+    FIDocRepository fiDocRepository;
 
     public TRE save(TRE tre) {
         tre.ndParents.forEach(ndParent -> save(ndParent));
@@ -208,6 +209,17 @@ public class RepositoryService extends FiCommon {
         logger.called("updateTre","tre",tre);
 
         return treRepository.save(tre);
+    }
+
+    public String save(MultipartFile doc) throws IOException {
+        logger.called("save","fiDoc",doc.getOriginalFilename());
+
+        FiDoc fiDoc=new FiDoc(doc);
+        return fiDocRepository.save(fiDoc).ID.toString();
+    }
+
+    public FiDoc getFiDoc(Long id) throws ResourceNotFoundException {
+        return fiDocRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Cannot find fiDoc for id "+id));
     }
 }
 

@@ -1,6 +1,7 @@
 package org.afeka.fi.backend.api;
 
 import org.afeka.fi.backend.common.CommonApi;
+import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
@@ -32,9 +33,9 @@ public class FiGeneratorApi extends CommonApi {
     }
 */
 
-    @PostMapping(path="/new/{id}", produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
+    @PostMapping(path="/new/{id}/{fiDocId}", produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
 
-    public GeneralResponse newFis(HttpServletRequest request,@PathVariable String id, @RequestBody String str) throws Exception {
+    public GeneralResponse newFis(HttpServletRequest request, @PathVariable String id, @RequestBody String str, @PathVariable Long fiDocId) throws Exception {
         logger.debug("call newFis api with request"+request.toString());
         logger.called("newFis post request","ndId",id);
         FI[]fis=new FI[1];
@@ -42,7 +43,7 @@ public class FiGeneratorApi extends CommonApi {
         securityCheck(request, Role.generator);
         ND nd=repositoryService.getNd(id);
         for (FI fi:fis){
-            fi=fiFactory.newFI(fi.PG,id);
+            fi=fiFactory.newFI(fi.PG,id,fiDocId);
             repositoryService.add(fi);
         }
         return new GeneralResponse("success to add "+fis.length+ " fis to ndId="+id);

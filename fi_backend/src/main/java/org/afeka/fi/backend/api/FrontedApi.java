@@ -8,12 +8,9 @@ import org.afeka.fi.backend.exception.ResourceNotFoundException;
 import org.afeka.fi.backend.factory.TreFactory;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.auth.User;
-import org.afeka.fi.backend.pojo.commonstructure.FI;
-import org.afeka.fi.backend.pojo.commonstructure.ND;
-import org.afeka.fi.backend.pojo.commonstructure.TRE;
+import org.afeka.fi.backend.pojo.commonstructure.*;
 import org.afeka.fi.backend.pojo.fiGenerator.FiGeneratorType;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
-import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
@@ -28,10 +25,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -53,8 +47,9 @@ public class FrontedApi extends CommonApi {
             logger.called("fiNew", "ndId " + ndId + " and fiDoc", fiDoc.getName());
             repositoryService.findNd(ndId);
             fiGeneratorClient.fiDocumentValidator(fiDoc);
-            fiGeneratorClient.executeFiGenerator(fiDoc, ndId,FiGeneratorType.valueOf(type) );
-            return new GeneralResponse("Success to execute FiGeneratorClient for with new fiDoc " + fiDoc.getName() + " for ndId" + ndId);
+            String fiDocId=repositoryService.save(fiDoc);
+            fiGeneratorClient.executeFiGenerator(fiDoc,fiDocId,ndId,FiGeneratorType.valueOf(type) );
+            return new GeneralResponse("Success to execute FiGeneratorClient for with new fiDoc " + fiDoc.getName() + " for ndId " + ndId);
         }catch (NullPointerException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "fiDoc not exist in the request or the key name is not fiDoc", e);
         }
@@ -289,5 +284,25 @@ public class FrontedApi extends CommonApi {
                 .contentLength(zipPath.toFile().length())
                 .body(inputStream);
 
+    }
+
+    @GetMapping(value = "/fi/{fiId}/fidoc",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    public ResponseEntity<Resource> getFiDoc(HttpServletRequest request, @PathVariable String fiId) {
+        try {
+            logger.called("getFiDoc","fiId",fiId);
+            securityCheck(request,Role.user,Role.viewer);
+            Long fiDocId=repositoryService.getFi(fiId).fiDocId;
+            logger.info("Find fiDocId "+fiDocId+" for FI with id "+fiId);
+            FiDoc fiDoc=repositoryService.getFiDoc(fiDocId);
+            byte[] fiDocByte=fiDoc.doc;
+            InputStreamResource inputStream= new InputStreamResource(new ByteArrayInputStream(fiDoc.doc));
+            return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+fiDoc.name)
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .contentLength(fiDocByte.length)
+                    .body(inputStream);
+
+        } catch (ResourceNotFoundException e) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage(), e);
+        }
     }
 }
