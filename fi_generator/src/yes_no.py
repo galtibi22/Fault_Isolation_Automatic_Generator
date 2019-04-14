@@ -10,7 +10,7 @@ import subprocess
 from docx import Document
 import common_functions as cf
 
-
+import sys
 #import win32com.client as win32
 #from win32com.client import constants
 
@@ -32,7 +32,7 @@ FI_Num = 0
 
 
 path=cf.init()
-pathUrl=cf.generate_fi_doc_path(path[0])
+pathUrl=cf.generate_fi_doc_path(sys.argv[0])
 document = Document(pathUrl)
 
 
@@ -104,5 +104,5 @@ fis=[{
     "status":"success"
 }]
 os.remove(pathUrl)
-cf.post_api_server(cf.args.result,cf.args.fiDocId,fis)
+cf.post_api_server(fis)
 

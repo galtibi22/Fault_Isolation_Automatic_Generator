@@ -90,25 +90,7 @@ public class Helpers {
         return lbl.replaceAll("[-+.^:,]","").replaceAll(" ","");
     }
 
-/*    public static void zip(Path source,Path result) throws IOException {
-        FileOutputStream fos = new FileOutputStream(result.toFile());
-        ZipOutputStream zipOut = new ZipOutputStream(fos);
-        File fileToZip = source.toFile();
-        for (File file : fileToZip.listFiles()) {
-            FileInputStream fis = new FileInputStream(file);
-            ZipEntry zipEntry = new ZipEntry(fileToZip.getName());
-            zipOut.putNextEntry(zipEntry);
-            byte[] bytes = new byte[1024];
-            int length;
-            while ((length = fis.read(bytes)) >= 0) {
-                zipOut.write(bytes, 0, length);
-            }
-            fis.close();
-        }
-        zipOut.close();
-
-    }*/
-       // fis.close();
-       // fos.close();
-    //}
+    public static String getFileSimpleName(MultipartFile fiDoc) {
+        return fiDoc.getOriginalFilename().substring(0,fiDoc.getOriginalFilename().lastIndexOf("."));
+    }
 }

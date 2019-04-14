@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -29,36 +30,38 @@ public class RepositoryService extends FiCommon {
     @Autowired
     FIDocRepository fiDocRepository;
 
+ /*   @Transactional
     public TRE save(TRE tre) {
         tre.ndParents.forEach(ndParent -> save(ndParent));
         return treRepository.save(tre);
     }
-
+    @Transactional
     public NdParent save(NdParent ndParent) {
         ndParent.ND.forEach(nd -> save(nd));
         return ndParentRepository.save(ndParent);
     }
-
+    @Transactional
     public ND save(ND nd){
             nd.FI.forEach(fi-> fiRepository.save(fi));
             return ndRepository.save(nd);
-    }
-
+    }*/
+    @Transactional
     public FI add(FI fi){
         logger.called("add","fi",fi);
         return fiRepository.save(fi);
     }
-
+    @Transactional
     public ND add(ND nd){
         logger.called("add","nd",nd);
         return ndRepository.save(nd);
     }
-
+    @Transactional
     public NdParent add(NdParent ndParent){
         logger.called("add","ndParent",ndParent);
         return ndParentRepository.save(ndParent);
     }
 
+    @Transactional
     public TRE add(TRE tre){
         logger.called("add","tre",tre);
         return treRepository.save(tre);
@@ -71,7 +74,7 @@ public class RepositoryService extends FiCommon {
      */
     public TRE getTre(String id) throws ResourceNotFoundException {
         logger.called("getTre","id",id);
-        TRE tre=treRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        TRE tre=findTre(id);
         List<NdParent> ndParents=ndParentRepository.findAll(Example.of(new NdParent(tre.ID)));
         ndParents.forEach(ndParent-> {
             try {
@@ -90,7 +93,7 @@ public class RepositoryService extends FiCommon {
      */
     public NdParent getNdParent(String id) throws ResourceNotFoundException {
         logger.called("getNdParent","id",id);
-        NdParent ndParent=ndParentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        NdParent ndParent=findNdParent(id);
         List<ND> nds=ndRepository.findAll(Example.of(new ND(ndParent.ID)));
         nds.forEach(nd-> {
             try {
@@ -109,7 +112,7 @@ public class RepositoryService extends FiCommon {
      */
     public ND getNd(String id) throws ResourceNotFoundException {
         logger.called("getNd","id",id);
-        ND nd=ndRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        ND nd=findNd(id);
         List<FI> fis=fiRepository.findAll(Example.of(new FI(nd.ID)));
         fis.forEach(fi1->nd.FI.add(Helpers.initGson().fromJson(fi1.fiJson, FI.class)));
         return nd;
@@ -121,28 +124,28 @@ public class RepositoryService extends FiCommon {
      */
     public FI getFi(String id) throws ResourceNotFoundException {
         logger.called("getFi","id",id);
-        FI fi= fiRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        FI fi= findFI(id);
         return Helpers.initGson().fromJson(fi.fiJson, FI.class);
     }
 
 
     public FI findFI(String id) throws ResourceNotFoundException {
         logger.called("findFI","id",id);
-        return fiRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return fiRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Cannot find fi with id "+id));
     }
 
     public ND findNd(String id) throws ResourceNotFoundException {
         logger.called("findNd","id",id);
-        return ndRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return ndRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Cannot find nd with id "+id));
     }
     public NdParent findNdParent(String id) throws ResourceNotFoundException {
         logger.called("findNdParent","id",id);
-        return ndParentRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return ndParentRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Cannot find ndParent with id "+id));
     }
 
     public TRE findTre(String id) throws ResourceNotFoundException {
         logger.called("findTre","id",id);
-        return treRepository.findById(id).orElseThrow(ResourceNotFoundException::new);
+        return treRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Cannot find tre with id "+id));
     }
 
     public List<TRE> getTres(User user) throws ResourceNotFoundException {
@@ -153,24 +156,27 @@ public class RepositoryService extends FiCommon {
         }
         return tres;
     }
-
+    @Transactional
     public void deleteFi(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
-        logger.called("deleteFi","id",id);
         FI fiToDelete=getFi(id);
+        logger.called("deleteFi","id",id);
         fiRepository.deleteById(id);
-       // return getNd(fiToDelete.ndId);
+        if (fiRepository.findAll(Example.of(new FI(fiToDelete.ndId,fiToDelete.fiDocId))).size()==0) {
+            logger.info("fiDoc with id "+fiToDelete.fiDocId+" not connect to any more FI in ND "+fiToDelete.ndId+". Delete fiDoc");
+            fiDocRepository.deleteById(fiToDelete.fiDocId);
+        }
 
     }
-
+    @Transactional
     public void deleteNd(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
         logger.called("deleteNd","id",id);
         ND ndToDelete=getNd(id);
         for (FI fi:ndToDelete.FI)
             deleteFi(fi.ID);
         ndRepository.deleteById(id);
-       // return getNdParent(ndToDelete.ndParentId);
-
     }
+
+    @Transactional
     public void deleteNdParent(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
         logger.called("deleteNdParent","id",id);
         NdParent ndParentToDelete=getNdParent(id);
@@ -180,6 +186,7 @@ public class RepositoryService extends FiCommon {
        // return getTre(ndParentToDelete.treId);
     }
 
+    @Transactional
     public void deleteTre(String id,User user) throws EmptyResultDataAccessException, ResourceNotFoundException {
         logger.called("deleteNdParent","id",id);
         TRE treToDelete=getTre(id);
@@ -189,36 +196,37 @@ public class RepositoryService extends FiCommon {
       // return getTres(user);
     }
 
+    @Transactional
     public FI updateFi(FI fi) throws ResourceNotFoundException {
         logger.called("updateFi","fi",fi);
         fi.fiJson=Helpers.initGson().toJson(fi);
         return fiRepository.save(fi);
     }
 
+    @Transactional
     public ND updateND(ND nd) throws ResourceNotFoundException {
         logger.called("updateND","nd",nd);
         return ndRepository.save(nd);
     }
-
+    @Transactional
     public NdParent updateNdParent(NdParent ndParent) throws ResourceNotFoundException {
         logger.called("updateNdParent","ndParent",ndParent);
         return ndParentRepository.save(ndParent);
     }
-
+    @Transactional
     public TRE updateTre(TRE tre) throws ResourceNotFoundException {
         logger.called("updateTre","tre",tre);
-
         return treRepository.save(tre);
     }
-
-    public String save(MultipartFile doc) throws IOException {
+    @Transactional
+    public String add(MultipartFile doc) throws IOException {
         logger.called("save","fiDoc",doc.getOriginalFilename());
-
         FiDoc fiDoc=new FiDoc(doc);
         return fiDocRepository.save(fiDoc).ID.toString();
     }
 
     public FiDoc getFiDoc(Long id) throws ResourceNotFoundException {
+        logger.called("getFiDoc","id",id);
         return fiDocRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Cannot find fiDoc for id "+id));
     }
 }

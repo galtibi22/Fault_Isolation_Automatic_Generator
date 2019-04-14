@@ -185,9 +185,9 @@ def save_as_docx_mac(path):
 
 
 
-def post_api_server(id,fiDocId,jsondata):
+def post_api_server(jsondata):
     # defining the api-endpoint
-    API_ENDPOINT = "http://127.0.0.1:8080/api/figenerator/new/"+id+"/"+fiDocId
+    API_ENDPOINT = "http://127.0.0.1:8080/api/figenerator/new/"+sys.argv[2]+"/"+sys.argv[3]
     headers = { 'content-type' : 'application/json', 'Authorization' : 'Basic ZmlnZW5lcmF0b3I6QWExMjM0NTY='}
     print("send fi","to",API_ENDPOINT,"with headers",headers,"data",jsondata)
     r=requests.post(API_ENDPOINT,data=json.dumps(jsondata),headers = headers)
@@ -202,17 +202,19 @@ def generate_fi_doc_path(path):
             if (os.name == 'posix'):
                 print("use save_as_docx_mac")
                 pathUrl=save_as_docx_mac(path)
-        else:
-            print("use save_as_docx_win")
-            pathUrl=save_as_docx_win(path)
+            else:
+                print("use save_as_docx_win")
+                pathUrl=save_as_docx_win(path)
     return pathUrl
 
 def init():
-    global args
-    parser = argparse.ArgumentParser()
-    parser.add_argument("source")
-    parser.add_argument("result")
-    parser.add_argument("fiDocId")
-    args = parser.parse_args()
-    path = glob(args.source, recursive=True)
-    return path
+    print("Start fi_generator client with the next params",sys.argv)
+#    global args
+ #   parser = argparse.ArgumentParser()
+ #   parser.add_argument("source")
+ #   parser.add_argument("result")
+ #   parser.add_argument("fiDocId")
+ #   print("args",sys.argv)
+ #   args = parser.parse_args()
+ #   path = glob(args.source, recursive=True)
+ #   return path

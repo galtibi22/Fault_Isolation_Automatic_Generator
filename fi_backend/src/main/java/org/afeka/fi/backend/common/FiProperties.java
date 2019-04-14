@@ -53,10 +53,10 @@ public class FiProperties extends FiCommon{
 
     }
 
-    public static String DATA_PATH;
-    public static String RESOURCES_PATH;
-    public static String VIEW_DEMO_FITRE_PATH;
-    public static String VIEW_DEMO_FITRE_NAME;
+    //public static String DATA_PATH;
+    //public static String RESOURCES_PATH;
+   // public static String VIEW_DEMO_FITRE_PATH;
+    //public static String VIEW_DEMO_FITRE_NAME;
     public static String ABBY_DLL_PATH;
     public static String ABBY_PROJECTID;
     public static String FI_GENERATOR_CLIENT_PATH;
@@ -66,10 +66,10 @@ public class FiProperties extends FiCommon{
     public static String PYTHON_COMMAND_START;
 
     private void loadProps() throws IOException {
-        DATA_PATH = instance.getProperty("data.path").toString();
-        RESOURCES_PATH=instance.getProperty("resources.path").toString();
-        VIEW_DEMO_FITRE_PATH=instance.getProperty("viewdemo.fiTre.path").toString();
-        VIEW_DEMO_FITRE_NAME=instance.getProperty("viewdemo.fiTre.name").toString();
+      //  DATA_PATH = instance.getProperty("data.path").toString();
+        //RESOURCES_PATH=instance.getProperty("resources.path").toString();
+      //  VIEW_DEMO_FITRE_PATH=instance.getProperty("viewdemo.fiTre.path").toString();
+       // VIEW_DEMO_FITRE_NAME=instance.getProperty("viewdemo.fiTre.name").toString();
         ABBY_DLL_PATH=instance.getProperty("abby.dll.path").toString();
         ABBY_PROJECTID=instance.getProperty("abby.projectId").toString();
         FI_GENERATOR_CLIENT_PATH=getProperty("fiGenerator.client.path").toString();

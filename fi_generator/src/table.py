@@ -5,7 +5,7 @@ import argparse
 from docx import Document
 import common_functions as cf
 import os
-
+import sys
 #############################################################################################
 #############################################################################################
 ###################################                    ######################################
@@ -25,8 +25,11 @@ FI_Txt_Header_Exist = False
 # args = parser.parse_args()
 # document = Document(args.file)
 
-path=cf.init()
-pathUrl=cf.generate_fi_doc_path(path[0])
+cf.init()
+
+
+pathUrl=cf.generate_fi_doc_path(sys.argv[1])
+print ("pathUrl",pathUrl)
 document = Document(pathUrl)
 
 FI_Array_List = []
@@ -93,5 +96,5 @@ for table in tables:
 
 
 os.remove(pathUrl)
-cf.post_api_server(cf.args.result,cf.args.fiDocId,FI_Array_List)
+cf.post_api_server(FI_Array_List)
 #print(json.dumps(FI_Array_List, indent=4, sort_keys=True))

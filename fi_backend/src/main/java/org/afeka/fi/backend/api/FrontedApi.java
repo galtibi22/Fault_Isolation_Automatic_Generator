@@ -3,6 +3,7 @@ package org.afeka.fi.backend.api;
 import org.afeka.fi.backend.common.CommonApi;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.DataNotValidException;
+import org.afeka.fi.backend.exception.FiGenratorException;
 import org.afeka.fi.backend.exception.FileNotSupportExption;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
 import org.afeka.fi.backend.factory.TreFactory;
@@ -35,7 +36,7 @@ import java.util.List;
 public class FrontedApi extends CommonApi {
     @PostMapping(value = "/tre/new",produces = "application/json")
     public TRE newTre(HttpServletRequest request,@RequestBody  ViewCreateRequest viewCreateRequest) {
-        logger.called("newTre","viewCreateRequest",viewCreateRequest);
+        logger.called("newTreApi","viewCreateRequest",viewCreateRequest);
         User user= securityCheck(request,Role.user);
         return repositoryService.add(treFactory.newTRE(user.userName,viewCreateRequest));
     }
@@ -44,43 +45,47 @@ public class FrontedApi extends CommonApi {
     public GeneralResponse fiNew(HttpServletRequest request, @RequestBody MultipartFile fiDoc, @PathVariable String ndId,@PathVariable String type) {
         try {
             securityCheck(request, Role.user);
-            logger.called("fiNew", "ndId " + ndId + " and fiDoc", fiDoc.getName());
+            logger.called("fiNewApi", "ndId " + ndId + " and fiDoc", fiDoc.getOriginalFilename());
             repositoryService.findNd(ndId);
             fiGeneratorClient.fiDocumentValidator(fiDoc);
-            String fiDocId=repositoryService.save(fiDoc);
+            String fiDocId=repositoryService.add(fiDoc);
             fiGeneratorClient.executeFiGenerator(fiDoc,fiDocId,ndId,FiGeneratorType.valueOf(type) );
             return new GeneralResponse("Success to execute FiGeneratorClient for with new fiDoc " + fiDoc.getOriginalFilename() + " for ndId " + ndId);
         }catch (NullPointerException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "fiDoc not exist in the request or the key name is not fiDoc", e);
         }
         catch (ResourceNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "ND with id +" + ndId + " not found", e);
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage(),e);
         } catch (IllegalArgumentException e) {
             throw new ResponseStatusException( HttpStatus.BAD_REQUEST, "Cannot find fiGeneratorClient type " +type, e);
         } catch (FileNotSupportExption fx) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "fiDoc type " + fiDoc.getName() + " not supported", fx);
-        } catch (IOException e) {
+        }catch (FiGenratorException e){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, e.getMessage());
+
+        }
+        catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot Start fi generator client" +e);
 
         }
     }
 
     @PostMapping(value = "/nd/new/{ndParentId}",produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
-    public ND ndNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String ndParentId) {
-        try {
-            logger.called("ndNew","viewCreateRequest",viewCreateRequest);
+    public ND ndNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String ndParentId) throws ResourceNotFoundException {
+        //try {
+            logger.called("ndNewApi","viewCreateRequest",viewCreateRequest);
             securityCheck(request,Role.user);
             NdParent ndParent = repositoryService.findNdParent(ndParentId);
             return repositoryService.add(ndFactory.newND(viewCreateRequest, ndParentId));
-        } catch (ResourceNotFoundException e) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NdParent with id +" + ndParentId + " not found", e);
+        //} //catch (ResourceNotFoundException e) {
+           // throw new ResponseStatusException(HttpStatus.NOT_FOUND, "NdParent with id +" + ndParentId + " not found", e);
         }
-    }
+    //}
 
     @PostMapping(value = "/ndparent/new/{treId}",produces = "application/json")
     public NdParent ndParentNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String treId) {
         try {
-            logger.called("ndParentNew","viewCreateRequest",viewCreateRequest);
+            logger.called("ndParentNewApi","viewCreateRequest",viewCreateRequest);
             securityCheck(request,Role.user);
             repositoryService.findTre(treId);
             return repositoryService.add(ndParentFactory.newNdParent(viewCreateRequest, treId));
@@ -92,7 +97,7 @@ public class FrontedApi extends CommonApi {
     @GetMapping(value = "/tre/{treId}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public TRE getTre(HttpServletRequest request, @PathVariable String treId) {
         try {
-            logger.called("getTre","treId",treId);
+            logger.called("getTreApi","treId",treId);
             securityCheck(request,Role.user);
             return repositoryService.getTre(treId);
         } catch (ResourceNotFoundException e) {
@@ -102,7 +107,7 @@ public class FrontedApi extends CommonApi {
     @GetMapping(value = "/tre/",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public List<TRE> getTres(HttpServletRequest request) {
         try {
-            logger.called("getTres","","");
+            logger.called("getTresApi","","");
             User user=securityCheck(request,Role.user);
             return repositoryService.getTres(user);
         } catch (ResourceNotFoundException e) {
@@ -113,7 +118,7 @@ public class FrontedApi extends CommonApi {
     @GetMapping(value = "/ndparent/{ndParentId}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public NdParent getNdParent(HttpServletRequest request, @PathVariable String ndParentId) {
         try {
-            logger.called("getNdParent","ndParentId",ndParentId);
+            logger.called("getNdParentApi","ndParentId",ndParentId);
             securityCheck(request,Role.user);
             return repositoryService.getNdParent(ndParentId);
         } catch (ResourceNotFoundException e) {
@@ -124,7 +129,7 @@ public class FrontedApi extends CommonApi {
     @GetMapping(value = "/nd/{ndId}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public ND getNd(HttpServletRequest request, @PathVariable String ndId) {
         try {
-            logger.called("getNd","ndId",ndId);
+            logger.called("getNdApi","ndId",ndId);
             securityCheck(request,Role.user,Role.viewer);
             return repositoryService.getNd(ndId);
         } catch (ResourceNotFoundException e) {
@@ -135,7 +140,7 @@ public class FrontedApi extends CommonApi {
     @GetMapping(value = "/fi/{fiId}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public FI getFi(HttpServletRequest request, @PathVariable String fiId) {
         try {
-            logger.called("getFi","fiId",fiId);
+            logger.called("getFiApi","fiId",fiId);
 
             securityCheck(request,Role.user,Role.viewer);
             return repositoryService.getFi(fiId);
@@ -146,7 +151,7 @@ public class FrontedApi extends CommonApi {
     @DeleteMapping(value = "/fi/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public ND deleteFi(HttpServletRequest request, @PathVariable String id) {
         try {
-            logger.called("deleteFi","id",id);
+            logger.called("deleteFiApi","id",id);
             securityCheck(request,Role.user);
             String parentId=repositoryService.findFI(id).ndId;
             repositoryService.deleteFi(id);
@@ -160,7 +165,7 @@ public class FrontedApi extends CommonApi {
     @DeleteMapping(value = "/nd/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public NdParent deleteNd(HttpServletRequest request, @PathVariable String id) {
         try {
-            logger.called("deleteNd","id",id);
+            logger.called("deleteNdApi","id",id);
             securityCheck(request,Role.user);
             String parentId=repositoryService.findNd(id).ndParentId;
             repositoryService.deleteNd(id);
@@ -175,7 +180,7 @@ public class FrontedApi extends CommonApi {
     @DeleteMapping(value = "/ndparent/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public TRE deleteNdParent(HttpServletRequest request, @PathVariable String id) {
         try {
-            logger.called("deleteNdParent","id",id);
+            logger.called("deleteNdParentApi","id",id);
             securityCheck(request,Role.user);
             String parentId=repositoryService.findNdParent(id).treId;
             repositoryService.deleteNdParent(id);
@@ -189,7 +194,7 @@ public class FrontedApi extends CommonApi {
     @DeleteMapping(value = "/tre/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public List<TRE> deleteTre(HttpServletRequest request, @PathVariable String id) {
         try {
-            logger.called("deleteTre","id",id);
+            logger.called("deleteTreApi","id",id);
             User user=securityCheck(request,Role.user);
             repositoryService.deleteTre(id,user);
             return repositoryService.getTres(user);
@@ -205,7 +210,7 @@ public class FrontedApi extends CommonApi {
     public FI updateFi(HttpServletRequest request, @RequestBody FI fi, @PathVariable String fiId) {
         try {
             securityCheck(request, Role.user);
-            logger.called("updateFi", "FI",fi);
+            logger.called("updateFiApi", "FI",fi);
             repositoryService.findFI(fiId);
             FI fiUpdated=repositoryService.updateFi(fi);
             return Helpers.initGson().fromJson(fiUpdated.fiJson,FI.class);
@@ -221,7 +226,7 @@ public class FrontedApi extends CommonApi {
     public ND updateND(HttpServletRequest request, @RequestBody ND nd, @PathVariable String ndId) {
         try {
             securityCheck(request, Role.user);
-            logger.called("updateND", "ND",nd);
+            logger.called("updateNDApi", "ND",nd);
             repositoryService.findNd(ndId);
             return repositoryService.updateND(nd);
         }catch (EmptyResultDataAccessException e) {
@@ -235,7 +240,7 @@ public class FrontedApi extends CommonApi {
     public NdParent updateNdParent(HttpServletRequest request, @RequestBody NdParent ndParent, @PathVariable String ndparentId) {
         try {
             securityCheck(request, Role.user);
-            logger.called("updateNdParent", "ndParent",ndParent);
+            logger.called("updateNdParentApi", "ndParent",ndParent);
             repositoryService.findNdParent(ndparentId);
             return repositoryService.updateNdParent(ndParent);
         }catch (EmptyResultDataAccessException e) {
@@ -249,7 +254,7 @@ public class FrontedApi extends CommonApi {
     public TRE updateTre(HttpServletRequest request, @RequestBody TRE tre, @PathVariable String treId) {
         try {
             securityCheck(request, Role.user);
-            logger.called("updateTre", "tre",tre);
+            logger.called("updateTreApi", "tre",tre);
             repositoryService.findTre(treId);
             return repositoryService.updateTre(tre);
         }catch (EmptyResultDataAccessException e) {
@@ -261,6 +266,7 @@ public class FrontedApi extends CommonApi {
 
     @PostMapping(value="/export",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public ResponseEntity<Resource> export(HttpServletRequest request, @RequestBody TRE tre) throws ResourceNotFoundException, IOException, JAXBException, DataNotValidException {
+        logger.called("exportApi", "tre",tre);
         TRE treToExport=repositoryService.findTre(tre.ID);
         for(NdParent ndParent:tre.ndParents){
             NdParent ndParentToExport=repositoryService.findNdParent(ndParent.ID);
@@ -289,7 +295,7 @@ public class FrontedApi extends CommonApi {
     @GetMapping(value = "/fi/{fiId}/fidoc",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public ResponseEntity<Resource> getFiDoc(HttpServletRequest request, @PathVariable String fiId) {
         try {
-            logger.called("getFiDoc","fiId",fiId);
+            logger.called("getFiDocApi","fiId",fiId);
             securityCheck(request,Role.user,Role.viewer);
             Long fiDocId=repositoryService.getFi(fiId).fiDocId;
             logger.info("Find fiDocId "+fiDocId+" for FI with id "+fiId);

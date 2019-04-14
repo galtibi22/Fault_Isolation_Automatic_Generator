@@ -28,6 +28,10 @@ public class FI
     public FI(String ndId){
         this.ndId=ndId;
     }
+   public FI(String ndId,Long fiDocId){
+      this.ndId=ndId;
+      this.fiDocId=fiDocId;
+    }
 
     @Expose(serialize = true, deserialize = true)
     @Transient
