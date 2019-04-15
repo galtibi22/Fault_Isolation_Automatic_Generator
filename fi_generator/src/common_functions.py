@@ -50,13 +50,12 @@ def fiMainDescription(Header_Name, Header_Description):
     FI_Main_HTML_Data_Obj = {}
     FI_Main_HTML_Obj = {}
 
-    for i in range(1,4):
+    for i in range(2,4):
         FI_Descriptoin += Header_Name[i] + ": " + Header_Description[i] + "\n"
 
     FI_Main_HTML_Data_Obj['htmlType'] = 'fiTitle'
-    FI_Main_HTML_Data_Obj['txt'] = Header_Name[0] + ": " + Header_Description[0]
+    FI_Main_HTML_Data_Obj['txt'] = Header_Name[0] +" "+ Header_Name[1]+ ": " + Header_Description[0]
     FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
-
     FI_Main_HTML_Data_Obj = {}
     FI_Main_HTML_Data_Obj['htmlType'] = 'fiStpDsc'
     FI_Main_HTML_Data_Obj['txt'] = FI_Descriptoin
@@ -172,14 +171,17 @@ def save_as_docx_mac(path):
     #print("path",path)
     SOFFICE_PATH='/Users/gal.tibi/afekaProjects/Fault_Isolation_Automatic_Generator/Contents/MacOS/soffice'
     #SOFFICE_PATH="C:\Program Files\LibreOffice\program\soffice.exe"
-    subprocess.call([SOFFICE_PATH, '--headless', '--convert-to', 'docx', path])
+    outdir=os.path.dirname(os.path.abspath(__file__))
+    print("outdir",outdir)
+    subprocess.call([SOFFICE_PATH, '--headless', '--convert-to', 'docx','--outdir', outdir, path])
     f = open(path)
     name=os.path.basename(f.name).replace("doc","docx")
     f.close()
     os.remove(path)
-    newPath=path.replace("doc","docx")
-    copyfile(name,newPath)
-    os.remove(name)
+    newPath=outdir+"/"+name
+    #newPath=path.replace("doc","docx")
+    #copyfile(name,newPath)
+    #os.remove(name)
     print("finish to convert doc to docx source path=",path,"result path=",newPath)
     return newPath
 
