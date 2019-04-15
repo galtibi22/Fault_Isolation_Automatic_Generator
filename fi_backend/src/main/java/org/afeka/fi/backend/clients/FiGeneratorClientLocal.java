@@ -1,4 +1,6 @@
 package org.afeka.fi.backend.clients;
+
+
 import org.afeka.fi.backend.common.FiProperties;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.FiGenratorException;
@@ -28,7 +30,7 @@ public class FiGeneratorClientLocal implements FiGeneratorClientInterface {
         logger.called("fiGeneratorLocal","command",command);
         Process p = Runtime.getRuntime().exec(command);
         try {
-            Thread.sleep(3000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             logger.error(e);
         }

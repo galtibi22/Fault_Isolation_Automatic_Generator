@@ -10,7 +10,7 @@ import java.io.IOException;
 
 @Entity
 public class FiDoc {
-    @Column(columnDefinition="BINARY(100000)")
+    @Column(columnDefinition="BINARY(10000000)")
     public byte [] doc;
     @Id
     @GeneratedValue

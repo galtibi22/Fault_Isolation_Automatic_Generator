@@ -54,5 +54,7 @@ public class Application extends FiCommon {
     private void loadUsers() {
         userRepository.save(new User("admin","Aa123456", Role.admin,"Admin","Admin"));
         userRepository.save(new User("figenerator","Aa123456", Role.generator,"FiGenerator","FiGenerator"));
+        userRepository.save(new User("user","Aa123456", Role.user,"user","user"));
+
     }
 }
