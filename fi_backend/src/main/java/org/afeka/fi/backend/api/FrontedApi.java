@@ -34,6 +34,10 @@ import java.util.List;
 @RequestMapping(path = "api/fronted")
 @RestController
 public class FrontedApi extends CommonApi {
+
+
+
+
     @PostMapping(value = "/tre/new",produces = "application/json")
     public TRE newTre(HttpServletRequest request,@RequestBody  ViewCreateRequest viewCreateRequest) {
         logger.called("newTreApi","viewCreateRequest",viewCreateRequest);
@@ -310,5 +314,21 @@ public class FrontedApi extends CommonApi {
         } catch (ResourceNotFoundException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND,e.getMessage(), e);
         }
+    }
+
+    @PostMapping(value = "/ocr",headers = HttpHeaders.AUTHORIZATION)
+    public ResponseEntity<Resource> ocr(HttpServletRequest request, @RequestBody MultipartFile fiImage) {
+            securityCheck(request, Role.user);
+            logger.called("ocrApi", "fiImage",fiImage.getOriginalFilename() );
+        try {
+            MultipartFile fiDoc=ocrClient.run(fiImage);
+            return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+fiDoc.getName())
+                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .contentLength(fiDoc.getSize())
+                    .body(new InputStreamResource(fiDoc.getInputStream()));
+        } catch (IOException e) {
+            throw new ResponseStatusException(HttpStatus.METHOD_FAILURE,e.getMessage(), e);
+        }
+
     }
 }

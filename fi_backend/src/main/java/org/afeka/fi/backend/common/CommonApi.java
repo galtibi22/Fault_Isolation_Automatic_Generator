@@ -1,6 +1,7 @@
 package org.afeka.fi.backend.common;
 
 import org.afeka.fi.backend.clients.FiGeneratorClientLocal;
+import org.afeka.fi.backend.clients.OcrClient;
 import org.afeka.fi.backend.factory.FiFactory;
 import org.afeka.fi.backend.factory.NdFactory;
 import org.afeka.fi.backend.factory.NdParentFactory;
@@ -11,8 +12,11 @@ import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.repository.RepositoryService;
 import org.afeka.fi.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,8 +25,11 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Optional;
 
+@Component
 public class CommonApi extends FiCommon{
 
+    @Value("${org.afeka.fi.backend.common.commonapi.ocrclass}")
+    private String ocrclass;
     @Autowired
     public UserRepository userRepository;
     @Autowired
@@ -36,7 +43,14 @@ public class CommonApi extends FiCommon{
     @Autowired
     public TreFactory treFactory;
 
+    protected OcrClient ocrClient;
+
+    @Autowired
+    public void setOcrClient(OcrClient ocrClient) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
+        this.ocrClient=ocrClient;// (OcrClient) this.getClass().getClassLoader().loadClass(getOcrclass()).newInstance();
+    }
     public FiGeneratorClientLocal fiGeneratorClient=new FiGeneratorClientLocal();
+
 
 
     public User securityCheck(HttpServletRequest request, Role... roles){
@@ -72,4 +86,11 @@ public class CommonApi extends FiCommon{
         return user.get();
     }
 
+    public String getOcrclass() {
+        return ocrclass;
+    }
+
+    public void setOcrclass(String ocrclass) {
+        this.ocrclass = ocrclass;
+    }
 }
