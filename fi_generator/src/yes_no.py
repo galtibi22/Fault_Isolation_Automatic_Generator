@@ -32,7 +32,7 @@ FI_Num = 0
 
 
 path=cf.init()
-pathUrl=cf.generate_fi_doc_path(sys.argv[0])
+pathUrl=cf.generate_fi_doc_path(sys.argv[1])
 document = Document(pathUrl)
 
 
