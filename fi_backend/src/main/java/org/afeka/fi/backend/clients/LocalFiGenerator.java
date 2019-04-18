@@ -5,28 +5,28 @@ import org.afeka.fi.backend.common.FiProperties;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.FiGenratorException;
 import org.afeka.fi.backend.pojo.fiGenerator.FiGeneratorType;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+@ConfigurationProperties(prefix = "figenerator.local")
+@Service("LocalFiGenerator")
+public class LocalFiGenerator implements FiGeneratorClient {
 
-public class FiGeneratorClientLocal implements FiGeneratorClientInterface {
-
-
-
+    private String path;
+    private String pythonprefix;
     @Override
     public void runFiGenerator(MultipartFile fiDoc,String fiDocId, FiGeneratorType fiGeneratorType, String ndId) throws IOException {
-        logger.called("runFiGeneratorLocal","type",fiGeneratorType);
-        Path path= Paths.get(FiProperties.FI_GENERATOR_CLIENT_PATH,fiGeneratorType+".py");
-        //Path fiDocPath=path.relativize(Paths.get(ndId+fiDoc.getOriginalFilename()));
+        logger.called("runLocalFiGenerator","type",fiGeneratorType);
+        Path path= Paths.get(getPath(),fiGeneratorType+".py");
         Path fiDocPath=Files.createTempFile(Helpers.getFileSimpleName(fiDoc),"."+Helpers.getFileExtension(fiDoc));
         fiDocPath.toFile().deleteOnExit();
         Files.write(fiDocPath,fiDoc.getBytes());
-       // Files.copy(fiDoc.getInputStream(),fiDocPath);
-        String command = String.format(FiProperties.PYTHON_COMMAND_START+" %s %s %s %s",path.toAbsolutePath(),fiDocPath.toAbsolutePath(),ndId,fiDocId);
+        String command = String.format(pythonprefix+" %s %s %s %s",path.toAbsolutePath(),fiDocPath.toAbsolutePath(),ndId,fiDocId);
         logger.called("fiGeneratorLocal","command",command);
         Process p = Runtime.getRuntime().exec(command);
         try {
@@ -44,5 +44,21 @@ public class FiGeneratorClientLocal implements FiGeneratorClientInterface {
         }
 
 
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public String getPythonprefix() {
+        return pythonprefix;
+    }
+
+    public void setPythonprefix(String pythonprefix) {
+        this.pythonprefix = pythonprefix;
     }
 }

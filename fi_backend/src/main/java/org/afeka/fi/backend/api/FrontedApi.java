@@ -51,9 +51,9 @@ public class FrontedApi extends CommonApi {
             securityCheck(request, Role.user);
             logger.called("fiNewApi", "ndId " + ndId + " and fiDoc", fiDoc.getOriginalFilename());
             repositoryService.findNd(ndId);
-            fiGeneratorClient.fiDocumentValidator(fiDoc);
+            fiGenerator.fiDocumentValidator(fiDoc);
             String fiDocId=repositoryService.add(fiDoc);
-            fiGeneratorClient.executeFiGenerator(fiDoc,fiDocId,ndId,FiGeneratorType.valueOf(type) );
+            fiGenerator.runFiGenerator(fiDoc,fiDocId,FiGeneratorType.valueOf(type),ndId);
             return new GeneralResponse("Success to execute FiGeneratorClient for with new fiDoc " + fiDoc.getOriginalFilename() + " for ndId " + ndId);
         }catch (NullPointerException e){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "fiDoc not exist in the request or the key name is not fiDoc", e);
@@ -71,6 +71,8 @@ public class FrontedApi extends CommonApi {
         catch (IOException e) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Cannot Start fi generator client" +e);
 
+        } catch (Exception e) {
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
 
@@ -268,7 +270,7 @@ public class FrontedApi extends CommonApi {
         }
     }
 
-    @PostMapping(value="/export",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    @PostMapping(value="/export"/*,headers = HttpHeaders.AUTHORIZATION*/)
     public ResponseEntity<Resource> export(HttpServletRequest request, @RequestBody TRE tre) throws ResourceNotFoundException, IOException, JAXBException, DataNotValidException {
         logger.called("exportApi", "tre",tre);
         TRE treToExport=repositoryService.findTre(tre.ID);
@@ -296,11 +298,11 @@ public class FrontedApi extends CommonApi {
 
     }
 
-    @GetMapping(value = "/fi/{fiId}/fidoc",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
+    @GetMapping(value = "/fi/{fiId}/fiDoc"/*,headers = HttpHeaders.AUTHORIZATION*/)
     public ResponseEntity<Resource> getFiDoc(HttpServletRequest request, @PathVariable String fiId) {
         try {
             logger.called("getFiDocApi","fiId",fiId);
-            securityCheck(request,Role.user,Role.viewer);
+           // securityCheck(request,Role.user,Role.viewer);
             Long fiDocId=repositoryService.getFi(fiId).fiDocId;
             logger.info("Find fiDocId "+fiDocId+" for FI with id "+fiId);
             FiDoc fiDoc=repositoryService.getFiDoc(fiDocId);

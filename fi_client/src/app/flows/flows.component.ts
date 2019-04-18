@@ -144,14 +144,16 @@ export class FlowsComponent implements OnInit {
   }
 
   download(fi: any) {
-    this.tresService.downloadFi(fi.ID).subscribe(
-      (data: any) => {
-        this.downloadFile(data, 'xml');
-      },
-      error => {
-        console.error(error);
-      });
-  }
+   // this.tresService.downloadFi(fi.ID).subscribe(
+    //  (data: any) => {
+     //   this.downloadFile(data, 'xml');
+     // },
+     // error => {
+     //   console.error(error);
+     // });
+      const url="http://localhost:8080/api/fronted/fi/"+fi.ID+"/fiDoc/";
+      window.open(url);
+     }
 
   exportSelected() {
     const selectedFIIds = this.selection.selected.map(row => {
@@ -184,6 +186,7 @@ export class FlowsComponent implements OnInit {
     const blob = new Blob([data], { type: type.toString() });
     const url = window.URL.createObjectURL(blob);
     const pwa = window.open(url);
+
     if (!pwa || pwa.closed || pwa.closed === undefined) {
       alert('Please disable your Pop-up blocker and try again.');
     }

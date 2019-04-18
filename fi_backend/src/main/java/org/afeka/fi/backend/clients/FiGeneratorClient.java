@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 
-public interface FiGeneratorClientInterface{
+public interface FiGeneratorClient {
 
     FiLogger logger = new FiLogger();
 
@@ -26,13 +26,13 @@ public interface FiGeneratorClientInterface{
         }
     }
 
-    default void executeFiGenerator(MultipartFile fiDoc,String fiDocId,String ndId,FiGeneratorType fiGeneratorType) throws IOException {
+   /* default void executeFiGenerator(MultipartFile fiDoc,String fiDocId,String ndId,FiGeneratorType fiGeneratorType) throws IOException {
         switch (FiProperties.FI_GENERATOR_MODE){
             case FiGeneratorMode.LOCAL:
-                new FiGeneratorClientLocal().runFiGenerator(fiDoc,fiDocId,fiGeneratorType,ndId);
+                new LocalFiGenerator().runFiGenerator(fiDoc,fiDocId,fiGeneratorType,ndId);
                 break;
             }
-        }
+        }*/
 
     }
 

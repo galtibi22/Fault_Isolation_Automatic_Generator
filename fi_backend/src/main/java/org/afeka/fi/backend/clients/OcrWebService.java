@@ -5,10 +5,13 @@ import org.afeka.fi.backend.pojo.ocr.OcrWebServiceResponse;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -16,12 +19,11 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
-@Component
-public class OcrWebService extends FiCommon implements OcrClient{
-    @Value("${org.afeka.fi.backend.clients.ocrwebservice.licensecode}")
-    private String licensecode;
-    @Value("${org.afeka.fi.backend.clients.ocrwebservice.username}")
 
+@Service("OcrWebService")
+@ConfigurationProperties(prefix = "ocrprovider.ocrwebservice")
+public class OcrWebService extends FiCommon implements OcrClient{
+    private String licensecode;
     private String username;
 
     @Override
@@ -29,7 +31,7 @@ public class OcrWebService extends FiCommon implements OcrClient{
         logger.called("OcrWebService.run","fiImage",file.getName());
         logger.info("Go to convert "+file.getName() +" to doc file with OcrWebService");
         HttpClientImpl httpClient=new HttpClientImpl();
-        String url = "https://www.ocrwebservice.com/restservices/processDocument?language=english&gettext=true&outputformat=doc";
+        String url = "https://www.ocrwebservice.com/restservices/processDocument?language=english&gettext=true&outputformat=pdf";
         Header[] headers={
                 new BasicHeader(HttpHeaders.AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((username + ":" + licensecode).getBytes()))
                 ,new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json")};

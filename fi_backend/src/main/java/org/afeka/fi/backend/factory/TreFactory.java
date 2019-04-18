@@ -161,13 +161,8 @@ public class TreFactory extends ViewFactory <TRE> {
         }
         HtmlGenerator htmlGenerator=new HtmlGenerator();
         htmlGenerator.basicRootPage(tre.lbl,tre.des);
-        save(htmlGenerator.toHtml().renderFormatted(),Paths.get(path+ FiProperties.VIEW_DEMO_TRE_HTML_NAME));
+        save(htmlGenerator.toHtml().renderFormatted(),path);
     }
-
-/*    @Override
-    public void add(NdParent ndParent) throws Exception {
-        tre.ndParents.add(ndParent);
-    }*/
 
 
 }

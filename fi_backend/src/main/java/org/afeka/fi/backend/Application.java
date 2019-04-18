@@ -22,14 +22,8 @@ public class Application extends FiCommon {
     RepositoryService repositoryService;
     @Autowired
     UserRepository userRepository;
-  /*
-    TreFactory treFactory=new TreFactory();
-    NdParentFactory ndParentFactory=new NdParentFactory();
-    NdFactory ndFactory=new NdFactory();
-    FiFactory fiFactory=new FiFactory();
-*/
     public static void main(String[] args) throws Exception {
-        FiProperties.init();
+        //FiProperties.init();
         SpringApplication.run(Application.class, args);
     }
 
@@ -39,15 +33,6 @@ public class Application extends FiCommon {
     public CommandLineRunner initDemoData() {
         return (args) -> {
            loadUsers();
-            /* logger.start("initDemoData");
-            TRE tre=repositoryService.add(treFactory.newTRE("gal@gal.com"));
-            NdParent ndParent= repositoryService.add(ndParentFactory.newNdParent("Root System",tre.ID));
-            ND nd=repositoryService.add(ndFactory.newND("UAV SYSTEM",ndParent.ID));
-            String fiJson=Helpers.readFile(FiProperties.DATA_PATH+"fiJson");
-            repositoryService.add(fiFactory.newFI(Helpers.initGson().fromJson(fiJson,FI.class).PG,nd.ID));
-            logger.info("initDemoData insert TRE="+repositoryService.getTre(tre.ID));
-            logger.finish("initDemoData");
-*/
         };
 
     }

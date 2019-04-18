@@ -1,6 +1,6 @@
 package org.afeka.fi.backend.common;
 
-import org.afeka.fi.backend.clients.FiGeneratorClientLocal;
+import org.afeka.fi.backend.clients.FiGeneratorClient;
 import org.afeka.fi.backend.clients.OcrClient;
 import org.afeka.fi.backend.factory.FiFactory;
 import org.afeka.fi.backend.factory.NdFactory;
@@ -8,50 +8,50 @@ import org.afeka.fi.backend.factory.NdParentFactory;
 import org.afeka.fi.backend.factory.TreFactory;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.auth.User;
-import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.repository.RepositoryService;
 import org.afeka.fi.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
-import java.util.Base64;
 import java.util.Optional;
 
-@Component
-public class CommonApi extends FiCommon{
+@Service
 
-    @Value("${org.afeka.fi.backend.common.commonapi.ocrclass}")
-    private String ocrclass;
+public class CommonApi extends FiCommon{
     @Autowired
-    public UserRepository userRepository;
+    protected ApplicationContext context;
     @Autowired
-    public RepositoryService repositoryService;
+    protected UserRepository userRepository;
     @Autowired
-    public FiFactory fiFactory;
+    protected RepositoryService repositoryService;
     @Autowired
-    public NdFactory ndFactory;
+    protected FiFactory fiFactory;
     @Autowired
-    public NdParentFactory ndParentFactory;
+    protected NdFactory ndFactory;
     @Autowired
-    public TreFactory treFactory;
+    protected NdParentFactory ndParentFactory;
+    @Autowired
+    protected TreFactory treFactory;
 
     protected OcrClient ocrClient;
+    protected FiGeneratorClient fiGenerator;
+
 
     @Autowired
-    public void setOcrClient(OcrClient ocrClient) throws ClassNotFoundException, IllegalAccessException, InstantiationException {
-        this.ocrClient=ocrClient;// (OcrClient) this.getClass().getClassLoader().loadClass(getOcrclass()).newInstance();
+    public void setOcrClient(@Value("${ocrprovider}") String ocrprovider) {
+        ocrClient= (OcrClient) context.getBean(ocrprovider);
     }
-    public FiGeneratorClientLocal fiGeneratorClient=new FiGeneratorClientLocal();
-
-
+    @Autowired
+    public void setFiGeneratorClient(@Value("${figenerator}") String figenerator) {
+        fiGenerator= (FiGeneratorClient) context.getBean(figenerator);
+    }
 
     public User securityCheck(HttpServletRequest request, Role... roles){
         logger.start("securityCheck");
@@ -85,12 +85,12 @@ public class CommonApi extends FiCommon{
         logger.finish("authCheck success for user "+user.get().userName);
         return user.get();
     }
-
+/*
     public String getOcrclass() {
         return ocrclass;
     }
 
     public void setOcrclass(String ocrclass) {
         this.ocrclass = ocrclass;
-    }
+    }*/
 }
