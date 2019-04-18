@@ -298,18 +298,18 @@ public class FrontedApi extends CommonApi {
 
     }
 
-    @GetMapping(value = "/fi/{fiId}/fiDoc"/*,headers = HttpHeaders.AUTHORIZATION*/)
+    @GetMapping(value = "/fi/{fiId}/fidoc",headers = HttpHeaders.AUTHORIZATION)
     public ResponseEntity<Resource> getFiDoc(HttpServletRequest request, @PathVariable String fiId) {
         try {
             logger.called("getFiDocApi","fiId",fiId);
-           // securityCheck(request,Role.user,Role.viewer);
+            securityCheck(request,Role.user,Role.viewer);
             Long fiDocId=repositoryService.getFi(fiId).fiDocId;
             logger.info("Find fiDocId "+fiDocId+" for FI with id "+fiId);
             FiDoc fiDoc=repositoryService.getFiDoc(fiDocId);
             byte[] fiDocByte=fiDoc.doc;
             InputStreamResource inputStream= new InputStreamResource(new ByteArrayInputStream(fiDoc.doc));
             return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+fiDoc.name)
-                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .contentType(MediaType.parseMediaType("application/msword"))
                     .contentLength(fiDocByte.length)
                     .body(inputStream);
 

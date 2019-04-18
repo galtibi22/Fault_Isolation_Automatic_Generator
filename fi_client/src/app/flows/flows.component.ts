@@ -1,3 +1,5 @@
+import {Observable,of, from } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, OnInit, ViewChild } from '@angular/core';
@@ -27,6 +29,7 @@ export interface IFiModel {
 })
 export class FlowsComponent implements OnInit {
   @ViewChild('file') file;
+
   displayedColumns: string[] = ['select', 'number', 'label', 'status', 'download', 'delete'];
   selection = new SelectionModel<any>(true, []);
   dataSource: any;
@@ -47,7 +50,9 @@ export class FlowsComponent implements OnInit {
 
   constructor(private route: ActivatedRoute,
               private router: Router,
-              private tresService: TresService) { }
+              private tresService: TresService,
+              private http: HttpClient) { }
+
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -143,17 +148,46 @@ export class FlowsComponent implements OnInit {
       });
   }
 
-  download(fi: any) {
-   // this.tresService.downloadFi(fi.ID).subscribe(
-    //  (data: any) => {
-     //   this.downloadFile(data, 'xml');
-     // },
-     // error => {
-     //   console.error(error);
-     // });
-      const url="http://localhost:8080/api/fronted/fi/"+fi.ID+"/fiDoc/";
-      window.open(url);
-     }
+public getFile(fi: any): Observable<Blob> {
+//const options = { responseType: 'blob' }; there is no use of this
+    const baseUrl = "http://localhost:8080/api/fronted/fi/"+fi.ID+"/fidoc/";
+  // const headers = new HttpHeaders().set('authorization','Bearer '+token);
+    return this.http.get(baseUrl, { responseType: 'blob' });
+}
+
+public download(fi: any): void {
+    this.getFile(fi)
+        .subscribe(x => {
+            //const filename=this.getFileNameFromHttpResponse(x)
+            var newBlob = new Blob([x], { type:"application/msword" });
+
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                window.navigator.msSaveOrOpenBlob(newBlob);
+                return;
+            }
+
+            // For other browsers:
+            // Create a link pointing to the ObjectURL containing the blob.
+            const data = window.URL.createObjectURL(newBlob);
+
+            var link = document.createElement('a');
+            link.href = data;
+            link.download = "fiDoc.doc";
+            // this is necessary as link.click() does not work on the latest firefox
+            link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+
+            setTimeout(function () {
+                // For Firefox it is necessary to delay revoking the ObjectURL
+                window.URL.revokeObjectURL(data);
+                link.remove();
+            }, 100);
+        });
+}
+private getFileNameFromHttpResponse(httpResponse) {
+      var contentDispositionHeader = httpResponse.headers('Content-Disposition');
+      var result = contentDispositionHeader.split(';')[1].trim().split('=')[1];
+      return result.replace(/"/g, '');
+  }
 
   exportSelected() {
     const selectedFIIds = this.selection.selected.map(row => {
