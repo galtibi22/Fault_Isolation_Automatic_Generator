@@ -35,6 +35,7 @@ export class FlowsComponent implements OnInit {
     { value: 'flowchart', viewValue: 'flowchart' },
     { value: 'table', viewValue: 'table' }
   ];
+  chooseUpload = false;
   canUpload = false;
   uploading = false;
   ndId: string;
@@ -76,6 +77,11 @@ export class FlowsComponent implements OnInit {
     this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
+  /** Selects upload new doc/docx file. */
+  selectedUploadFile() {
+    this.chooseUpload = true;
+  }
+
   /** The label for the checkbox on the passed row */
   checkboxLabel(row?: any): string {
     if (!row) {
@@ -114,10 +120,12 @@ export class FlowsComponent implements OnInit {
         (data: { message: string; }) => {
           this.getFiList();
           this.uploading = false;
+          this.chooseUpload = false;
           this.file.nativeElement.value = '';
         },
         error => {
           this.uploading = false;
+          this.chooseUpload = false;
           console.error(error);
           this.file.nativeElement.value = '';
         });
@@ -144,16 +152,14 @@ export class FlowsComponent implements OnInit {
   }
 
   download(fi: any) {
-   // this.tresService.downloadFi(fi.ID).subscribe(
-    //  (data: any) => {
-     //   this.downloadFile(data, 'xml');
-     // },
-     // error => {
-     //   console.error(error);
-     // });
-      const url="http://localhost:8080/api/fronted/fi/"+fi.ID+"/fiDoc/";
-      window.open(url);
-     }
+    this.tresService.downloadFi(fi.ID).subscribe(
+      (data: any) => {
+        this.downloadFile(data, 'xml');
+      },
+      error => {
+        console.error(error);
+      });
+  }
 
   exportSelected() {
     const selectedFIIds = this.selection.selected.map(row => {
@@ -186,9 +192,25 @@ export class FlowsComponent implements OnInit {
     const blob = new Blob([data], { type: type.toString() });
     const url = window.URL.createObjectURL(blob);
     const pwa = window.open(url);
-
     if (!pwa || pwa.closed || pwa.closed === undefined) {
       alert('Please disable your Pop-up blocker and try again.');
+    }
+  }
+
+  DeleteSelected() {
+    const selectedFIIds = this.selection.selected.map(row => {
+      return { ID: row.ID};
+    });
+    if (confirm('Are you sure delete selected?')) {
+      for (let fi of selectedFIIds) {
+        this.tresService.deleteFi(fi.ID).subscribe(
+          (data: INd) => {
+            this.initDataSource(data);
+          },
+          error => {
+            console.error(error);
+          });
+      }
     }
   }
 }
