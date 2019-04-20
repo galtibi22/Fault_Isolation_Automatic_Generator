@@ -155,16 +155,14 @@ export class UserPageComponent {
     const flatNode = this.flatNodeMap.get(node);
     const flatParentNode = this.getParentNode(node);
     const parentNode = this.flatNodeMap.get(flatParentNode);
-    if (confirm('Are you sure delete selected?')) {
-      this.database.deleteItem(parentNode!, node.item, flatNode, node.level).subscribe(
-        (tres: Array<any>) => {
-          this.database.deleteItemFromList(parentNode!, flatNode);
-          this.router.navigate(['']);
-        },
-        error => {
-          console.error(error);
-        });
-    }
+    this.database.deleteItem(parentNode!, node.item, flatNode, node.level).subscribe(
+      (tres: Array<any>) => {
+        this.database.deleteItemFromList(parentNode!, flatNode);
+        this.router.navigate(['']);
+      },
+      error => {
+        console.error(error);
+      });
   }
 
   /** Select the category so we can insert the new item. */

@@ -1,4 +1,4 @@
-import {Observable,of, from } from 'rxjs';
+import { Observable, of, from } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -29,8 +29,7 @@ export interface IFiModel {
 })
 export class FlowsComponent implements OnInit {
   @ViewChild('file') file;
-
-  displayedColumns: string[] = ['select', 'number', 'label', 'status', 'download', 'delete'];
+  displayedColumns: string[] = ['select', 'number', 'label', 'status', 'download'];
   selection = new SelectionModel<any>(true, []);
   dataSource: any;
   fileTypes: any[] = [
@@ -38,6 +37,7 @@ export class FlowsComponent implements OnInit {
     { value: 'flowchart', viewValue: 'flowchart' },
     { value: 'table', viewValue: 'table' }
   ];
+  chooseUpload = false;
   canUpload = false;
   uploading = false;
   ndId: string;
@@ -52,7 +52,6 @@ export class FlowsComponent implements OnInit {
               private router: Router,
               private tresService: TresService,
               private http: HttpClient) { }
-
 
   ngOnInit() {
     this.route.queryParams.subscribe(params => {
@@ -79,6 +78,11 @@ export class FlowsComponent implements OnInit {
     this.isAllSelected() ?
     this.selection.clear() :
     this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  /** Selects upload new doc/docx file. */
+  selectedUploadFile() {
+    this.chooseUpload = true;
   }
 
   /** The label for the checkbox on the passed row */
@@ -119,10 +123,12 @@ export class FlowsComponent implements OnInit {
         (data: { message: string; }) => {
           this.getFiList();
           this.uploading = false;
+          this.chooseUpload = false;
           this.file.nativeElement.value = '';
         },
         error => {
           this.uploading = false;
+          this.chooseUpload = false;
           console.error(error);
           this.file.nativeElement.value = '';
         });
@@ -148,45 +154,39 @@ export class FlowsComponent implements OnInit {
       });
   }
 
-public getFile(fi: any): Observable<Blob> {
-//const options = { responseType: 'blob' }; there is no use of this
-    const baseUrl = "http://localhost:8080/api/fronted/fi/"+fi.ID+"/fidoc/";
-  // const headers = new HttpHeaders().set('authorization','Bearer '+token);
+  public getFile(fi: any): Observable<Blob> {
+    // const options = { responseType: 'blob' }; there is no use of this
+    const baseUrl = 'http://localhost:8080/api/fronted/fi/' + fi.ID + '/fidoc/';
+    // const headers = new HttpHeaders().set('authorization','Bearer '+token);
     return this.http.get(baseUrl, { responseType: 'blob' });
-}
+  }
 
-public download(fi: any): void {
+  public download(fi: any): void {
     this.getFile(fi)
-        .subscribe(x => {
-            //const filename=this.getFileNameFromHttpResponse(x)
-            var newBlob = new Blob([x], { type:"application/msword" });
+      .subscribe(x => {
+        const newBlob = new Blob([x], { type: 'application/msword' });
 
-            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                window.navigator.msSaveOrOpenBlob(newBlob);
-                return;
-            }
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(newBlob);
+          return;
+        }
 
-            // For other browsers:
-            // Create a link pointing to the ObjectURL containing the blob.
-            const data = window.URL.createObjectURL(newBlob);
+        // For other browsers:
+        // Create a link pointing to the ObjectURL containing the blob.
+        const data = window.URL.createObjectURL(newBlob);
 
-            var link = document.createElement('a');
-            link.href = data;
-            link.download = "fiDoc.doc";
-            // this is necessary as link.click() does not work on the latest firefox
-            link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+        const link = document.createElement('a');
+        link.href = data;
+        link.download = 'fiDoc.doc';
+        // this is necessary as link.click() does not work on the latest firefox
+        link.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
 
-            setTimeout(function () {
-                // For Firefox it is necessary to delay revoking the ObjectURL
-                window.URL.revokeObjectURL(data);
-                link.remove();
-            }, 100);
-        });
-}
-private getFileNameFromHttpResponse(httpResponse) {
-      var contentDispositionHeader = httpResponse.headers('Content-Disposition');
-      var result = contentDispositionHeader.split(';')[1].trim().split('=')[1];
-      return result.replace(/"/g, '');
+        setTimeout(() => {
+          // For Firefox it is necessary to delay revoking the ObjectURL
+          window.URL.revokeObjectURL(data);
+          link.remove();
+        }, 100);
+      });
   }
 
   exportSelected() {
@@ -220,9 +220,25 @@ private getFileNameFromHttpResponse(httpResponse) {
     const blob = new Blob([data], { type: type.toString() });
     const url = window.URL.createObjectURL(blob);
     const pwa = window.open(url);
-
     if (!pwa || pwa.closed || pwa.closed === undefined) {
       alert('Please disable your Pop-up blocker and try again.');
+    }
+  }
+
+  DeleteSelected() {
+    const selectedFIIds = this.selection.selected.map(row => {
+      return { ID: row.ID};
+    });
+    if (confirm('Are you sure delete selected?')) {
+      for (let fi of selectedFIIds) {
+        this.tresService.deleteFi(fi.ID).subscribe(
+          (data: INd) => {
+            this.initDataSource(data);
+          },
+          error => {
+            console.error(error);
+          });
+      }
     }
   }
 }
