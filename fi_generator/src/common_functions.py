@@ -53,6 +53,7 @@ def fiMainDescription(Header_Name, Header_Description):
     for i in range(2,4):
         FI_Descriptoin += Header_Name[i] + ": " + Header_Description[i] + "\n"
 
+
     FI_Main_HTML_Data_Obj['htmlType'] = 'fiTitle'
     FI_Main_HTML_Data_Obj['txt'] = Header_Name[0] +" "+ Header_Name[1]+ ": " + Header_Description[0]
     FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
@@ -125,8 +126,8 @@ def fiTaskYes(str, yesOption, noOption):
     yesObj['msg'] = "1"
     yesObj['msgIx'] = "0"
 
-
     return yesObj
+
 
 
 # Method return Task Object to 'Y' (Yes option only)
@@ -195,6 +196,7 @@ def post_api_server(jsondata):
     r=requests.post(API_ENDPOINT,data=json.dumps(jsondata),headers = headers)
     print(r)
 
+
 def generate_fi_doc_path(path):
     pathUrl=""
     if(path.endswith('docx')):
@@ -208,6 +210,7 @@ def generate_fi_doc_path(path):
                 print("use save_as_docx_win")
                 pathUrl=save_as_docx_win(path)
     return pathUrl
+
 
 def init():
     print("Start fi_generator client with the next params",sys.argv)
