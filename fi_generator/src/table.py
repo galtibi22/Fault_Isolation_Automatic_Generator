@@ -91,7 +91,7 @@ for table in tables:
                             else:
                                 if(i == 4):
                                     # Step
-                                    FI_status = "missingStepError"
+                                    FI_Status = "missingStepError"
 
 
                         ###### Default end FI numbers ######
