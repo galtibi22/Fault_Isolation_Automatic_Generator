@@ -91,6 +91,8 @@ private FiFactory pgs(List<PG> pgs) {
     }
     if(pgs.stream().allMatch(p->p.status.equals(Status.success.name())))
         status(Status.success);
+    else
+        status(Status.failed);
 
     return this;
 }
