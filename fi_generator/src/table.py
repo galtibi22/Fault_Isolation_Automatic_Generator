@@ -85,6 +85,7 @@ for table in tables:
                                     newNumberObj['Y'] = cf.fiTaskYes2(FI_row[i], str(Number_Of_Actions+1), str(FI_Num+1))
                                     newNumberObj['N'] = { 'typ' : '4' }
                                 newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(FI_Txt_Header[i] + ": " + FI_row[i])
+                                newNumberObj['status'] = "success"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
 
@@ -96,10 +97,10 @@ for table in tables:
 
                         ###### Default end FI numbers ######
                         FI_Array.append({"n": str(FI_Num), "htmlObj": {"htmlData": [{"htmlType": "fiNegEnd"}]},
-                                         "N": {"typ": "4"}, "Y": {"typ": "4"}})
+                                         "N": {"typ": "4"}, "Y": {"typ": "4"}, "status": "success"})
                         FI_Num += 1
                         FI_Array.append({"n": str(FI_Num), "htmlObj": {"htmlData": [{"htmlType": "fiPosEnd"}]},
-                                         "N": {"typ": "4"}, "Y": {"typ": "4"}})
+                                         "N": {"typ": "4"}, "Y": {"typ": "4"}, "status": "success"})
                         FI={"PG":FI_Array,
                             "status":FI_Status}
                         FI_Array_List.append(FI)
