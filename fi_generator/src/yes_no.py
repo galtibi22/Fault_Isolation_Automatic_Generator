@@ -89,14 +89,15 @@ for table in tables:
                             newNumberObj['Y'] = cf.fiTaskYes(FI_row[0], FI_row[1], FI_row[2])
                             newNumberObj['N'] = { 'typ' : '4' }
                             newNumberObj['htmlObj'] = cf.fiTaskDescriptionQuestion(FI_row[0])
+                        newNumberObj['status'] = "success"
                         FI_Array.append(newNumberObj)
                         FI_Num+=1
 
 
 ###### Default end FI numbers ######
-FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiNegEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
+FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiNegEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" }, "status": "success" })
 FI_Num+=1
-FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiPosEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" } })
+FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiPosEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" }, "status": "success" })
 
 
 fis=[{
