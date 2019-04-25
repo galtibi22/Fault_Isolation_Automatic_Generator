@@ -41,7 +41,7 @@ public class UserApi extends CommonApi {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot update user with Role Admin");
         if (!userRepository.findById(user.userName).isPresent())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User "+user.userName +" is not exist in the system. Please user register api");
-        return  userRepository.save(user);
+        return userRepository.update(user);
     }
 
     @DeleteMapping(path="/delete/{userName}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")

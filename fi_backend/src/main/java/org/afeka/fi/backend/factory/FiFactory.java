@@ -28,7 +28,7 @@ public class FiFactory extends ViewFactory<FI> {
                 nPg(fiSource.PG.size()-1+"").
                 ndId(ndId).
                 fiDocId(fiDocId).
-                status(fiSource.status).
+                //status(fiSource.status).
                 fiJson().
                 get();
     }
@@ -89,6 +89,9 @@ private FiFactory pgs(List<PG> pgs) {
                 break;
             }
     }
+    if(pgs.stream().allMatch(p->p.status.equals(Status.success.name())))
+        status(Status.success);
+
     return this;
 }
 

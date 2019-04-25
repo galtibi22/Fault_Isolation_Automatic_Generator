@@ -38,22 +38,22 @@ public class User {
         this.lastName=lastName;
     }
 
-    @NotNull
+   // @NotNull
     @Expose
     @Password
     @Size(min = 8,max=15,message = "Password must be 8 - 15 characters long")
     @JsonProperty( value = "password", access = JsonProperty.Access.WRITE_ONLY)
     @SerializedName("password")
     public String password;
-    @NotNull
+    //@NotNull
     @Expose
     public Role role;
     @Expose
-    @NotNull
+    //@NotNull
     @Size(min = 2,max=48,message = "firstName must be 2 - 48 characters long")
     public String firstName;
     @Expose
-    @NotNull
+    //@NotNull
     @Size(min = 2,max=48,message = "lastName must be 2 - 48 characters long")
     public String lastName;
 

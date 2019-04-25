@@ -36,9 +36,12 @@ public class PG
     @Expose(serialize = true,deserialize = true)
     @XmlTransient
     public HtmlObj htmlObj;
+    @Expose(serialize = true,deserialize = true)
+    @XmlTransient
+    public String status;
 
     @Override
     public String toString() {
-        return "PG{" + "dwgID='" + dwgID + '\'' + ", doc='" + doc + '\'' + ", _n='" + _n + '\'' + ", N=" + N + ", Y=" + Y + ", htmlObj=" + htmlObj + '}';
+        return "PG{" + "dwgID='" + dwgID + '\'' + ", doc='" + doc + '\'' + ", _n='" + _n + '\'' + ", N=" + N + ", Y=" + Y + ", htmlObj=" + htmlObj + ", status='" + status + '\'' + '}';
     }
 }
