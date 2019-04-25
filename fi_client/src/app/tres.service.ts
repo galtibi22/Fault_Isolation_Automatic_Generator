@@ -74,6 +74,24 @@ export class TresService {
     return this.http.post<{ message: string; }>(`${this.frontendApi}/fi/new/${ndId}/${fiType}/`, body);
   }
 
+  updateTre(treId: string, data: any) {
+    return this.http.put<ITre>(`${this.frontendApi}/tre/${treId}/`, data);
+  }
+
+  updateNdParent(ndParentId: string, data: any) {
+    return this.http.put<INdParent>(`${this.frontendApi}/ndparent/${ndParentId}/`, data);
+  }
+
+  updateNd(ndId: string, data: any) {
+    return this.http.put<INd>(`${this.frontendApi}/nd/${ndId}/`, data);
+  }
+
+  updateFi(fiId: string, fiType: string, file: any) {
+    const body = new FormData();
+    body.append('fiDoc', file, file.name);
+    return this.http.put<{ message: string; }>(`${this.frontendApi}/fi/${fiId}`, body);
+  }
+
   getTres() {
     return this.http.get<ITre[]>(`${this.frontendApi}/tre/`);
   }
@@ -111,8 +129,7 @@ export class TresService {
   }
 
   downloadFi(id: string) {
-    const baseUrl = `http://localhost:8080/api/fronted/fi/${id}/fidoc/`;
-    return this.http.get(baseUrl, { responseType: 'blob' });
+    return this.http.get(`${this.frontendApi}/fi/${id}/fidoc/`, { responseType: 'blob' });
   }
 
   export(data: any) {
