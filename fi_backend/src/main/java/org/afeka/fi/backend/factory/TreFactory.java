@@ -161,7 +161,7 @@ public class TreFactory extends ViewFactory <TRE> {
         }
         HtmlGenerator htmlGenerator=new HtmlGenerator();
         htmlGenerator.basicRootPage(tre.lbl,tre.des);
-        save(htmlGenerator.toHtml().renderFormatted(),path);
+        save(htmlGenerator.toHtml().renderFormatted(),path.resolve("main.html"));
     }
 
 
