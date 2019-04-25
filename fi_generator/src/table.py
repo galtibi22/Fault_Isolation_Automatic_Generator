@@ -63,7 +63,7 @@ for table in tables:
 
                         for i in range(2, 4):
                             if (FI_row[i] == ""):
-                                FI_Status = "error" + str(FI_Txt_Header[i])
+                                FI_Status = "title." + str(FI_Txt_Header[i]) + "Error"
 
                         FI_Array.append(newNumberObj)
                         Number_Of_Actions = 0
