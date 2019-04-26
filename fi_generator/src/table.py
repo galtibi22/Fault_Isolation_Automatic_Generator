@@ -36,7 +36,7 @@ FI_Array_List = []
 FI_Array = []
 
 tables = document.tables
-print(len(tables[0].rows[0].cells))
+#print(len(tables[0].rows[0].cells))
 
 for table in tables:
     for row in table.rows:

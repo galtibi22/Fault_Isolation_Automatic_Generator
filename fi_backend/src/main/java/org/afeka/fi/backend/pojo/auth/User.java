@@ -62,8 +62,9 @@ public class User {
     @Expose
     public String userName;
 
-
     @Transient
+    @JsonIgnore
+   // @JsonProperty( value = "tres", access = JsonProperty.Access.READ_WRITE)
     @Null
     public List<TRE> tres;
 

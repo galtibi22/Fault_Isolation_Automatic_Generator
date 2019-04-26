@@ -28,7 +28,7 @@ public class FiFactory extends ViewFactory<FI> {
                 nPg(fiSource.PG.size()-1+"").
                 ndId(ndId).
                 fiDocId(fiDocId).
-                //status(fiSource.status).
+                status(fiSource.PG).
                 fiJson().
                 get();
     }
@@ -37,8 +37,12 @@ public class FiFactory extends ViewFactory<FI> {
         view.ndId=ndId;
         return this;
     }
-    private FiFactory status(Status status) {
-        view.status=status;
+
+    private FiFactory status(List<PG> pgs) {
+        if(pgs.stream().allMatch(p->p.status.equals(Status.success.name())))
+            view.status=Status.success;
+        else
+            view.status=Status.failed;
         return this;
     }
 
@@ -89,10 +93,7 @@ private FiFactory pgs(List<PG> pgs) {
                 break;
             }
     }
-    if(pgs.stream().allMatch(p->p.status.equals(Status.success.name())))
-        status(Status.success);
-    else
-        status(Status.failed);
+
 
     return this;
 }

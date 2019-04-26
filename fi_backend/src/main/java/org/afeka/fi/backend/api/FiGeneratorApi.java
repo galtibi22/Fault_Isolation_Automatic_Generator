@@ -36,7 +36,7 @@ public class FiGeneratorApi extends CommonApi {
     @PostMapping(path="/new/{ndId}/{fiDocId}", produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
 
     public GeneralResponse newFis(HttpServletRequest request, @PathVariable String ndId, @RequestBody String str, @PathVariable Long fiDocId) throws Exception {
-        logger.debug("call newFis api with request"+request.toString());
+        logger.info("call newFis api with request"+request.toString());
         logger.called("newFis post request","ndId",ndId);
         FI[]fis=new FI[1];
         fis=Helpers.initGson().fromJson(str,fis.getClass());
