@@ -98,9 +98,13 @@ for table in tables:
                                 FI_Num+=1
 
                             else:
-                                if(i == 4):
-                                    # Step
-                                    FI_Status = "missingStepError"
+                                if (i == 4):
+                                    # Step is missing
+                                    newNumberObj = {}
+                                    newNumberObj['n'] = str(FI_Num)
+                                    newNumberObj['status'] = "missingStepError"
+                                    # FI_Array.append(newNumberObj)
+                                    # FI_Num += 1
 
 
                         ###### Default end FI numbers ######
