@@ -55,15 +55,23 @@ for table in tables:
                     else:
                         # Main text info to object (Failure No., Tested Unit, Severity, Platform)
                         FI_Num=0
-                        FI_Status = "success"
                         newNumberObj = {}
                         newNumberObj['n'] = str(FI_Num)
                         FI_Num+=1
                         newNumberObj['htmlObj'] = cf.fiMainDescription(FI_Txt_Header, FI_row)
 
-                        for i in range(2, 4):
+                        PG_Status = ""
+                        for i in range(1, 4):
                             if (FI_row[i] == ""):
-                                FI_Status = "title." + str(FI_Txt_Header[i]) + "Error"
+                                if (PG_Status == ""):
+                                    PG_Status = "title."+str(FI_Txt_Header[i])+"Error"
+                                else:
+                                    PG_Status += ",title." + str(FI_Txt_Header[i]) + "Error"
+
+                        if (PG_Status == ""):
+                            newNumberObj['status'] = "success"
+                        else:
+                            newNumberObj['status'] = PG_Status
 
                         FI_Array.append(newNumberObj)
                         Number_Of_Actions = 0
@@ -102,7 +110,7 @@ for table in tables:
                         FI_Array.append({"n": str(FI_Num), "htmlObj": {"htmlData": [{"htmlType": "fiPosEnd"}]},
                                          "N": {"typ": "4"}, "Y": {"typ": "4"}, "status": "success"})
                         FI={"PG":FI_Array,
-                            "status":FI_Status}
+                            "status":"success"}
                         FI_Array_List.append(FI)
                         FI_Array = []
 

@@ -50,12 +50,12 @@ def fiMainDescription(Header_Name, Header_Description):
     FI_Main_HTML_Data_Obj = {}
     FI_Main_HTML_Obj = {}
 
-    for i in range(2,4):
+    for i in range(1,4):
         FI_Descriptoin += Header_Name[i] + ": " + Header_Description[i] + "\n"
 
 
     FI_Main_HTML_Data_Obj['htmlType'] = 'fiTitle'
-    FI_Main_HTML_Data_Obj['txt'] = Header_Name[0] +" "+ Header_Name[1]+ ": " + Header_Description[0]
+    FI_Main_HTML_Data_Obj['txt'] = Header_Name[0] + ": " + Header_Description[0]
     FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
     FI_Main_HTML_Data_Obj = {}
     FI_Main_HTML_Data_Obj['htmlType'] = 'fiStpDsc'
@@ -63,6 +63,8 @@ def fiMainDescription(Header_Name, Header_Description):
     FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
 
     FI_Main_HTML_Obj['htmlData'] = FI_Main_HTML_Data
+
+
 
     return FI_Main_HTML_Obj
 
