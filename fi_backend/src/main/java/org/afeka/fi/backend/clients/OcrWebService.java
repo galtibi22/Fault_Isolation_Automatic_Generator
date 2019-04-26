@@ -31,7 +31,7 @@ public class OcrWebService extends FiCommon implements OcrClient{
         logger.called("OcrWebService.run","fiImage",file.getName());
         logger.info("Go to convert "+file.getName() +" to doc file with OcrWebService");
         HttpClientImpl httpClient=new HttpClientImpl();
-        String url = "https://www.ocrwebservice.com/restservices/processDocument?language=english&gettext=true&outputformat=pdf";
+        String url = "https://www.ocrwebservice.com/restservices/processDocument?language=english&gettext=true&outputformat=doc";
         Header[] headers={
                 new BasicHeader(HttpHeaders.AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((username + ":" + licensecode).getBytes()))
                 ,new BasicHeader(HttpHeaders.CONTENT_TYPE, "application/json")};

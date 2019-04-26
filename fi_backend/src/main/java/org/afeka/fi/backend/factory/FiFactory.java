@@ -17,10 +17,15 @@ public class FiFactory extends ViewFactory<FI> {
         view=new FI();
         logger.called("newFI","ndId "+ndId+" pgs ",fiSource.PG);
         PG pgZero=fiSource.PG.stream().filter(pgi -> pgi._n.equals("0")).findAny().orElseThrow(() -> new DataFactoryNotFoundException("Cannot find PG with n=0"));
-        return findFiLbl(pgZero.htmlObj).
+        if (pgZero.status.equals(Status.success)){
+            doc(pgZero.htmlObj).findFiLbl(pgZero.htmlObj);
+        }
+        else {
+            view.lbl="Cannot generate lbl for fi_"+Generator.id();
+        }
+        return
                 ID(Helpers.removeSpecialChars(view.lbl)+"_"+ Generator.id()).
                 type("10").kd("0").
-                doc(pgZero.htmlObj).
                 pgs(fiSource.PG.subList(1,fiSource.PG.size())).
                 newV("0").
                 v("-").

@@ -23,10 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import javax.swing.text.html.parser.Entity;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -83,7 +80,15 @@ public class HttpClientImpl extends FiCommon {
         HttpResponse response=client.execute(request);
         Assert.assertThat("response code is not 200 for request "+request.toString(),response.getStatusLine().getStatusCode(),equalTo(200));
         logger.info("GetResponse for request url "+request.getURI());
-        MultipartFile fiDoc = new MockMultipartFile("fiDoc.doc",EntityUtils.toByteArray(response.getEntity()));
+        InputStream initialStream = new ByteArrayInputStream(EntityUtils.toByteArray(response.getEntity()));
+       /* byte[] buffer = new byte[initialStream.available()];
+        initialStream.read(buffer);
+
+        File targetFile = new File("targetFile.doc");
+        OutputStream outStream = new FileOutputStream(targetFile);
+        outStream.write(buffer);*/
+        MultipartFile fiDoc = new MockMultipartFile("fiDoc.doc",initialStream);
+
         return fiDoc;
     }
 

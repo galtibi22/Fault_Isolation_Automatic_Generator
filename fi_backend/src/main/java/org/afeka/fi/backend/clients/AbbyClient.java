@@ -1,6 +1,6 @@
 package org.afeka.fi.backend.clients;
 
-//*import com.abbyy.FREngine.*;
+//import com.abbyy.FREngine.*;
 import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.common.FiCommonTest;
 import org.afeka.fi.backend.common.FiProperties;
@@ -32,14 +32,14 @@ public class AbbyClient extends FiCommon {
 
     private void loadEngine() throws Exception {
         logger.info( "Initializing Engine..." );
-        //*    engine = Engine.InitializeEngine( FiProperties.ABBY_DLL_PATH, FiProperties.ABBY_PROJECTID,
+          //engine = Engine.InitializeEngine( FiProperties.ABBY_DLL_PATH, FiProperties.ABBY_PROJECTID,
         //*  ""/*SamplesConfig.GetLicensePath()*/,"" /* SamplesConfig.GetLicensePassword()*/, "", "", false );
     }
 
     private void setupFREngine() {
         String predefined="Version9Compatibility";
         logger.info( "Loading predefined profile "+predefined );
-        //*      engine.LoadPredefinedProfile( predefined );
+            // engine.LoadPredefinedProfile( predefined );
         // Possible profile names are:
         //   "DocumentConversion_Accuracy", "DocumentConversion_Speed",
         //   "DocumentArchiving_Accuracy", "DocumentArchiving_Speed",

@@ -325,7 +325,7 @@ public class FrontedApi extends CommonApi {
         try {
             MultipartFile fiDoc=ocrClient.run(fiImage);
             return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+fiDoc.getName())
-                    .contentType(MediaType.parseMediaType("application/octet-stream"))
+                    .contentType(MediaType.parseMediaType("application/msword"))
                     .contentLength(fiDoc.getSize())
                     .body(new InputStreamResource(fiDoc.getInputStream()));
         } catch (IOException e) {
