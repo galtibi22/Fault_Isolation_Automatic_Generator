@@ -18,15 +18,16 @@ public class FiFactory extends ViewFactory<FI> {
         logger.called("newFI","ndId "+ndId+" pgs ",fiSource.PG);
         PG pgZero=fiSource.PG.stream().filter(pgi -> pgi._n.equals("0")).findAny().orElseThrow(() -> new DataFactoryNotFoundException("Cannot find PG with n=0"));
         if (pgZero.status.equals(Status.success.name())){
-            doc(pgZero.htmlObj).findFiLbl(pgZero.htmlObj);
+            ID(Helpers.removeSpecialChars(view.lbl)+"_"+ Generator.id()).
+                    doc(pgZero.htmlObj).findFiLbl(pgZero.htmlObj);
         }
         else {
+            ID(Helpers.removeSpecialChars(view.lbl)+"_"+ Generator.id());
             view.lbl="Cannot generate lbl for fi_"+Generator.id();
             pgZero.Y=new YN();
             pgZero.N=new YN();
         }
         return
-                ID(Helpers.removeSpecialChars(view.lbl)+"_"+ Generator.id()).
                 type("10").kd("0").
                 pgs(/*fiSource.PG.subList(1,fiSource.PG.size())*/fiSource.PG).
                 newV("0").
@@ -97,7 +98,7 @@ private FiFactory pgs(List<PG> pgs) {
                 view.PG.get(i).doc = "fi_notResolved.html";
                 break;
             } else {
-                view.PG.get(i).doc = view.ID + "-step-" + (i + 1) + ".html";
+                view.PG.get(i).doc = view.ID + "-step-" + view.PG.get(i)._n + ".html";
                 break;
             }
         }else{
