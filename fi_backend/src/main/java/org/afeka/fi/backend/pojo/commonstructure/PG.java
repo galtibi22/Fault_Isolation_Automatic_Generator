@@ -29,10 +29,10 @@ public class PG
     public String _n;
     @Expose(serialize = true,deserialize = true)
     @XmlElement(name = "N")
-    public YN N;
+    public YN N=new YN();
     @Expose(serialize = true,deserialize = true)
     @XmlElement(name = "Y")
-    public YN Y;
+    public YN Y=new YN();
     @Expose(serialize = true,deserialize = true)
     @XmlTransient
     public HtmlObj htmlObj;

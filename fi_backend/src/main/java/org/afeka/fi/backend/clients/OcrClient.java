@@ -6,5 +6,5 @@ import java.io.IOException;
 
 public interface OcrClient {
 
-    MultipartFile run(MultipartFile file) throws IOException;
+    MultipartFile run(MultipartFile file) throws Exception;
 }

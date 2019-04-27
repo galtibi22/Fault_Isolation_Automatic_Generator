@@ -17,16 +17,18 @@ public class FiFactory extends ViewFactory<FI> {
         view=new FI();
         logger.called("newFI","ndId "+ndId+" pgs ",fiSource.PG);
         PG pgZero=fiSource.PG.stream().filter(pgi -> pgi._n.equals("0")).findAny().orElseThrow(() -> new DataFactoryNotFoundException("Cannot find PG with n=0"));
-        if (pgZero.status.equals(Status.success)){
+        if (pgZero.status.equals(Status.success.name())){
             doc(pgZero.htmlObj).findFiLbl(pgZero.htmlObj);
         }
         else {
             view.lbl="Cannot generate lbl for fi_"+Generator.id();
+            pgZero.Y=new YN();
+            pgZero.N=new YN();
         }
         return
                 ID(Helpers.removeSpecialChars(view.lbl)+"_"+ Generator.id()).
                 type("10").kd("0").
-                pgs(fiSource.PG.subList(1,fiSource.PG.size())).
+                pgs(/*fiSource.PG.subList(1,fiSource.PG.size())*/fiSource.PG).
                 newV("0").
                 v("-").
                 pd("60").
@@ -71,7 +73,7 @@ public class FiFactory extends ViewFactory<FI> {
         }
         logger.info("export fi html with name=" + fi.doc);
         save(htmlGen.toHtml().renderFormatted(), Paths.get(path + "/" + fi.doc));
-        for (PG pg : fi.PG) {
+        for (PG pg : fi.PG.subList(1,fi.PG.size())) {
             htmlGen = new HtmlGenerator();
             for (HtmlData htmlData : pg.htmlObj.getHtmlData()) {
                 if (htmlData.htmlType.equals(HtmlType.fiStpPrc)) htmlGen.fiStpPrc(htmlData.txt);
@@ -86,7 +88,8 @@ private FiFactory pgs(List<PG> pgs) {
     view.PG= pgs;
 
     for (int i=0;i<view.PG.size();i++) {
-        for (HtmlData htmlData : view.PG.get(i).htmlObj.getHtmlData())
+       if ( view.PG.get(i).status.equals(Status.success.name()))
+        for (HtmlData htmlData : view.PG.get(i).htmlObj.getHtmlData()) {
             if (htmlData.htmlType.equals(HtmlType.fiPosEnd)) {
                 view.PG.get(i).doc = "fi_endOK.html";
                 break;
@@ -97,6 +100,13 @@ private FiFactory pgs(List<PG> pgs) {
                 view.PG.get(i).doc = view.ID + "-step-" + (i + 1) + ".html";
                 break;
             }
+        }else{
+           view.PG.get(i).N=new YN();
+           view.PG.get(i).Y=new YN();
+           view.PG.get(i).htmlObj=new HtmlObj();
+
+
+       }
     }
 
 

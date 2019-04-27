@@ -103,8 +103,8 @@ for table in tables:
                                     newNumberObj = {}
                                     newNumberObj['n'] = str(FI_Num)
                                     newNumberObj['status'] = "missingStepError"
-                                    # FI_Array.append(newNumberObj)
-                                    # FI_Num += 1
+                                    FI_Array.append(newNumberObj)
+                                    FI_Num += 1
 
 
                         ###### Default end FI numbers ######

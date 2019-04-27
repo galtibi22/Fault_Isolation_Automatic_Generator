@@ -328,7 +328,7 @@ public class FrontedApi extends CommonApi {
                     .contentType(MediaType.parseMediaType("application/msword"))
                     .contentLength(fiDoc.getSize())
                     .body(new InputStreamResource(fiDoc.getInputStream()));
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new ResponseStatusException(HttpStatus.METHOD_FAILURE,e.getMessage(), e);
         }
 
