@@ -43,28 +43,33 @@ def fiStepDescriptionQuestion(str):
 
 
 # Method return description about FI flow
-def fiMainDescription(Header_Name, Header_Description):
+def fiMainDescription(Main_Rows, Des_Rows, FI_row):
 
-    FI_Descriptoin = ""
     FI_Main_HTML_Data = []
     FI_Main_HTML_Data_Obj = {}
+
+
+    # Main title
     FI_Main_HTML_Obj = {}
-
-    for i in range(1,4):
-        FI_Descriptoin += Header_Name[i] + ": " + Header_Description[i] + "\n"
-
-
     FI_Main_HTML_Data_Obj['htmlType'] = 'fiTitle'
-    FI_Main_HTML_Data_Obj['txt'] = Header_Name[0] + ": " + Header_Description[0]
-    FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
-    FI_Main_HTML_Data_Obj = {}
-    FI_Main_HTML_Data_Obj['htmlType'] = 'fiStpDsc'
+    FI_Descriptoin = ""
+    for key, value in Main_Rows.items():
+        FI_Descriptoin += Main_Rows[key] + ": " + FI_row[key] + " "
     FI_Main_HTML_Data_Obj['txt'] = FI_Descriptoin
     FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
 
+
+    # Description title
+    FI_Main_HTML_Data_Obj = {}
+    FI_Main_HTML_Data_Obj['htmlType'] = 'fiStpDsc'
+    FI_Descriptoin = ""
+    for key, value in Des_Rows.items():
+        FI_Descriptoin += Des_Rows[key] + ": " + FI_row[key] + "\n"
+    FI_Main_HTML_Data_Obj['txt'] = FI_Descriptoin
+    FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
+
+
     FI_Main_HTML_Obj['htmlData'] = FI_Main_HTML_Data
-
-
 
     return FI_Main_HTML_Obj
 

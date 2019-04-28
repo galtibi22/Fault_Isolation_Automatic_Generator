@@ -54,13 +54,12 @@ def fiMainDescription(Main_Rows, Des_Rows, FI_row):
 FI_Label = True
 FI_Num = 0
 
-FI_Txt_Header = {}
 FI_Txt_Header_Exist = False
 
 
 # Generic titles
 FI_Generic_Title_Main = ["Failure No."]
-FI_Generic_Title_Des = ["Tested Unit", "Severity", "Name"]
+FI_Generic_Title_Des = ["Tested Unit", "Severity", "Name", "Platform"]
 FI_Generic_Step = ["Test ", "DSA"]
 FI_Generic_Task = ["LRU", "SAW"]
 
@@ -81,13 +80,13 @@ FI_Generic_Task_Rows = {}
 # pathUrl=cf.generate_fi_doc_path(sys.argv[1])
 # print ("pathUrl",pathUrl)
 # document = Document(pathUrl)
-document = Document('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\DOC-Troubleshooting_table_testing.docx')
+document = Document('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\DOC-Troubleshooting_table_new_testing.docx')
 
 FI_Array_List = []
 FI_Array = []
 
 tables = document.tables
-print(len(tables[0].rows[0].cells))
+# print(len(tables[0].rows[0].cells))
 
 for table in tables:
     for row in table.rows:
@@ -98,7 +97,7 @@ for table in tables:
 
                 if(len(FI_row) == 8):
 
-                    if not FI_Txt_Header_Exist:
+                    if not FI_Generic_Title_Main_Rows:
 
                         for i in range(0,len(FI_row)):
                             for title in FI_Generic_Title_Main:
@@ -116,13 +115,6 @@ for table in tables:
                             for title in FI_Generic_Task:
                                 if title in FI_row[i]:
                                     FI_Generic_Task_Rows[i] = FI_row[i]
-
-                            FI_Txt_Header[i] = FI_row[i]
-
-                        print(FI_Generic_Title_Main_Rows)
-                        print(FI_Generic_Title_Des_Rows)
-                        print(FI_Generic_Step_Rows)
-                        print(FI_Generic_Task_Rows)
 
                         FI_Txt_Header_Exist = True
 
@@ -168,7 +160,7 @@ for table in tables:
                                 newNumberObj['n'] = str(FI_Num)
                                 newNumberObj['Y'] = {'to': str(Number_Of_Actions + 1), 'typ': '0'}
                                 newNumberObj['N'] = {'to': str(FI_Num + 1), 'typ': '0'}
-                                newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(FI_Txt_Header[i] + ": " + FI_row[i])
+                                newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(value + ": " + FI_row[key])
                                 newNumberObj['status'] = "success"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
@@ -178,8 +170,8 @@ for table in tables:
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
                                 newNumberObj['status'] = "missingStepError"
-                                # FI_Array.append(newNumberObj)
-                                # FI_Num+=1
+                                FI_Array.append(newNumberObj)
+                                FI_Num+=1
 
 
                         # Create Tasks
@@ -187,9 +179,9 @@ for table in tables:
                             if FI_row[key] != "":
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
-                                newNumberObj['Y'] = cf.fiTaskYes2(FI_row[i], str(Number_Of_Actions+1), str(FI_Num+1))
+                                newNumberObj['Y'] = cf.fiTaskYes2(FI_row[key], str(Number_Of_Actions+1), str(FI_Num+1))
                                 newNumberObj['N'] = { 'typ' : '4' }
-                                newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(FI_Txt_Header[i] + ": " + FI_row[i])
+                                newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(value + ": " + FI_row[key])
                                 newNumberObj['status'] = "success"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
