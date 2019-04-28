@@ -10,28 +10,33 @@ import sys
 
 
 # Method return description about FI flow
-def fiMainDescription(Header_Name, Header_Description):
+def fiMainDescription(Main_Rows, Des_Rows, FI_row):
 
-    FI_Descriptoin = ""
     FI_Main_HTML_Data = []
     FI_Main_HTML_Data_Obj = {}
+
+
+    # Main title
     FI_Main_HTML_Obj = {}
-
-    for i in range(1,4):
-        FI_Descriptoin += Header_Name[i] + ": " + Header_Description[i] + "\n"
-
-
     FI_Main_HTML_Data_Obj['htmlType'] = 'fiTitle'
-    FI_Main_HTML_Data_Obj['txt'] = Header_Name[0] + ": " + Header_Description[0]
-    FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
-    FI_Main_HTML_Data_Obj = {}
-    FI_Main_HTML_Data_Obj['htmlType'] = 'fiStpDsc'
+    FI_Descriptoin = ""
+    for key, value in Main_Rows.items():
+        FI_Descriptoin += Main_Rows[key] + ": " + FI_row[key] + " "
     FI_Main_HTML_Data_Obj['txt'] = FI_Descriptoin
     FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
 
+
+    # Description title
+    FI_Main_HTML_Data_Obj = {}
+    FI_Main_HTML_Data_Obj['htmlType'] = 'fiStpDsc'
+    FI_Descriptoin = ""
+    for key, value in Des_Rows.items():
+        FI_Descriptoin += Des_Rows[key] + ": " + FI_row[key] + "\n"
+    FI_Main_HTML_Data_Obj['txt'] = FI_Descriptoin
+    FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
+
+
     FI_Main_HTML_Obj['htmlData'] = FI_Main_HTML_Data
-
-
 
     return FI_Main_HTML_Obj
 
@@ -127,15 +132,15 @@ for table in tables:
                         newNumberObj = {}
                         newNumberObj['n'] = str(FI_Num)
                         FI_Num+=1
-                        newNumberObj['htmlObj'] = fiMainDescription(FI_Generic_Title_Des_Rows, FI_row)
+                        newNumberObj['htmlObj'] = fiMainDescription(FI_Generic_Title_Main_Rows, FI_Generic_Title_Des_Rows, FI_row)
 
                         PG_Status = ""
-                        for i in range(1, 4):
-                            if (FI_row[i] == ""):
+                        for key, value in FI_Generic_Title_Des_Rows.items():
+                            if (FI_row[key] == ""):
                                 if (PG_Status == ""):
-                                    PG_Status = "title."+str(FI_Txt_Header[i])+"Error"
+                                    PG_Status = "title."+str(value)+"Error"
                                 else:
-                                    PG_Status += ",title." + str(FI_Txt_Header[i]) + "Error"
+                                    PG_Status += ",title." + str(value) + "Error"
 
                         if (PG_Status == ""):
                             newNumberObj['status'] = "success"
@@ -145,35 +150,50 @@ for table in tables:
                         FI_Array.append(newNumberObj)
                         Number_Of_Actions = 0
 
-                        for i in range(4, 8):
-                            if FI_row[i] != "":
+                        # count number of steps with tasks
+                        for key, value in FI_Generic_Step_Rows.items():
+                            if FI_row[key] != "":
                                 Number_Of_Actions +=1
 
-                        for i in range(4, 8):
-                            if FI_row[i] != "":
+                        for key, value in FI_Generic_Task_Rows.items():
+                            if FI_row[key] != "":
+                                Number_Of_Actions +=1
+
+
+
+                        # Create Steps
+                        for key, value in FI_Generic_Step_Rows.items():
+                            if FI_row[key] != "":
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
-                                if(i == 4):
-                                    # Step
-                                    newNumberObj['Y'] = {'to' : str(Number_Of_Actions+1), 'typ' : '0'}
-                                    newNumberObj['N'] = {'to' : str(FI_Num+1), 'typ' : '0'}
-                                else:
-                                    # Task
-                                    newNumberObj['Y'] = cf.fiTaskYes2(FI_row[i], str(Number_Of_Actions+1), str(FI_Num+1))
-                                    newNumberObj['N'] = { 'typ' : '4' }
+                                newNumberObj['Y'] = {'to': str(Number_Of_Actions + 1), 'typ': '0'}
+                                newNumberObj['N'] = {'to': str(FI_Num + 1), 'typ': '0'}
                                 newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(FI_Txt_Header[i] + ": " + FI_row[i])
                                 newNumberObj['status'] = "success"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
 
                             else:
-                                if(i == 4):
-                                    # Step is missing
-                                    newNumberObj = {}
-                                    newNumberObj['n'] = str(FI_Num)
-                                    newNumberObj['status'] = "missingStepError"
-                                    # FI_Array.append(newNumberObj)
-                                    # FI_Num+=1
+                                # Step is missing
+                                newNumberObj = {}
+                                newNumberObj['n'] = str(FI_Num)
+                                newNumberObj['status'] = "missingStepError"
+                                # FI_Array.append(newNumberObj)
+                                # FI_Num+=1
+
+
+                        # Create Tasks
+                        for key, value in FI_Generic_Task_Rows.items():
+                            if FI_row[key] != "":
+                                newNumberObj = {}
+                                newNumberObj['n'] = str(FI_Num)
+                                newNumberObj['Y'] = cf.fiTaskYes2(FI_row[i], str(Number_Of_Actions+1), str(FI_Num+1))
+                                newNumberObj['N'] = { 'typ' : '4' }
+                                newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(FI_Txt_Header[i] + ": " + FI_row[i])
+                                newNumberObj['status'] = "success"
+                                FI_Array.append(newNumberObj)
+                                FI_Num+=1
+
 
 
                         ###### Default end FI numbers ######
@@ -190,4 +210,4 @@ for table in tables:
 
 # os.remove(pathUrl)
 # cf.post_api_server(FI_Array_List)
-# print(json.dumps(FI_Array_List, indent=4, sort_keys=True))
+print(json.dumps(FI_Array_List, indent=4, sort_keys=True))
