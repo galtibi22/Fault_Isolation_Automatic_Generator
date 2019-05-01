@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.xml.bind.JAXBException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -27,7 +28,7 @@ public class OcrWebService extends FiCommon implements OcrClient{
     private String username;
 
     @Override
-    public MultipartFile run(MultipartFile file) throws IOException {
+    public MultipartFile run(MultipartFile file) throws Exception {
         logger.called("OcrWebService.run","fiImage",file.getName());
         logger.info("Go to convert "+file.getName() +" to doc file with OcrWebService");
         HttpClientImpl httpClient=new HttpClientImpl();

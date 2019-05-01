@@ -23,7 +23,7 @@ FI_Txt_Header_Exist = False
 FI_Generic_Title_Main = ["Failure No."]
 FI_Generic_Title_Des = ["Tested Unit", "Severity", "Name", "Platform"]
 FI_Generic_Step = ["Test ", "DSA"]
-FI_Generic_Task = ["LRU", "SAW"]
+FI_Generic_Task = ["LRU", "SAW","Task"]
 
 FI_Generic_Title_Main_Rows = {}
 FI_Generic_Title_Des_Rows = {}

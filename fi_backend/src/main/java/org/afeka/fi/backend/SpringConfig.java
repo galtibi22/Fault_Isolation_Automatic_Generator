@@ -29,8 +29,8 @@ public class SpringConfig extends FiCommon implements WebMvcConfigurer {
     }
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        logger.called("addViewControllers","url", "app/index.html");
-        registry.addRedirectViewController("/", "app/index.html");
+      /*  logger.called("addViewControllers","url", "app/index.html");
+        registry.addRedirectViewController("/", "app/index.html");*/
     }
 
     @Override

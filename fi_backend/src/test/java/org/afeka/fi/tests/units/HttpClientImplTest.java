@@ -33,7 +33,7 @@ public class HttpClientImplTest extends FiCommonTest {
 
     private HttpClientImpl httpClient=new HttpClientImpl();
     @Test
-    public void ocrwebservice_doc_upload() throws IOException {
+    public void ocrwebservice_doc_upload() throws Exception {
         String url = "https://www.ocrwebservice.com/restservices/processDocument?language=english&gettext=true&outputformat=doc";
         String userName="galtibi";
         String licenseCode="65D923DA-A426-46DE-AD97-71D73052A0D1";
