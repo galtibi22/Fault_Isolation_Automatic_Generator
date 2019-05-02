@@ -1,11 +1,13 @@
 package org.afeka.fi.backend.api;
 
 import org.afeka.fi.backend.common.CommonApi;
+import org.afeka.fi.backend.exception.*;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
 import org.afeka.fi.backend.pojo.auth.User;
 import org.afeka.fi.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +29,9 @@ public class UserApi extends CommonApi {
         logger.called("registerUser","user",user);
         securityCheck(request, Role.admin);
         if (user.role.equals(Role.admin))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot add user with Role Admin to the system");
+            throw new PermissionExption("Cannot add user with Role Admin to the system");
         if (userRepository.findById(user.userName).isPresent())
-           throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User "+user.userName +" already exist in the system");
+           throw new AddEntityExption("User "+user.userName +" already exist in the system");
         return userRepository.save(user);
 
     }
@@ -38,9 +40,8 @@ public class UserApi extends CommonApi {
         logger.called("updateUser","user",user);
         securityCheck(request, Role.admin);
         if (user.role.equals(Role.admin))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot update user with Role Admin");
-        if (!userRepository.findById(user.userName).isPresent())
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"User "+user.userName +" is not exist in the system. Please user register api");
+            throw new PermissionExption("Cannot update user with Role Admin");
+        userRepository.find(user.userName);
         return userRepository.update(user);
     }
 
@@ -48,11 +49,9 @@ public class UserApi extends CommonApi {
     public GeneralResponse deleteUser(HttpServletRequest request, @PathVariable String userName) throws Exception {
         logger.called("deleteUser","userName",userName);
         securityCheck(request, Role.admin);
-        Optional<User> userToDelete=userRepository.findById(userName);
-        if (!userToDelete.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User "+userName +" not exist in the system");
-        if (userToDelete.get().role.equals(Role.admin))
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot delete user with Role Admin from the system");
+        User userToDelete=userRepository.find(userName);
+        if (userToDelete.role.equals(Role.admin))
+            throw new PermissionExption("Cannot delete user with Role Admin from the system");
         userRepository.deleteById(userName);
         return new GeneralResponse("Success to delete user "+userName);
     }
@@ -67,10 +66,7 @@ public class UserApi extends CommonApi {
     public User getUser(HttpServletRequest request,@PathVariable String userName) throws Exception {
         logger.called("getUser","user","");
         securityCheck(request, Role.admin);
-        Optional<User> user= userRepository.findById(userName);
-        if (!user.isPresent())
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND,"User "+userName +" not exist in the system");
-        return user.get();
+        return userRepository.find(userName);
     }
 
 

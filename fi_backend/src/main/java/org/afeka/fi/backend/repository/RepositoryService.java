@@ -2,6 +2,7 @@ package org.afeka.fi.backend.repository;
 
 import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.common.Helpers;
+import org.afeka.fi.backend.exception.DeleteEntityExption;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
 import org.afeka.fi.backend.pojo.auth.User;
 import org.afeka.fi.backend.pojo.commonstructure.*;
@@ -136,11 +137,12 @@ public class RepositoryService extends FiCommon {
 
     public ND findNd(String id) throws ResourceNotFoundException {
         logger.called("findNd","id",id);
-        return ndRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Cannot find nd with id "+id));
+            return ndRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Cannot find nd with id "+id));
     }
     public NdParent findNdParent(String id) throws ResourceNotFoundException {
         logger.called("findNdParent","id",id);
         return ndParentRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Cannot find ndParent with id "+id));
+
     }
 
     public TRE findTre(String id) throws ResourceNotFoundException {
@@ -149,7 +151,7 @@ public class RepositoryService extends FiCommon {
     }
 
     public List<TRE> getTres(User user) throws ResourceNotFoundException {
-        logger.called("getTres","","");
+        logger.called("getTres","userId",user.userName);
         List<TRE> tres=treRepository.findAll(Example.of(new TRE(user.userName)));
         for (TRE tre:tres){
             tre=getTre(tre.ID);
@@ -157,10 +159,14 @@ public class RepositoryService extends FiCommon {
         return tres;
     }
     @Transactional
-    public void deleteFi(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+    public void deleteFi(String id) throws ResourceNotFoundException, DeleteEntityExption {
         FI fiToDelete=getFi(id);
         logger.called("deleteFi","id",id);
-        fiRepository.deleteById(id);
+        try {
+            fiRepository.deleteById(id);
+        }catch (EmptyResultDataAccessException e){
+            throw new DeleteEntityExption("Cannot delete fi with ID"+id+" because "+e.getMessage());
+        }
         if (fiRepository.findAll(Example.of(new FI(fiToDelete.ndId,fiToDelete.fiDocId))).size()==0) {
             logger.info("fiDoc with id "+fiToDelete.fiDocId+" not connect to any more FI in ND "+fiToDelete.ndId+". Delete fiDoc");
             fiDocRepository.deleteById(fiToDelete.fiDocId);
@@ -168,33 +174,43 @@ public class RepositoryService extends FiCommon {
 
     }
     @Transactional
-    public void deleteNd(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+    public void deleteNd(String id) throws ResourceNotFoundException, DeleteEntityExption {
         logger.called("deleteNd","id",id);
         ND ndToDelete=getNd(id);
         for (FI fi:ndToDelete.FI)
             deleteFi(fi.ID);
-        ndRepository.deleteById(id);
+       try{
+        ndRepository.deleteById(id);}
+        catch (EmptyResultDataAccessException e){
+            throw new DeleteEntityExption("Cannot delete ND with ID"+id+" because "+e.getMessage());
+        }
     }
 
     @Transactional
-    public void deleteNdParent(String id) throws EmptyResultDataAccessException, ResourceNotFoundException {
+    public void deleteNdParent(String id) throws DeleteEntityExption, ResourceNotFoundException {
         logger.called("deleteNdParent","id",id);
         NdParent ndParentToDelete=getNdParent(id);
         for (ND nd:ndParentToDelete.ND)
             deleteNd(nd.ID);
-        ndParentRepository.deleteById(id);
-       // return getTre(ndParentToDelete.treId);
-    }
+        try{
+        ndParentRepository.deleteById(id);}
+         catch (EmptyResultDataAccessException e){
+            throw new DeleteEntityExption("Cannot delete NdParent with ID"+id+" because "+e.getMessage());
+        }    }
 
-    @Transactional
-    public void deleteTre(String id,User user) throws EmptyResultDataAccessException, ResourceNotFoundException {
+
+        @Transactional
+    public void deleteTre(String id,User user) throws DeleteEntityExption, ResourceNotFoundException {
         logger.called("deleteNdParent","id",id);
         TRE treToDelete=getTre(id);
         for (NdParent ndParent:treToDelete.ndParents)
             deleteNdParent(ndParent.ID);
-       treRepository.deleteById(id);
-      // return getTres(user);
-    }
+       try{
+        treRepository.deleteById(id);}
+       catch (EmptyResultDataAccessException e){
+           throw new DeleteEntityExption("Cannot delete TRE with ID"+id+" because "+e.getMessage());
+       }
+        }
 
     @Transactional
     public FI updateFi(FI fi) throws ResourceNotFoundException {
