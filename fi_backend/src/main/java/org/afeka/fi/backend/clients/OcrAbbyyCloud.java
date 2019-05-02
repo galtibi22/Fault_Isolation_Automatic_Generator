@@ -24,8 +24,7 @@ public class OcrAbbyyCloud extends FiCommon implements OcrClient {
 
     @Override
     public MultipartFile run(MultipartFile file) throws Exception {
-        logger.called("OcrAbbyyCloud.run","fiImage",file.getName());
-        logger.info("Go to convert "+file.getName() +" to doc file with OcrWebService");
+        logger.called("OcrAbbyyCloud.run","fiImage",file.getOriginalFilename());
         HttpClientImpl httpClient=new HttpClientImpl();
         String url = "http://cloud-eu.ocrsdk.com/processImage?language=english&exportFormat=docx";
         Header[] headers={

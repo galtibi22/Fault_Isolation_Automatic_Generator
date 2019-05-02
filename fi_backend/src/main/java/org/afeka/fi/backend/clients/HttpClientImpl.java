@@ -50,8 +50,9 @@ public class HttpClientImpl extends FiCommon {
 
         HttpResponse response=client.execute(request);
         String entityResponse=EntityUtils.toString(response.getEntity());
-        Assert.assertThat("response code is not 200 for request "+request.toString(),response.getStatusLine().getStatusCode(),equalTo(200));
         logger.info("PostResponse for request url "+request.getURI()+" response entity "+entityResponse);
+
+        Assert.assertThat("response code is not 200 for request "+request.toString(),response.getStatusLine().getStatusCode(),equalTo(200));
         if (response.getFirstHeader(HttpHeaders.CONTENT_TYPE).getValue().contains("text/xml")){
             JAXBContext jaxbContext = JAXBContext.newInstance(e.getClass());
             Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();

@@ -26,13 +26,5 @@ public interface FiGeneratorClient {
         }
     }
 
-   /* default void executeFiGenerator(MultipartFile fiDoc,String fiDocId,String ndId,FiGeneratorType fiGeneratorType) throws IOException {
-        switch (FiProperties.FI_GENERATOR_MODE){
-            case FiGeneratorMode.LOCAL:
-                new LocalFiGenerator().runFiGenerator(fiDoc,fiDocId,fiGeneratorType,ndId);
-                break;
-            }
-        }*/
-
     }
 
