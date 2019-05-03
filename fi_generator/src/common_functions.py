@@ -9,7 +9,6 @@ import subprocess
 import time
 from docx import Document
 from shutil import copyfile
-import win32com.client as win32
 
 # Method check if string has Yes/No
 def checkYesNo(str):
@@ -158,6 +157,7 @@ def fiTaskYes2(str, yesOption, noOption):
 
 
 def save_as_docx_win(path):
+    import win32com.client as win32
     # Opening MS Word
     word = win32.gencache.EnsureDispatch('Word.Application')
     doc = word.Documents.Open(path)
