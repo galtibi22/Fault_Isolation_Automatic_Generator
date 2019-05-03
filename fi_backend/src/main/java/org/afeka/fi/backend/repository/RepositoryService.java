@@ -118,8 +118,12 @@ public class RepositoryService extends FiCommon {
         List<FI> fis=fiRepository.findAll(Example.of(new FI(nd.ID)));
         fis.forEach(fi1->nd.FI.add(Helpers.initGson().fromJson(fi1.fiJson, FI.class)));
         if (nd.FI!=null) {
-            nd.FI.forEach(fi -> fi.PG.forEach(pg -> fi.pgBounderies.add(new PgBoundery(pg))));
-            nd.FI.forEach(fi -> fi.PG = null);
+            nd.FI.forEach(fi -> {
+                if(fi.PG!=null)
+                    fi.PG.forEach(pg -> fi.pgBounderies.add(new PgBoundery(pg)));
+                fi.PG=null;
+            });
+            //nd.FI.forEach(fi -> fi.PG = null);
         }
         return nd;
     }

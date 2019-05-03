@@ -1,27 +1,38 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
+import org.afeka.fi.backend.common.FiLogger;
+import org.apache.logging.log4j.Logger;
+
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class PgBoundery {
-    private String n;
-    private String type;
-    private String status;
-    private String description;
-    private String toYes;
-    private String toNo;
+    Logger logger= FiLogger.getLogger(getClass().getName());
+    private String n="";
+    private String type="";
+    private String status="";
+    private String description="";
+    private String toYes="";
+    private String toNo="";
 
     public PgBoundery(){
 
     }
 
     public PgBoundery(PG pg){
-        n=pg._n;
-        type=pg.type;
-        status=pg.status;
-        toNo=pg.N.getTo();
-        toYes=pg.N.getTo();
-        description=createDescription(pg);
+      try {
+          n = pg._n;
+          if (type!=null)
+              type = pg.type;
+          status = pg.status;
+          if (pg.N.getTo()!=null)
+            toNo = pg.N.getTo();
+          if (pg.Y.getTo()!=null)
+            toYes = pg.Y.getTo();
+          description = createDescription(pg);
+      }catch (Exception e){
+          logger.error("Cannot convert pg to PgBoundery",e);
+      }
     }
 
     private String createDescription(PG pg) {
