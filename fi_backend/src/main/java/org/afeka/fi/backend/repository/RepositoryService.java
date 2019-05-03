@@ -135,6 +135,7 @@ public class RepositoryService extends FiCommon {
     public FI getFi(String id) throws ResourceNotFoundException {
         logger.called("getFi","id",id);
         FI fi= findFI(id);
+        logger.info("get fi from db "+ fi.fiJson);
         return Helpers.initGson().fromJson(fi.fiJson, FI.class);
     }
 

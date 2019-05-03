@@ -22,7 +22,7 @@ public class PgBoundery {
     public PgBoundery(PG pg){
       try {
           n = pg._n;
-          if (type!=null)
+          if (pg.type!=null)
               type = pg.type;
           status = pg.status;
           if (pg.N.getTo()!=null)

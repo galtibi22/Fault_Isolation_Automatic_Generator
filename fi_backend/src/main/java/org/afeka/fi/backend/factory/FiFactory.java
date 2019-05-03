@@ -153,7 +153,7 @@ private FiFactory pgs(List<PG> pgs) {
 
     private FiFactory findFiLbl(HtmlObj htmlObj) throws DataFactoryNotFoundException {
         if (htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiTitle)) {
-            view.lbl = htmlObj.getHtmlData()[0].txt;
+            view.lbl = htmlObj.getHtmlData()[0].txt.replaceAll("  "," ");
         }
        else
             throw new DataFactoryNotFoundException("fiTitle",htmlObj.toString());
