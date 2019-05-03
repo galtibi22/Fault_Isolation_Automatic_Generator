@@ -93,4 +93,8 @@ public class Helpers {
     public static String getFileSimpleName(MultipartFile fiDoc) {
         return fiDoc.getOriginalFilename().substring(0,fiDoc.getOriginalFilename().lastIndexOf("."));
     }
+
+    public static String encodeBasicAuth(String userName, String password) {
+        return "Basic " + Base64.getEncoder().encodeToString((userName + ":" + password).getBytes());
+    }
 }

@@ -1,5 +1,6 @@
 package org.afeka.fi.backend;
 
+import org.afeka.fi.backend.common.Constants;
 import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.common.FiProperties;
 import org.afeka.fi.backend.pojo.auth.Role;
@@ -38,9 +39,9 @@ public class Application extends FiCommon {
     }
 
     private void loadUsers() {
-        userRepository.save(new User("admin","Aa123456", Role.admin,"Admin","Admin"));
-        userRepository.save(new User("figenerator","Aa123456", Role.generator,"FiGenerator","FiGenerator"));
-        userRepository.save(new User("user","Aa123456", Role.user,"user","user"));
+        userRepository.save(new User(Constants.ADMIN_USER_NAME ,Constants.ADMIN_PASSWORD, Role.admin,"Admin","Admin"));
+        userRepository.save(new User("figenerator",Constants.USER_PASSWORD, Role.generator,"FiGenerator","FiGenerator"));
+        userRepository.save(new User("user",Constants.USER_PASSWORD, Role.user,"user","user"));
 
     }
 }

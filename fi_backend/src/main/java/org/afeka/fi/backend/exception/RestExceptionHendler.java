@@ -1,6 +1,8 @@
 package org.afeka.fi.backend.exception;
 
+import org.afeka.fi.backend.common.FiLogger;
 import org.afeka.fi.backend.pojo.http.ResponseError;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -17,10 +19,8 @@ import java.util.Date;
 
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @ControllerAdvice
-
-
-
-public class RestExceptionHendler extends ResponseEntityExceptionHandler {
+public class RestExceptionHendler extends ResponseEntityExceptionHandler{
+    Logger logger= FiLogger.getLogger(getClass().getName());
     @ExceptionHandler(ResourceNotFoundException.class)
     protected ResponseEntity<ResponseError> handleEntityNotFound(ResourceNotFoundException ex, ServletWebRequest request) {
         return  ResponseEntity.status(HttpStatus.NOT_FOUND).body(
@@ -50,6 +50,7 @@ public class RestExceptionHendler extends ResponseEntityExceptionHandler {
     }
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<ResponseError> exception(Exception ex, ServletWebRequest request) {
+        logger.error(ex);
         return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 ResponseError.builder().setError(HttpStatus.INTERNAL_SERVER_ERROR).setMessage(ex.getMessage()).timeStampNow().setReason(ex).setUrl(request.getRequest().getRequestURI()));
     }

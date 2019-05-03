@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -71,7 +72,7 @@ public class FiApi extends CommonApi {
     }
 
     @GetMapping(value = "/{fiId}/fidoc",headers = HttpHeaders.AUTHORIZATION)
-    public ResponseEntity<Resource> getFiDoc(HttpServletRequest request, @PathVariable String fiId) throws ResourceNotFoundException {
+    public ResponseEntity<Resource> getFiDoc(HttpServletRequest request, @PathVariable String fiId) throws ResourceNotFoundException, IOException {
             logger.called("getFiDocApi","fiId",fiId);
             securityCheck(request,Role.user,Role.viewer);
             Long fiDocId=repositoryService.getFi(fiId).fiDocId;
@@ -79,10 +80,11 @@ public class FiApi extends CommonApi {
             FiDoc fiDoc=repositoryService.getFiDoc(fiDocId);
             byte[] fiDocByte=fiDoc.doc;
             InputStreamResource inputStream= new InputStreamResource(new ByteArrayInputStream(fiDoc.doc));
-            return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+fiDoc.name)
+            return super.initMsWordResponse(new MockMultipartFile(fiDoc.name,fiDoc.doc));
+           /* return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+fiDoc.name)
                     .contentType(MediaType.parseMediaType("application/msword"))
                     .contentLength(fiDocByte.length)
-                    .body(inputStream);
+                    .body(inputStream);*/
 
     }
 

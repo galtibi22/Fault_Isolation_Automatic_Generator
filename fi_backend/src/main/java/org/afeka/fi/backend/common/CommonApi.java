@@ -1,6 +1,7 @@
 package org.afeka.fi.backend.common;
 
 import org.afeka.fi.backend.clients.FiGeneratorClient;
+import org.afeka.fi.backend.clients.OcrAbbyyCloud;
 import org.afeka.fi.backend.clients.OcrClient;
 import org.afeka.fi.backend.factory.FiFactory;
 import org.afeka.fi.backend.factory.NdFactory;
@@ -15,10 +16,16 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -40,14 +47,14 @@ public class CommonApi extends FiCommon{
     @Autowired
     protected TreFactory treFactory;
 
-    protected OcrClient ocrClient;
+    protected OcrClient ocrClient=new OcrAbbyyCloud();
     protected FiGeneratorClient fiGenerator;
 
 
-    @Autowired
+ /*   @Autowired
     public void setOcrClient(@Value("${ocrprovider}") String ocrprovider) {
         ocrClient= (OcrClient) context.getBean(ocrprovider);
-    }
+    }*/
     @Autowired
     public void setFiGeneratorClient(@Value("${figenerator}") String figenerator) {
         fiGenerator= (FiGeneratorClient) context.getBean(figenerator);
@@ -84,6 +91,13 @@ public class CommonApi extends FiCommon{
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Incorrect password for user "+actualUser.userName);
         logger.finish("authCheck success for user "+user.get().userName);
         return user.get();
+    }
+
+    protected ResponseEntity<Resource> initMsWordResponse(MultipartFile file) throws IOException {
+        return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+file.getOriginalFilename())
+                .contentType(MediaType.parseMediaType("application/msword"))
+                .contentLength(file.getSize())
+                .body(file.getResource());
     }
 /*
     public String getOcrclass() {

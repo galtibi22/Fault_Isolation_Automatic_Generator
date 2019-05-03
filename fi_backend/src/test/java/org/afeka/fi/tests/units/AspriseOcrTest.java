@@ -1,7 +1,7 @@
 package org.afeka.fi.tests.units;
 
 import com.asprise.ocr.Ocr;
-import org.afeka.fi.backend.common.FiCommonTest;
+import org.afeka.fi.tests.common.FiCommonTest;
 import org.junit.Test;
 
 import java.io.File;

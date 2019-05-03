@@ -84,6 +84,7 @@ public class FI
     @XmlAttribute(name="typ")
 
     public String typ;
+
     @Transient
     @Expose(serialize = true,deserialize = true)
     @XmlElement(name="PG")
@@ -120,6 +121,10 @@ public class FI
     @Expose
     @XmlTransient
     public Long fiDocId;
+    @Transient
+    @Expose
+    @XmlTransient
+    public List<PgBoundery> pgBounderies=new ArrayList<>();
 
 
 }

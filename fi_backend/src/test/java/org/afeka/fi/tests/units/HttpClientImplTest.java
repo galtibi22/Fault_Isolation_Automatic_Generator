@@ -2,29 +2,16 @@ package org.afeka.fi.tests.units;
 
 
 import org.afeka.fi.backend.clients.HttpClientImpl;
-import org.afeka.fi.backend.common.FiCommonTest;
-import org.afeka.fi.backend.common.Helpers;
+import org.afeka.fi.tests.common.FiCommonTest;
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
 import org.junit.Test;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
-import java.io.BufferedReader;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.Base64;
+
 import org.afeka.fi.backend.pojo.ocr.OcrWebServiceResponse;
 import org.springframework.web.multipart.MultipartFile;
 

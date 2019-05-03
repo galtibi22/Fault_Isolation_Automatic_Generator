@@ -1,6 +1,7 @@
 package org.afeka.fi.backend.clients;
 
 import org.afeka.fi.backend.common.FiCommon;
+import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.pojo.ocr.AbbyyOcrResponse;
 import org.afeka.fi.backend.pojo.ocr.OcrWebServiceResponse;
 import org.afeka.fi.backend.pojo.ocr.Response;
@@ -28,7 +29,7 @@ public class OcrAbbyyCloud extends FiCommon implements OcrClient {
         HttpClientImpl httpClient=new HttpClientImpl();
         String url = "http://cloud-eu.ocrsdk.com/processImage?language=english&exportFormat=docx";
         Header[] headers={
-                new BasicHeader(HttpHeaders.AUTHORIZATION, "Basic " + Base64.getEncoder().encodeToString((applicationId + ":" + password).getBytes()))
+                new BasicHeader(HttpHeaders.AUTHORIZATION, Helpers.encodeBasicAuth(applicationId,password))
                 ,new BasicHeader(HttpHeaders.CONTENT_TYPE,"application/octet-stream")};
         Response abbyyOcrResponse=httpClient.post(url,headers,file.getBytes(),new Response());
         String status=abbyyOcrResponse.getTask().status;

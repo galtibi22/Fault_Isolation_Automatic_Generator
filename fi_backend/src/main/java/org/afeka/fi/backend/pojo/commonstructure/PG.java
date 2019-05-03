@@ -45,6 +45,8 @@ public class PG
     @Expose(serialize = true,deserialize = true)
     @XmlTransient
     public String status;
+    @XmlTransient
+    public String type;
 
     @Override
     public String toString() {
