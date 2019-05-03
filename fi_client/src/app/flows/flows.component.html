@@ -103,7 +103,7 @@
       <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length">
         <div class="example-element-detail"
              [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-          <app-re-table [tableData]="element.PG"></app-re-table>
+          <app-re-table [tableData]="element.pgBounderies"></app-re-table>
         </div>
       </td>
     </ng-container>
