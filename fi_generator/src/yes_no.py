@@ -62,6 +62,7 @@ FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
 
 FI_Main_HTML_Obj['htmlData'] = FI_Main_HTML_Data
 FI_Main_Info['htmlObj'] = FI_Main_HTML_Obj
+FI_Main_Info['status'] = "success"
 FI_Array.append(FI_Main_Info)
 
 tables = document.tables
@@ -83,12 +84,14 @@ for table in tables:
                             # Step
                             newNumberObj['Y'] = {'to' : cf.removeCharsFunc(FI_row[1]), 'typ' : '0'}
                             newNumberObj['N'] = {'to' : cf.removeCharsFunc(FI_row[2]), 'typ' : '0'}
+                            newNumberObj['type'] = "step"
                             newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(FI_row[0])
                         else:
                             # Task
                             newNumberObj['Y'] = cf.fiTaskYes(FI_row[0], FI_row[1], FI_row[2])
                             newNumberObj['N'] = { 'typ' : '4' }
                             newNumberObj['htmlObj'] = cf.fiTaskDescriptionQuestion(FI_row[0])
+                            newNumberObj['type'] = "task"
                         newNumberObj['status'] = "success"
                         FI_Array.append(newNumberObj)
                         FI_Num+=1

@@ -90,9 +90,9 @@ for table in tables:
                         for key, value in FI_Generic_Title_Des_Rows.items():
                             if (FI_row[key] == ""):
                                 if (PG_Status == ""):
-                                    PG_Status = "title."+str(value)+"Error"
+                                    PG_Status = "missing"+str(value)+"Error"
                                 else:
-                                    PG_Status += ",title." + str(value) + "Error"
+                                    PG_Status += ",missing" + str(value) + "Error"
 
                         if (PG_Status == ""):
                             newNumberObj['status'] = "success"
@@ -121,6 +121,7 @@ for table in tables:
                                 newNumberObj['Y'] = {'to': str(Number_Of_Actions + 1), 'typ': '0'}
                                 newNumberObj['N'] = {'to': str(FI_Num + 1), 'typ': '0'}
                                 newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(value + ": " + FI_row[key])
+                                newNumberObj['type'] = "step"
                                 newNumberObj['status'] = "success"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
@@ -129,7 +130,8 @@ for table in tables:
                                 # Step is missing
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
-                                newNumberObj['status'] = "missingStepError"
+                                newNumberObj['type'] = "step"
+                                newNumberObj['status'] = "missingTestError"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
 
@@ -142,6 +144,7 @@ for table in tables:
                                 newNumberObj['Y'] = cf.fiTaskYes2(FI_row[key], str(Number_Of_Actions+1), str(FI_Num+1))
                                 newNumberObj['N'] = { 'typ' : '4' }
                                 newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(value + ": " + FI_row[key])
+                                newNumberObj['type'] = "task"
                                 newNumberObj['status'] = "success"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1

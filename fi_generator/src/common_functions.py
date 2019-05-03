@@ -209,7 +209,7 @@ def generate_fi_doc_path(path):
     if(path.endswith('docx')):
         pathUrl=path
     else:
-        if (path.endswith('doc')):
+        if (fiStepDescriptionQuestion.endswith('doc')):
             if (os.name == 'posix'):
                 print("use save_as_docx_mac")
                 pathUrl=save_as_docx_mac(path)
