@@ -45,11 +45,9 @@ public class PG
     @Expose(serialize = true,deserialize = true)
     @XmlTransient
     public String status;
+    @Expose(serialize = true,deserialize = true)
     @XmlTransient
     public String type;
 
-    @Override
-    public String toString() {
-        return "PG{" + "dwgID='" + dwgID + '\'' + ", doc='" + doc + '\'' + ", _n='" + _n + '\'' + ", N=" + N + ", Y=" + Y + ", htmlObj=" + htmlObj + ", status='" + status + '\'' + '}';
-    }
+
 }

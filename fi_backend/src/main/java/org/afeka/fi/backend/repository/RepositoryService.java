@@ -116,7 +116,11 @@ public class RepositoryService extends FiCommon {
         logger.called("getNd","id",id);
         ND nd=findNd(id);
         List<FI> fis=fiRepository.findAll(Example.of(new FI(nd.ID)));
-        fis.forEach(fi1->nd.FI.add(Helpers.initGson().fromJson(fi1.fiJson, FI.class)));
+        fis.forEach(fi1->{
+            logger.debug("get fi from db "+fi1.fiJson);
+            nd.FI.add(Helpers.initGson().fromJson(fi1.fiJson, FI.class));
+
+        });
         if (nd.FI!=null) {
             nd.FI.forEach(fi -> {
                 if(fi.PG!=null)
@@ -135,7 +139,7 @@ public class RepositoryService extends FiCommon {
     public FI getFi(String id) throws ResourceNotFoundException {
         logger.called("getFi","id",id);
         FI fi= findFI(id);
-        logger.info("get fi from db "+ fi.fiJson);
+        logger.debug("get fi from db "+ fi.fiJson);
         return Helpers.initGson().fromJson(fi.fiJson, FI.class);
     }
 

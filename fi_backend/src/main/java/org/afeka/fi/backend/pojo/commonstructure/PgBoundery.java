@@ -1,5 +1,7 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.afeka.fi.backend.common.FiLogger;
 import org.apache.logging.log4j.Logger;
 
@@ -8,11 +10,23 @@ import java.util.stream.Collectors;
 
 public class PgBoundery {
     Logger logger= FiLogger.getLogger(getClass().getName());
-    private String n="";
-    private String type="";
+    @JsonPropertyOrder("1")
+    @JsonProperty("Number")
+    private String Number="";
+    @JsonPropertyOrder("2")
+    @JsonProperty("Type")
+    private String Type="";
+    @JsonPropertyOrder("3")
+    @JsonProperty("Status")
     private String status="";
-    private String description="";
+    @JsonPropertyOrder("4")
+    @JsonProperty("Description")
+    private String Description="";
+    @JsonPropertyOrder("5")
+    @JsonProperty("To yes")
     private String toYes="";
+    @JsonPropertyOrder("6")
+    @JsonProperty("To no")
     private String toNo="";
 
     public PgBoundery(){
@@ -21,23 +35,43 @@ public class PgBoundery {
 
     public PgBoundery(PG pg){
       try {
-          n = pg._n;
-          if (pg.type!=null)
-              type = pg.type;
+          Number = pg._n;
+          Type =createType(pg);
           status = pg.status;
           if (pg.N.getTo()!=null)
             toNo = pg.N.getTo();
           if (pg.Y.getTo()!=null)
             toYes = pg.Y.getTo();
-          description = createDescription(pg);
+          Description = createDescription(pg);
       }catch (Exception e){
           logger.error("Cannot convert pg to PgBoundery",e);
       }
     }
 
+    private String createType(PG pg){
+        String type;
+        if (pg.type!=null)
+            type=pg.type;
+        else if(pg._n.equals("0"))
+            type="opening";
+        else if (pg.htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiPosEnd))
+            type="finish";
+        else if (pg.htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiNegEnd))
+            type="finish";
+        else
+            type="null";
+        return type;
+
+
+    }
     private String createDescription(PG pg) {
         String description="";
-        if(status.equals(Status.success.name()))
+        if(pg.htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiNegEnd)){
+            description="Negative end for the flow";
+        }else if(pg.htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiPosEnd)){
+            description="Positive end for the flow";
+        }
+        else if(status.equals(Status.success.name()))
             description= Arrays.stream(pg.htmlObj.getHtmlData()).map(htmlData -> htmlData.txt).collect(Collectors.joining());
         else{
             if(pg.status.startsWith("missing")){
@@ -56,20 +90,20 @@ public class PgBoundery {
         return description;
     }
 
-    public String getN() {
-        return n;
+  /*  public String getNumber() {
+        return Number;
     }
 
-    public void setN(String n) {
-        this.n = n;
+    public void setNumber(String number) {
+        Number = number;
     }
 
     public String getType() {
-        return type;
+        return Type;
     }
 
     public void setType(String type) {
-        this.type = type;
+        Type = type;
     }
 
     public String getStatus() {
@@ -81,11 +115,11 @@ public class PgBoundery {
     }
 
     public String getDescription() {
-        return description;
+        return Description;
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        Description = description;
     }
 
     public String getToYes() {
@@ -102,5 +136,5 @@ public class PgBoundery {
 
     public void setToNo(String toNo) {
         this.toNo = toNo;
-    }
+    }*/
 }
