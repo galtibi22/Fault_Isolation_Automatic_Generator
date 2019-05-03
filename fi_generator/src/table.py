@@ -87,12 +87,20 @@ for table in tables:
                         newNumberObj['htmlObj'] = cf.fiMainDescription(FI_Generic_Title_Main_Rows, FI_Generic_Title_Des_Rows, FI_row)
 
                         PG_Status = ""
+
+                        for key, value in FI_Generic_Title_Main_Rows.items():
+                            if (FI_row[key] == ""):
+                                if (PG_Status == ""):
+                                    PG_Status = "missing"+str(value)
+                                else:
+                                    PG_Status += ",missing" + str(value)
+
                         for key, value in FI_Generic_Title_Des_Rows.items():
                             if (FI_row[key] == ""):
                                 if (PG_Status == ""):
-                                    PG_Status = "missing"+str(value)+"Error"
+                                    PG_Status = "missing"+str(value)
                                 else:
-                                    PG_Status += ",missing" + str(value) + "Error"
+                                    PG_Status += ",missing" + str(value)
 
                         if (PG_Status == ""):
                             newNumberObj['status'] = "success"
@@ -131,7 +139,7 @@ for table in tables:
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
                                 newNumberObj['type'] = "step"
-                                newNumberObj['status'] = "missingTestError"
+                                newNumberObj['status'] = "missingTest"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
 

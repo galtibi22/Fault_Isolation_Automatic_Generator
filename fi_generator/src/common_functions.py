@@ -9,6 +9,7 @@ import subprocess
 import time
 from docx import Document
 from shutil import copyfile
+import win32com.client as win32
 
 # Method check if string has Yes/No
 def checkYesNo(str):

@@ -41,14 +41,14 @@ cf.init()
 # pathUrl=cf.generate_fi_doc_path(sys.argv[1])
 # print ("pathUrl",pathUrl)
 # document = Document(pathUrl)
-document = Document('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\presentation\\Troubleshooting_table_full_gal.docx')
-
+document = Document('C:\\Users\\eden.SPIDERSERVICES\\Desktop\\docx\\presentation\\table_pretty_output_ocr.docx')
 
 FI_Array_List = []
 FI_Array = []
 
 tables = document.tables
 Table_Length = len(tables[0].rows[0].cells)
+print(len(tables[0].rows[0].cells))
 
 for table in tables:
     for row in table.rows:
@@ -57,7 +57,8 @@ for table in tables:
             for paragraph in cell.paragraphs:
                 FI_row.append(paragraph.text)
 
-                if(len(FI_row) == Table_Length):
+                if (len(FI_row) == Table_Length):
+
 
                     if not FI_Generic_Title_Main_Rows:
 
@@ -79,6 +80,10 @@ for table in tables:
                                     FI_Generic_Task_Rows[i] = FI_row[i]
 
                         FI_Txt_Header_Exist = True
+                        print(FI_Generic_Title_Main_Rows)
+                        print(FI_Generic_Title_Des_Rows)
+                        print(FI_Generic_Step_Rows)
+                        print(FI_Generic_Task_Rows)
 
                     else:
                         # Main text info to object (Failure No., Tested Unit, Severity, Platform)
@@ -92,9 +97,9 @@ for table in tables:
                         for key, value in FI_Generic_Title_Des_Rows.items():
                             if (FI_row[key] == ""):
                                 if (PG_Status == ""):
-                                    PG_Status = "title."+str(value)+"Error"
+                                    PG_Status = "missing"+str(value)
                                 else:
-                                    PG_Status += ",title." + str(value) + "Error"
+                                    PG_Status += ",missing" + str(value)
 
                         if (PG_Status == ""):
                             newNumberObj['status'] = "success"
@@ -123,6 +128,7 @@ for table in tables:
                                 newNumberObj['Y'] = {'to': str(Number_Of_Actions + 1), 'typ': '0'}
                                 newNumberObj['N'] = {'to': str(FI_Num + 1), 'typ': '0'}
                                 newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(value + ": " + FI_row[key])
+                                newNumberObj['type'] = "step"
                                 newNumberObj['status'] = "success"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
@@ -131,7 +137,8 @@ for table in tables:
                                 # Step is missing
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
-                                newNumberObj['status'] = "missingStepError"
+                                newNumberObj['type'] = "step"
+                                newNumberObj['status'] = "missingTest"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
 
@@ -144,6 +151,7 @@ for table in tables:
                                 newNumberObj['Y'] = cf.fiTaskYes2(FI_row[key], str(Number_Of_Actions+1), str(FI_Num+1))
                                 newNumberObj['N'] = { 'typ' : '4' }
                                 newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(value + ": " + FI_row[key])
+                                newNumberObj['type'] = "task"
                                 newNumberObj['status'] = "success"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
