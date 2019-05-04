@@ -1,21 +1,9 @@
-from glob import glob
 import json
-import re
-import sys
-import time
 import argparse
-import os
-import requests
-import subprocess
 from docx import Document
 import common_functions as cf
-
+import os
 import sys
-#import win32com.client as win32
-#from win32com.client import constants
-
-
-
 #############################################################################################
 #############################################################################################
 ###################################                    ######################################
@@ -24,12 +12,8 @@ import sys
 #############################################################################################
 #############################################################################################
 
-removeCharacters = ['\n','\t','\u200e']
 FI_Label = True
-FI_Descriptoin = ""
 FI_Num = 0
-
-
 
 path=cf.init()
 pathUrl=cf.generate_fi_doc_path(sys.argv[1])
@@ -45,6 +29,7 @@ FI_Num+=1
 FI_Main_HTML_Obj ={}
 FI_Main_HTML_Data = []
 FI_Main_HTML_Data_Obj = {}
+FI_Descriptoin = ""
 
 for para in document.paragraphs:
     if (FI_Label == True):

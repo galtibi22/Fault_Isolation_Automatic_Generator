@@ -6,9 +6,8 @@ import argparse
 import os
 import requests
 import subprocess
-import time
-from docx import Document
-from shutil import copyfile
+
+
 
 # Method check if string has Yes/No
 def checkYesNo(str):
@@ -156,30 +155,7 @@ def fiTaskYes2(str, yesOption, noOption):
 
 
 
-def save_as_docx_win(path):
-    import win32com.client as win32
-    # Opening MS Word
-    word = win32.gencache.EnsureDispatch('Word.Application')
-    doc = word.Documents.Open(path)
-    doc.Activate ()
-
-    # Rename path with .docx
-    new_file_abs = os.path.abspath(path)
-    new_file_abs = re.sub(r'\.\w+$', '.docx', new_file_abs)
-
-    # Save and Close
-    word.ActiveDocument.SaveAs(
-        new_file_abs, FileFormat=constants.wdFormatXMLDocument
-    )
-    doc.Close(False)
-
-    return new_file_abs
-
-
-def save_as_docx_mac(path):
-    #print("path",path)
-    SOFFICE_PATH='/Users/gal.tibi/afekaProjects/Fault_Isolation_Automatic_Generator/Contents/MacOS/soffice'
-    #SOFFICE_PATH="C:\Program Files\LibreOffice\program\soffice.exe"
+def save_as_docx(path, SOFFICE_PATH):
     outdir=os.path.dirname(os.path.abspath(__file__))
     print("outdir",outdir)
     subprocess.call([SOFFICE_PATH, '--headless', '--convert-to', 'docx','--outdir', outdir, path])
@@ -188,16 +164,12 @@ def save_as_docx_mac(path):
     f.close()
     os.remove(path)
     newPath=outdir+"/"+name
-    #newPath=path.replace("doc","docx")
-    #copyfile(name,newPath)
-    #os.remove(name)
     print("finish to convert doc to docx source path=",path,"result path=",newPath)
     return newPath
 
 
-
 def post_api_server(jsondata):
-    # defining the api-endpoint
+    # Define API-Endpoint to local server
     API_ENDPOINT = "http://127.0.0.1:8080/api/figenerator/new/"+sys.argv[2]+"/"+sys.argv[3]
     headers = { 'content-type' : 'application/json', 'Authorization' : 'Basic ZmlnZW5lcmF0b3I6QWExMjM0NTY='}
     print("send fi","to",API_ENDPOINT,"with headers",headers,"data",jsondata)
@@ -207,16 +179,20 @@ def post_api_server(jsondata):
 
 def generate_fi_doc_path(path):
     pathUrl=""
+    SOFFICE_PATH=''
     if(path.endswith('docx')):
         pathUrl=path
     else:
         if (path.endswith('doc')):
+            # Conversion doc to docx use with LibreOffice that should be install on server
             if (os.name == 'posix'):
                 print("use save_as_docx_mac")
-                pathUrl=save_as_docx_mac(path)
+                SOFFICE_PATH = '/Users/gal.tibi/afekaProjects/Fault_Isolation_Automatic_Generator/Contents/MacOS/soffice'
             else:
                 print("use save_as_docx_win")
-                pathUrl=save_as_docx_win(path)
+                SOFFICE_PATH = "C:\Program Files\LibreOffice\program\soffice.exe"
+
+            pathUrl=save_as_docx(path, SOFFICE_PATH)
     return pathUrl
 
 

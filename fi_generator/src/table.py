@@ -1,6 +1,4 @@
 import json
-import re
-import sys
 import argparse
 from docx import Document
 import common_functions as cf
@@ -20,7 +18,7 @@ FI_Num = 0
 FI_Txt_Header_Exist = False
 
 # Generic titles
-FI_Generic_Title_Main = ["Failure No."]
+FI_Generic_Title_Main = ["Failure"]
 FI_Generic_Title_Des = ["Tested Unit", "Severity", "Name", "Platform"]
 FI_Generic_Step = ["Test ", "DSA"]
 FI_Generic_Task = ["LRU", "SAW","Task"]
