@@ -15,6 +15,7 @@ import sys
 FI_Label = True
 FI_Num = 0
 
+
 path=cf.init()
 pathUrl=cf.generate_fi_doc_path(sys.argv[1])
 document = Document(pathUrl)
@@ -23,13 +24,13 @@ document = Document(pathUrl)
 FI_Array = []
 
 # Main text info to object
+FI_Descriptoin = ""
 FI_Main_Info = {}
 FI_Main_Info['n'] = str(FI_Num)
 FI_Num+=1
 FI_Main_HTML_Obj ={}
 FI_Main_HTML_Data = []
 FI_Main_HTML_Data_Obj = {}
-FI_Descriptoin = ""
 
 for para in document.paragraphs:
     if (FI_Label == True):
@@ -87,6 +88,7 @@ FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fi
 FI_Num+=1
 FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiPosEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" }, "status": "success" })
 
+FI_Array = cf.recheckFlow(FI_Array)
 
 fis=[{
     'PG':FI_Array,

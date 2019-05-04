@@ -124,7 +124,7 @@ for table in tables:
                             if FI_row[key] != "":
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
-                                newNumberObj['Y'] = {'to': str(Number_Of_Actions + 1), 'typ': '0'}
+                                newNumberObj['Y'] = {'to': str(Number_Of_Actions + 2), 'typ': '0'}
                                 newNumberObj['N'] = {'to': str(FI_Num + 1), 'typ': '0'}
                                 newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(value + ": " + FI_row[key])
                                 newNumberObj['type'] = "step"
@@ -172,4 +172,4 @@ for table in tables:
 
 os.remove(pathUrl)
 cf.post_api_server(FI_Array_List)
-#print(json.dumps(FI_Array_List, indent=4, sort_keys=True))
+# print(json.dumps(FI_Array_List, indent=4, sort_keys=True))

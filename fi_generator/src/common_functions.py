@@ -153,6 +153,30 @@ def fiTaskYes2(str, yesOption, noOption):
     return yesObj
 
 
+# Method check flow steps if exists
+def recheckFlow(FI_Array):
+    for numObj in FI_Array:
+        if 'type' in numObj:
+            if numObj['type'] == 'step':
+                if 'N' in numObj:
+                    existN = False
+                    for numOnjTest in FI_Array:
+                        if numObj['N']['to'] == numOnjTest['n']:
+                            existN = True
+                    if existN == False:
+                        numObj['status'] = "missingTest"
+
+                if 'Y' in numObj:
+                    existY = False
+                    for numOnjTest in FI_Array:
+                        if numObj['Y']['to'] == numOnjTest['n']:
+                            existY = True
+                    if existY == False:
+                        numObj['status'] = "missingTest"
+
+    return FI_Array
+
+
 
 
 def save_as_docx(path, SOFFICE_PATH):
@@ -166,15 +190,6 @@ def save_as_docx(path, SOFFICE_PATH):
     newPath=outdir+"/"+name
     print("finish to convert doc to docx source path=",path,"result path=",newPath)
     return newPath
-
-
-def post_api_server(jsondata):
-    # Define API-Endpoint to local server
-    API_ENDPOINT = "http://127.0.0.1:8080/api/figenerator/new/"+sys.argv[2]+"/"+sys.argv[3]
-    headers = { 'content-type' : 'application/json', 'Authorization' : 'Basic ZmlnZW5lcmF0b3I6QWExMjM0NTY='}
-    print("send fi","to",API_ENDPOINT,"with headers",headers,"data",jsondata)
-    r=requests.post(API_ENDPOINT,data=json.dumps(jsondata),headers = headers)
-    print(r)
 
 
 def generate_fi_doc_path(path):
@@ -194,6 +209,15 @@ def generate_fi_doc_path(path):
 
             pathUrl=save_as_docx(path, SOFFICE_PATH)
     return pathUrl
+
+
+def post_api_server(jsondata):
+    # Define API-Endpoint to local server
+    API_ENDPOINT = "http://127.0.0.1:8080/api/figenerator/new/"+sys.argv[2]+"/"+sys.argv[3]
+    headers = { 'content-type' : 'application/json', 'Authorization' : 'Basic ZmlnZW5lcmF0b3I6QWExMjM0NTY='}
+    print("send fi","to",API_ENDPOINT,"with headers",headers,"data",jsondata)
+    r=requests.post(API_ENDPOINT,data=json.dumps(jsondata),headers = headers)
+    print(r)
 
 
 def init():
