@@ -1,7 +1,12 @@
 <mat-toolbar class="example-header" color="primary">
-  <button type="button" mat-button (click)="sidenav.toggle()">
-    <mat-icon>menu</mat-icon>
-  </button>
+  <div>
+    <button type="button" mat-button (click)="sidenav.toggle()">
+      <mat-icon>menu</mat-icon>
+    </button>
+
+    <button mat-stroked-button class="fi-link" (click)="navigateFi()">Fault Isolation</button>
+    <button mat-stroked-button (click)="navigateOcr()">OCR</button>
+  </div>
 
   <p><a mat-button [routerLink]="['/login']">Logout</a></p>
 </mat-toolbar>
