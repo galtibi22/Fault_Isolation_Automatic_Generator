@@ -1,4 +1,4 @@
-package org.afeka.fi.backend.common;
+package org.afeka.fi.backend.generator;
 
 
 import net.bytebuddy.utility.RandomString;

@@ -87,18 +87,19 @@ public class PgBoundery {
     }
     private String createDescription(PG pg) {
         String description="";
-        if(pg.htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiNegEnd)){
-            description="Negative end for the flow";
-        }else if(pg.htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiPosEnd)){
-            description="Positive end for the flow";
+        if(Type.toLowerCase().equals("finish")) {
+            if (pg.htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiNegEnd))
+                description = "Negative end for the flow";
+            else if (pg.htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiPosEnd))
+                description = "Positive end for the flow";
         }
         else if(status.equals(Status.success.name()))
             description= Arrays.stream(pg.htmlObj.getHtmlData()).map(htmlData -> htmlData.txt).collect(Collectors.joining());
         else{
-            if(pg.status.startsWith("missing")){
+            if(pg.status.toLowerCase().startsWith("missing")){
                 String[] errors=pg.status.split(",");
                 for (String error:errors) {
-                    error.replace("missing","");
+                    error=error.replace("missing","");
                     String name=error.substring(0,1).toUpperCase()+error.substring(1);
                     description += name +" is missing, ";
                 }
