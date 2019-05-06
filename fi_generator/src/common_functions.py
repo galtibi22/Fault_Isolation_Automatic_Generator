@@ -153,6 +153,22 @@ def fiTaskYes2(str, yesOption, noOption):
     return yesObj
 
 
+# Method replace line to number
+def replaceLineToNumber(FI_Array):
+    for numObj in FI_Array:
+        if 'type' in numObj:
+            if numObj['type'] == 'task':
+                if 'Y' in numObj:
+                    if 'rtN' in numObj['Y']:
+                        if numObj['Y']['rtN'] == '-':
+                            numObj['Y']['rtN'] = str(len(FI_Array)-2)
+                    if 'rtY' in numObj['Y']:
+                        if numObj['Y']['rtY'] == '-':
+                            numObj['Y']['rtY'] = str(len(FI_Array) - 1)
+
+    return FI_Array
+
+
 # Method check flow tests if exists
 def recheckFlow(FI_Array):
     for numObj in FI_Array:

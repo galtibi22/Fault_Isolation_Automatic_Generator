@@ -88,12 +88,15 @@ FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fi
 FI_Num+=1
 FI_Array.append({ "n": str(FI_Num), "htmlObj": { "htmlData": [ { "htmlType": "fiPosEnd" } ] }, "N": { "typ": "4" }, "Y": { "typ": "4" }, "status": "success" })
 
+FI_Array = cf.replaceLineToNumber(FI_Array)
 FI_Array = cf.recheckFlow(FI_Array)
 
 fis=[{
     'PG':FI_Array,
     "status":"success"
 }]
+
 os.remove(pathUrl)
 cf.post_api_server(fis)
+# print(json.dumps(fis, indent=4, sort_keys=True))
 
