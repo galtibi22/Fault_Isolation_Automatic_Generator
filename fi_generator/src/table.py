@@ -147,7 +147,7 @@ for table in tables:
                             if FI_row[key] != "":
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
-                                newNumberObj['Y'] = cf.fiTaskYes2(FI_row[key], str(Number_Of_Actions+1), str(FI_Num+1))
+                                newNumberObj['Y'] = cf.fiTaskYes2(FI_row[key], str(Number_Of_Actions+2), str(FI_Num+1))
                                 newNumberObj['N'] = { 'typ' : '4' }
                                 newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(value + ": " + FI_row[key])
                                 newNumberObj['type'] = "task"
