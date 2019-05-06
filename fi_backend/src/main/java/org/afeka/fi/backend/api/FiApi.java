@@ -3,31 +3,20 @@ package org.afeka.fi.backend.api;
 import org.afeka.fi.backend.common.CommonApi;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.*;
-import org.afeka.fi.backend.factory.TreFactory;
 import org.afeka.fi.backend.pojo.auth.Role;
-import org.afeka.fi.backend.pojo.auth.User;
 import org.afeka.fi.backend.pojo.commonstructure.*;
 import org.afeka.fi.backend.pojo.fiGenerator.FiGeneratorType;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
-import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.bind.JAXBException;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.List;
 
 @RequestMapping(path = "api/fronted/fi")
 @RestController
@@ -80,7 +69,7 @@ public class FiApi extends CommonApi {
             FiDoc fiDoc=repositoryService.getFiDoc(fiDocId);
             byte[] fiDocByte=fiDoc.doc;
             InputStreamResource inputStream= new InputStreamResource(new ByteArrayInputStream(fiDoc.doc));
-            return super.initMsWordResponse(new MockMultipartFile(fiDoc.name,fiDoc.doc));
+            return initFileResponse(new MockMultipartFile(fiDoc.name,fiDoc.doc));
            /* return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+fiDoc.name)
                     .contentType(MediaType.parseMediaType("application/msword"))
                     .contentLength(fiDocByte.length)

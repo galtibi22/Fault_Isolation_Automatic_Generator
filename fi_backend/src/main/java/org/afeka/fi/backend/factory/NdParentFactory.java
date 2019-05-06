@@ -1,9 +1,8 @@
 package org.afeka.fi.backend.factory;
 
 import org.afeka.fi.backend.common.Generator;
-import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.DataNotValidException;
-import org.afeka.fi.backend.html.HtmlGenerator;
+import org.afeka.fi.backend.generator.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.http.ViewCreateRequest;

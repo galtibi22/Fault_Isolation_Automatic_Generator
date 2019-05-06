@@ -9,26 +9,31 @@ import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class PgBoundery {
+
+
+
     Logger logger= FiLogger.getLogger(getClass().getName());
     @JsonPropertyOrder("1")
     @JsonProperty("Number")
-    private String Number="";
+    public String Number="";
     @JsonPropertyOrder("2")
     @JsonProperty("Type")
-    private String Type="";
+    public String Type="";
     @JsonPropertyOrder("3")
     @JsonProperty("Status")
-    private String status="";
+    public String status="";
     @JsonPropertyOrder("4")
     @JsonProperty("Description")
-    private String Description="";
+    public String Description="";
     @JsonPropertyOrder("5")
     @JsonProperty("To yes")
-    private String toYes="";
+    public String toYes="";
     @JsonPropertyOrder("6")
     @JsonProperty("To no")
-    private String toNo="";
-
+    public String toNo="";
+    @JsonPropertyOrder("7")
+    @JsonProperty("Task Link")
+    public String taskLink="";
     public PgBoundery(){
 
     }
@@ -37,17 +42,33 @@ public class PgBoundery {
       try {
           Number = pg._n;
           Type =createType(pg);
+
           status = pg.status;
           if (pg.N.getTo()!=null)
-            toNo = pg.N.getTo();
+              if (Type.equals("task"))
+                 setTaskLink(pg.N);
+              else
+                  toNo = pg.N.getTo();
           if (pg.Y.getTo()!=null)
-            toYes = pg.Y.getTo();
+              if (Type.equals("task"))
+                 setTaskLink(pg.N);
+              else
+                  toYes = pg.Y.getTo();
           Description = createDescription(pg);
       }catch (Exception e){
           logger.error("Cannot convert pg to PgBoundery",e);
       }
     }
 
+    private void setTaskLink(YN yn){
+        if (Type.equals("task")) {
+            taskLink = yn.getTo();
+            if (yn.getRtN()!=null)
+                toNo=yn.getRtN();
+            if (yn.getRtY()!=null)
+                toYes=yn.getRtY();
+        }
+    }
     private String createType(PG pg){
         String type;
         if (pg.type!=null)

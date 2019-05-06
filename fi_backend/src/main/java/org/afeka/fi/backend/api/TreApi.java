@@ -1,5 +1,6 @@
 package org.afeka.fi.backend.api;
 
+import com.itextpdf.text.DocumentException;
 import org.afeka.fi.backend.common.CommonApi;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.DataNotValidException;
@@ -18,12 +19,14 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -70,9 +73,38 @@ public class TreApi extends CommonApi {
 
     }
 
-    @PostMapping(value="/export"/*,headers = HttpHeaders.AUTHORIZATION*/)
+
+    @PostMapping(value="/export",headers = HttpHeaders.AUTHORIZATION)
     public ResponseEntity<Resource> export(HttpServletRequest request, @RequestBody TRE tre) throws ResourceNotFoundException, IOException, JAXBException, DataNotValidException {
         logger.called("exportApi", "tre",tre);
+        securityCheck(request, Role.user);
+        TRE treToExport=initTreToExport(tre);
+        TreFactory treFactory=new TreFactory();
+        Path resultPath= Files.createTempDirectory("results").toAbsolutePath();
+        treFactory.export(resultPath,treToExport);
+        Path zipPath=Files.createTempFile("export",".zip");
+        Helpers.zip(resultPath,zipPath);
+        InputStreamResource inputStream= new InputStreamResource(new FileInputStream(zipPath.toFile()));
+        return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+tre.ID+"_xml.zip")
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .contentLength(zipPath.toFile().length())
+                .body(inputStream);
+
+    }
+    @PostMapping(value="/export/report",headers =HttpHeaders.AUTHORIZATION)
+    public ResponseEntity<Resource> exportReport(HttpServletRequest request, @RequestBody TRE tre) throws ResourceNotFoundException, IOException, JAXBException, DataNotValidException, DocumentException {
+        logger.called("exportApi", "tre",tre);
+        securityCheck(request, Role.user);
+        TRE treToExport=initTreToExport(tre);
+        TreFactory treFactory=new TreFactory();
+        Path reportPath=Files.createTempFile(tre.ID+"_report_",".pdf");
+        treFactory.exportReport(reportPath,treToExport);
+        InputStream inputStream= new FileInputStream(reportPath.toFile());
+        return initFileResponse(new MockMultipartFile(reportPath.getFileName().toString(),inputStream));
+
+    }
+
+    private TRE initTreToExport(TRE tre) throws ResourceNotFoundException {
         TRE treToExport=repositoryService.findTre(tre.ID);
         for(NdParent ndParent:tre.ndParents){
             NdParent ndParentToExport=repositoryService.findNdParent(ndParent.ID);
@@ -85,16 +117,6 @@ public class TreApi extends CommonApi {
                 }
             }
         }
-        TreFactory treFactory=new TreFactory();
-        Path resultPath= Files.createTempDirectory("results").toAbsolutePath();
-        treFactory.export(resultPath,treToExport);
-        Path zipPath=Files.createTempFile("export",".zip");
-        Helpers.zip(resultPath,zipPath);
-        InputStreamResource inputStream= new InputStreamResource(new FileInputStream(zipPath.toFile()));
-        return ResponseEntity.ok().header("Content-Disposition", "attachment;filename=download.zip")
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .contentLength(zipPath.toFile().length())
-                .body(inputStream);
-
+        return treToExport;
     }
 }

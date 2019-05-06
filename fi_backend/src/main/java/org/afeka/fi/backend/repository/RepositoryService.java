@@ -117,18 +117,14 @@ public class RepositoryService extends FiCommon {
         ND nd=findNd(id);
         List<FI> fis=fiRepository.findAll(Example.of(new FI(nd.ID)));
         fis.forEach(fi1->{
-            logger.debug("get fi from db "+fi1.fiJson);
-            nd.FI.add(Helpers.initGson().fromJson(fi1.fiJson, FI.class));
+            try {
+                nd.FI.add(getFi(fi1.ID));
+            } catch (ResourceNotFoundException e) {
+                logger.error(e);
+            }
 
         });
-        if (nd.FI!=null) {
-            nd.FI.forEach(fi -> {
-                if(fi.PG!=null)
-                    fi.PG.forEach(pg -> fi.pgBounderies.add(new PgBoundery(pg)));
-                fi.PG=null;
-            });
-            //nd.FI.forEach(fi -> fi.PG = null);
-        }
+
         return nd;
     }
     /**
@@ -137,10 +133,16 @@ public class RepositoryService extends FiCommon {
      * @return
      */
     public FI getFi(String id) throws ResourceNotFoundException {
-        logger.called("getFi","id",id);
-        FI fi= findFI(id);
-        logger.debug("get fi from db "+ fi.fiJson);
-        return Helpers.initGson().fromJson(fi.fiJson, FI.class);
+        logger.called("getFi", "id", id);
+        FI fi = findFI(id);
+        fi=Helpers.initGson().fromJson(fi.fiJson, FI.class);
+        logger.debug("get fi from db " + fi.fiJson);
+        if (fi.PG != null) {
+            FI finalFi = fi;
+            fi.PG.forEach(pg -> finalFi.pgBounderies.add(new PgBoundery(pg)));
+        }
+        fi.PG = null;
+        return fi;
     }
 
 

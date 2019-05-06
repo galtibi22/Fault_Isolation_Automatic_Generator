@@ -1,8 +1,7 @@
-package org.afeka.fi.backend.html;
+package org.afeka.fi.backend.generator;
 import j2html.tags.ContainerTag;
 import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
-import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

@@ -93,9 +93,15 @@ public class CommonApi extends FiCommon{
         return user.get();
     }
 
-    protected ResponseEntity<Resource> initMsWordResponse(MultipartFile file) throws IOException {
-        return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+file.getOriginalFilename())
-                .contentType(MediaType.parseMediaType("application/msword"))
+    protected ResponseEntity<Resource> initFileResponse(MultipartFile file) throws IOException {
+        String extension=Helpers.getFileExtension(file);
+        MediaType mediaType = null;
+        if (extension.equals("doc") ||extension.equals("docx"))
+            mediaType=MediaType.parseMediaType("application/msword");
+        else if( extension.equals("pdf"))
+            mediaType=MediaType.APPLICATION_PDF;
+        return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+file.getName())
+                .contentType(mediaType)
                 .contentLength(file.getSize())
                 .body(file.getResource());
     }
