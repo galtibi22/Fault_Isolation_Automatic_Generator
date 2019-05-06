@@ -176,7 +176,7 @@ public class RepositoryService extends FiCommon {
     }
     @Transactional
     public void deleteFi(String id) throws ResourceNotFoundException, DeleteEntityExption {
-        FI fiToDelete=getFi(id);
+        FI fiToDelete=findFI(id);
         logger.called("deleteFi","id",id);
         try {
             fiRepository.deleteById(id);

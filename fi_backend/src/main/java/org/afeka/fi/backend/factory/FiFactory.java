@@ -2,13 +2,16 @@ package org.afeka.fi.backend.factory;
 
 import org.afeka.fi.backend.common.*;
 import org.afeka.fi.backend.exception.DataFactoryNotFoundException;
+import org.afeka.fi.backend.generator.Generator;
 import org.afeka.fi.backend.generator.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.*;
+import org.afeka.fi.backend.pojo.internal.PgNode;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -109,10 +112,54 @@ private FiFactory pgs(List<PG> pgs) {
 
        }
     }
+    validatePgPathes();
 
 
     return this;
 }
+
+    private void validatePgPathes() {
+        try {
+            List<PgNode> pgNodes = new ArrayList<>();
+            List<PG> pgs = view.PG.subList(1, view.PG.size());
+            pgs.forEach(pg -> pgNodes.add(new PgNode(Integer.parseInt(pg._n) - 1)));
+            pgs.forEach(pg -> {
+                PgNode current = pgNodes.get(Integer.parseInt(pg._n) - 1);
+                if (pg.type != null && pg.type.equals("task")) {
+                    current.setYes(pgNodes.get(Integer.parseInt(pg.Y.getRtY()) - 1));
+                    current.setNo(pgNodes.get(Integer.parseInt(pg.Y.getRtN()) - 1));
+
+                } else if (pg.type != null && (pg.type.equals("test") || pg.type.equals("step"))) {
+                    current.setYes(pgNodes.get(Integer.parseInt(pg.Y.getTo())));
+                    current.setNo(pgNodes.get(Integer.parseInt(pg.N.getTo())));
+
+                }
+            });
+            validateBinaryTree(pgNodes.get(0));
+            logger.info("success to validate paths for " + view.ID);
+        }catch (Exception e){
+            logger.error(e);
+        }
+    }
+
+    private void validateBinaryTree(PgNode pgNode) {
+        try{
+            if (pgNode==null)
+                return;
+            if (pgNode.getYes()==null && pgNode.getNo()==null)
+                return;
+            else{
+                validateBinaryTree(pgNode.getNo());
+                validateBinaryTree(pgNode.getYes());
+
+            }
+        }catch (Exception e){
+            logger.error(e);
+        }
+
+
+
+    }
 
     private FiFactory doc(HtmlObj htmlObj){
         view.htmlObject=htmlObj;

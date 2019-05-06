@@ -1,12 +1,10 @@
 package org.afeka.fi.backend.factory;
 
-import org.afeka.fi.backend.common.Generator;
+import org.afeka.fi.backend.generator.Generator;
 import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.generator.HtmlGenerator;
 import org.afeka.fi.backend.generator.PdfGenerator;
-import org.afeka.fi.backend.pojo.commonstructure.FI;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
-import org.afeka.fi.backend.pojo.commonstructure.PgBoundery;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
 import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
 import org.springframework.stereotype.Component;
@@ -18,17 +16,10 @@ import java.io.*;
 import java.nio.file.Path;
 
 import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
-
-import static com.itextpdf.text.FontFactory.COURIER;
 
 @Component
 public class TreFactory extends ViewFactory <TRE> {
