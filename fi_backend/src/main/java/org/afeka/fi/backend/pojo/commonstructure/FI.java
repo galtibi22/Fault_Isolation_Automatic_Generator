@@ -32,35 +32,41 @@ public class FI
       this.ndId=ndId;
       this.fiDocId=fiDocId;
     }
-
-    @Expose(serialize = true, deserialize = true)
+    @JsonIgnore
+    @Expose
     @Transient
    @XmlAttribute(name="nPg")
     public String nPg;
-
+ @JsonIgnore
+ @Expose
     @Transient
     @XmlAttribute(name="pd")
    public String pd;
-    @Expose(serialize = true, deserialize = true)
+ @JsonIgnore
+
+ @Expose
     @Transient
     @XmlAttribute(name="v")
 
     public String v;
 
     @Transient
-    @Expose(serialize = true,deserialize = true)
+    @Expose
     @XmlAttribute(name="lbl")
     public String lbl="lbl";
-    @Expose(serialize = true, deserialize = true)
+ @JsonIgnore
+    @Expose
     @Transient
     @XmlAttribute(name="kd")
 
    public String kd;
-    @Expose(serialize = true, deserialize = true)
+ @JsonIgnore
+ @Expose
     @Transient
     @XmlAttribute(name="newV")
    public String newV;
-    @Expose(serialize = true, deserialize = true)
+ @JsonIgnore
+ @Expose
     @Transient
     @XmlAttribute(name="pdf")
    public String pdf;
@@ -69,40 +75,38 @@ public class FI
     @Id
     @XmlAttribute(name="ID")
    public String ID;
-    @Expose(serialize = true, deserialize = true)
+ @JsonIgnore
+    @Expose
     @Transient
     @XmlAttribute(name="kIdDsp")
    public String kIdDsp;
 
-    @Expose(serialize = true, deserialize = true)
+    @Expose
     @Transient
     @XmlAttribute(name="doc")
 
     public String doc;
-    @Expose(serialize = true, deserialize = true)
+ @JsonIgnore
+    @Expose
     @Transient
     @XmlAttribute(name="typ")
 
     public String typ;
-
+    @JsonIgnore
     @Transient
-    @Expose(serialize = true,deserialize = true)
+    @Expose
     @XmlElement(name="PG")
     public List<PG> PG;
 
     @XmlTransient
-    @Expose(serialize = true, deserialize = true)
+    @Expose
     public String ndId;
-    @Transient
-    @XmlTransient
-    @Expose(serialize = true, deserialize = true)
-
-    public HtmlObj htmlObject;
+ @JsonIgnore
     @Transient
     @XmlTransient
     @Expose
-    public ErrorReport errorReport;
-
+    public HtmlObj htmlObject;
+   @JsonIgnore
     @Transient
     @XmlTransient
     @Expose

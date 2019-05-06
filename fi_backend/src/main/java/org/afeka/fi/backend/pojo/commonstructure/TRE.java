@@ -2,7 +2,9 @@ package org.afeka.fi.backend.pojo.commonstructure;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.gson.annotations.Expose;
 
 import javax.annotation.Generated;
 import javax.persistence.*;
@@ -19,36 +21,52 @@ public class TRE
     public TRE(String userName){
         this.userName=userName;
     }
+    @JsonIgnore
     @XmlAttribute(name="lnkCol0")
     public String lnkCol0;
+    @JsonIgnore
     @XmlAttribute(name="prnt")
     public String prnt;
+    @JsonIgnore
     @XmlAttribute(name="lnkCol0tl")
     public String lnkCol0tl;
+    @JsonIgnore
     @XmlAttribute(name="lnkCol2")
     public String lnkCol2;
+    @JsonIgnore
     @XmlAttribute(name="lnkCol1")
     public String lnkCol1;
+    @JsonIgnore
     @XmlAttribute(name="fiRigid")
     public String fiRigid;
+    @JsonIgnore
     @XmlAttribute(name="srch")
     public String srch;
+    @JsonIgnore
     @XmlAttribute(name="ful")
     public String ful;
+    @JsonIgnore
     @XmlAttribute(name="lnkCol2w")
     public String lnkCol2w;
+    @JsonIgnore
     @XmlAttribute(name="nLnkCols")
     public String nLnkCols;
+    @JsonIgnore
     @XmlAttribute(name="lnkCol1w")
     public String lnkCol1w;
+    @JsonIgnore
     @XmlAttribute(name="lnkCol0w")
     public String lnkCol0w;
+    @JsonIgnore
     @XmlAttribute(name="mxPgs")
     public String mxPgs;
+    @JsonIgnore
     @XmlAttribute(name="v")
     public String v;
+    @JsonIgnore
     @XmlAttribute(name="lnkCol1tl")
     public String lnkCol1tl;
+    @JsonIgnore
     @XmlAttribute(name="lnkCol2tl")
     public String lnkCol2tl;
     @XmlTransient

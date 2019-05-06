@@ -141,7 +141,7 @@ public class RepositoryService extends FiCommon {
             FI finalFi = fi;
             fi.PG.forEach(pg -> finalFi.pgBounderies.add(new PgBoundery(pg)));
         }
-        fi.PG = null;
+       // fi.PG = null;
         return fi;
     }
 

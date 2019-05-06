@@ -2,20 +2,27 @@ package org.afeka.fi.backend.factory;
 
 import org.afeka.fi.backend.common.*;
 import org.afeka.fi.backend.exception.DataFactoryNotFoundException;
+import org.afeka.fi.backend.exception.PgLoopException;
 import org.afeka.fi.backend.generator.Generator;
 import org.afeka.fi.backend.generator.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.*;
 import org.afeka.fi.backend.pojo.internal.PgNode;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Component
 public class FiFactory extends ViewFactory<FI> {
+
+    @Value("${levelsinfitre}")
+    public int levelOfstepInFiTre;
     public FI newFI(FI fiSource,String ndId,Long fiDocId) throws DataFactoryNotFoundException {
         view=new FI();
         logger.called("newFI","ndId "+ndId+" pgs ",fiSource.PG);
@@ -112,52 +119,67 @@ private FiFactory pgs(List<PG> pgs) {
 
        }
     }
-    validatePgPathes();
+    validatePgsTree();
 
 
     return this;
 }
 
-    private void validatePgPathes() {
-        try {
+    private void validatePgsTree() {
             List<PgNode> pgNodes = new ArrayList<>();
             List<PG> pgs = view.PG.subList(1, view.PG.size());
             pgs.forEach(pg -> pgNodes.add(new PgNode(Integer.parseInt(pg._n) - 1)));
             pgs.forEach(pg -> {
+                if (pg.status.equals(Status.success.name())){
                 PgNode current = pgNodes.get(Integer.parseInt(pg._n) - 1);
                 if (pg.type != null && pg.type.equals("task")) {
-                    current.setYes(pgNodes.get(Integer.parseInt(pg.Y.getRtY()) - 1));
-                    current.setNo(pgNodes.get(Integer.parseInt(pg.Y.getRtN()) - 1));
+                    try { current.setYes(pgNodes.get(Integer.parseInt(pg.Y.getRtY()) - 1)); }
+                    catch (Exception e) {
+                        logger.error("Found taskReturnNextYesIncorrectFormat in fi "+view.ID+" in pg n "+pg._n);
+                        pg.status = Status.taskReturnNextYesIncorrectFormat.name();
+                        return;
+                    }
+                    try {current.setNo(pgNodes.get(Integer.parseInt(pg.Y.getRtN()) - 1)); }
+                    catch (Exception e) {
+                        logger.error("Found taskReturnNextNoIncorrectFormat in fi "+view.ID+" in pg n "+pg._n);
+                        pg.status = Status.taskReturnNextNoIncorrectFormat.name();
+                        return;
+                    }
 
-                } else if (pg.type != null && (pg.type.equals("test") || pg.type.equals("step"))) {
-                    current.setYes(pgNodes.get(Integer.parseInt(pg.Y.getTo())));
-                    current.setNo(pgNodes.get(Integer.parseInt(pg.N.getTo())));
-
+                } else if (pg.type != null && pg.type.equals("test")) {
+                    try {
+                        current.setYes(pgNodes.get(Integer.parseInt(pg.Y.getTo())-1));
+                    } catch (Exception e) {
+                        logger.error("Found nextYesIncorrectFormat in fi "+view.ID+" in pg n "+pg._n);
+                        pg.status = Status.nextYesIncorrectFormat.name();
+                    }
+                    try {
+                        current.setNo(pgNodes.get(Integer.parseInt(pg.N.getTo())-1));
+                    } catch (Exception e) {
+                        logger.error("Found nextNoIncorrectFormat in fi "+view.ID+" in pg n "+pg._n);
+                        pg.status = Status.nextNoIncorrectFormat.name();
+                    }
+                }
                 }
             });
-            validateBinaryTree(pgNodes.get(0));
-            logger.info("success to validate paths for " + view.ID);
-        }catch (Exception e){
-            logger.error(e);
+        try {
+            validatePgPath(pgNodes.get(0),-1);
+        }catch (PgLoopException e){
+            logger.error("Found fiPathLoopError in fi "+view.ID+" in pg n "+e.getNumber());
+            pgs.get(e.getNumber()).status=Status.FiPathLoopError.name();
+
         }
     }
 
-    private void validateBinaryTree(PgNode pgNode) {
-        try{
-            if (pgNode==null)
-                return;
-            if (pgNode.getYes()==null && pgNode.getNo()==null)
-                return;
-            else{
-                validateBinaryTree(pgNode.getNo());
-                validateBinaryTree(pgNode.getYes());
-
-            }
-        }catch (Exception e){
-            logger.error(e);
-        }
-
-
+    private void validatePgPath(PgNode pgNode,int parent) throws PgLoopException {
+        if (pgNode==null)
+            return;
+        else if (pgNode.isMarked())
+                throw new PgLoopException(parent);
+        pgNode.setMarkedarked(true);
+        validatePgPath(pgNode.getYes(),pgNode.getN());
+        validatePgPath(pgNode.getNo(),pgNode.getN());
+        pgNode.setMarkedarked(false);
 
     }
 

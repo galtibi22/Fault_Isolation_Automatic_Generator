@@ -6,6 +6,7 @@ public class PgNode {
     private int n;
     private PgNode yes;
     private PgNode no;
+    private boolean marked;
 
     public PgNode(int n){
         this.n=n;
@@ -34,5 +35,13 @@ public class PgNode {
 
     public void setNo(PgNode no) {
         this.no = no;
+    }
+
+    public boolean isMarked() {
+        return marked;
+    }
+
+    public void setMarkedarked(boolean marked) {
+        this.marked = marked;
     }
 }

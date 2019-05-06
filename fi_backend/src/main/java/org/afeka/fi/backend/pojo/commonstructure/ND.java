@@ -1,5 +1,6 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.annotations.Expose;
 import j2html.tags.ContainerTag;
@@ -24,33 +25,41 @@ public class ND
     public ND(String parentNdId){
         this.ndParentId=parentNdId;
     }
-    @XmlAttribute(name="nPg")
+    @JsonIgnore
+ @XmlAttribute(name="nPg")
     public String nPg;
+    @JsonIgnore
     @XmlAttribute(name="pd")
     public String pd;
+    @JsonIgnore
     @XmlAttribute(name="v")
     public String v;
     @XmlAttribute(name="lbl")
     public String lbl;
     @XmlTransient
     public String des;
+    @JsonIgnore
     @XmlAttribute(name="kd")
     public String kd;
+    @JsonIgnore
     @XmlAttribute(name="newV")
     public String newV;
+    @JsonIgnore
     @XmlAttribute(name="pdf")
     public String pdf;
 
     @Id
-   // @GeneratedValue(strategy = GenerationType.IDENTITY)
     @XmlAttribute(name="ID")
     public String ID;
+    @JsonIgnore
     @XmlAttribute(name="kIdDsp")
     public String kIdDsp;
     @XmlAttribute(name="doc")
     public String doc;
+    @JsonIgnore
     @XmlAttribute(name="typ")
     public String typ;
+    @JsonIgnore
     @XmlAttribute(name="pic")
     public String pic;
 
@@ -62,10 +71,10 @@ public class ND
     @XmlElement(name="ND")
     public List<ND> ND=new ArrayList<ND>();*/
      @XmlTransient
-    public String ndParentId;
+     public String ndParentId;
     @Transient
     @XmlTransient
-    @Expose(serialize = false, deserialize = false)
+    @JsonIgnore
     public ContainerTag htmlObject;
 
     @Override

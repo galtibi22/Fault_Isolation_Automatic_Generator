@@ -104,9 +104,8 @@ public class PgBoundery {
                     description += name +" is missing, ";
                 }
                 description.substring(0,description.length()-3);
-            }
-            else{
-                description=pg.status+" please implement this error in PgBoundery.createDescription";
+            }else{
+                description=Status.getDescription(pg.status);
             }
         }
         return description;
