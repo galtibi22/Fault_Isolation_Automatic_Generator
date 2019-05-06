@@ -42,8 +42,11 @@ public class PgBoundery {
       try {
           Number = pg._n;
           Type =createType(pg);
+          if (pg.status.equals(Status.success.name()))
+              status = Status.success.name();
+          else
+              status=Status.failed.name();
 
-          status = pg.status;
           if (pg.N.getTo()!=null)
               if (Type.equals("task"))
                  setTaskLink(pg.N);
@@ -93,7 +96,7 @@ public class PgBoundery {
             else if (pg.htmlObj.getHtmlData()[0].htmlType.equals(HtmlType.fiPosEnd))
                 description = "Positive end for the flow";
         }
-        else if(status.equals(Status.success.name()))
+        else if(pg.status.equals(Status.success.name()))
             description= Arrays.stream(pg.htmlObj.getHtmlData()).map(htmlData -> htmlData.txt).collect(Collectors.joining());
         else{
             if(pg.status.toLowerCase().startsWith("missing")){
