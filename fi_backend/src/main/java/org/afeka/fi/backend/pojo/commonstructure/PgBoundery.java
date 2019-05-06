@@ -51,7 +51,7 @@ public class PgBoundery {
                   toNo = pg.N.getTo();
           if (pg.Y.getTo()!=null)
               if (Type.equals("task"))
-                 setTaskLink(pg.N);
+                 setTaskLink(pg.Y);
               else
                   toYes = pg.Y.getTo();
           Description = createDescription(pg);
