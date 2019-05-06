@@ -17,8 +17,8 @@ def checkYesNo(str):
 
 
 
-# Method return to Step description and question from string
-def fiStepDescriptionQuestion(str):
+# Method return to Test description and question from string
+def fiTestDescriptionQuestion(str):
     htmlDataObj = {}
     htmlDataObjAraay = []
 
@@ -153,11 +153,11 @@ def fiTaskYes2(str, yesOption, noOption):
     return yesObj
 
 
-# Method check flow steps if exists
+# Method check flow tests if exists
 def recheckFlow(FI_Array):
     for numObj in FI_Array:
         if 'type' in numObj:
-            if numObj['type'] == 'step':
+            if numObj['type'] == 'test':
                 if 'N' in numObj:
                     existN = False
                     for numOnjTest in FI_Array:

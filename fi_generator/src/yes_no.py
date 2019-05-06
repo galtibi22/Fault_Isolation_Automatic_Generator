@@ -67,11 +67,11 @@ for table in tables:
                         newNumberObj = {}
                         newNumberObj['n'] = str(FI_Num)
                         if(('(' not in  FI_row[0]) and (')' not in  FI_row[0])):
-                            # Step
+                            # Test
                             newNumberObj['Y'] = {'to' : cf.removeCharsFunc(FI_row[1]), 'typ' : '0'}
                             newNumberObj['N'] = {'to' : cf.removeCharsFunc(FI_row[2]), 'typ' : '0'}
-                            newNumberObj['type'] = "step"
-                            newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(FI_row[0])
+                            newNumberObj['type'] = "test"
+                            newNumberObj['htmlObj'] = cf.fiTestDescriptionQuestion(FI_row[0])
                         else:
                             # Task
                             newNumberObj['Y'] = cf.fiTaskYes(FI_row[0], FI_row[1], FI_row[2])

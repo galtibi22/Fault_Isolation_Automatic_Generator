@@ -20,12 +20,12 @@ FI_Txt_Header_Exist = False
 # Generic titles
 FI_Generic_Title_Main = ["Failure"]
 FI_Generic_Title_Des = ["Tested Unit", "Severity", "Name", "Platform"]
-FI_Generic_Step = ["Test ", "DSA"]
+FI_Generic_Test = ["Test ", "DSA"]
 FI_Generic_Task = ["LRU", "SAW","Task"]
 
 FI_Generic_Title_Main_Rows = {}
 FI_Generic_Title_Des_Rows = {}
-FI_Generic_Step_Rows = {}
+FI_Generic_Test_Rows = {}
 FI_Generic_Task_Rows = {}
 
 # parser = argparse.ArgumentParser()
@@ -66,9 +66,9 @@ for table in tables:
                                 if title in FI_row[i]:
                                     FI_Generic_Title_Des_Rows[i] = FI_row[i]
 
-                            for title in FI_Generic_Step:
+                            for title in FI_Generic_Test:
                                 if title in FI_row[i]:
-                                    FI_Generic_Step_Rows[i] = FI_row[i]
+                                    FI_Generic_Test_Rows[i] = FI_row[i]
 
                             for title in FI_Generic_Task:
                                 if title in FI_row[i]:
@@ -108,8 +108,8 @@ for table in tables:
                         FI_Array.append(newNumberObj)
                         Number_Of_Actions = 0
 
-                        # count number of steps with tasks
-                        for key, value in FI_Generic_Step_Rows.items():
+                        # count number of tests with tasks
+                        for key, value in FI_Generic_Test_Rows.items():
                             if FI_row[key] != "":
                                 Number_Of_Actions +=1
 
@@ -119,24 +119,24 @@ for table in tables:
 
 
 
-                        # Create Steps
-                        for key, value in FI_Generic_Step_Rows.items():
+                        # Create Tests
+                        for key, value in FI_Generic_Test_Rows.items():
                             if FI_row[key] != "":
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
                                 newNumberObj['Y'] = {'to': str(Number_Of_Actions + 2), 'typ': '0'}
                                 newNumberObj['N'] = {'to': str(FI_Num + 1), 'typ': '0'}
-                                newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(value + ": " + FI_row[key])
-                                newNumberObj['type'] = "step"
+                                newNumberObj['htmlObj'] = cf.fiTestDescriptionQuestion(value + ": " + FI_row[key])
+                                newNumberObj['type'] = "test"
                                 newNumberObj['status'] = "success"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
 
                             else:
-                                # Step is missing
+                                # Test is missing
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
-                                newNumberObj['type'] = "step"
+                                newNumberObj['type'] = "test"
                                 newNumberObj['status'] = "missingTest"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
@@ -149,7 +149,7 @@ for table in tables:
                                 newNumberObj['n'] = str(FI_Num)
                                 newNumberObj['Y'] = cf.fiTaskYes2(FI_row[key], str(Number_Of_Actions+2), str(FI_Num+1))
                                 newNumberObj['N'] = { 'typ' : '4' }
-                                newNumberObj['htmlObj'] = cf.fiStepDescriptionQuestion(value + ": " + FI_row[key])
+                                newNumberObj['htmlObj'] = cf.fiTestDescriptionQuestion(value + ": " + FI_row[key])
                                 newNumberObj['type'] = "task"
                                 newNumberObj['status'] = "success"
                                 FI_Array.append(newNumberObj)
