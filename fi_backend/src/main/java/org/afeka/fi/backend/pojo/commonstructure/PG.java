@@ -15,37 +15,31 @@ import javax.xml.bind.annotation.XmlTransient;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class PG
 {
-    @Expose(serialize = true,deserialize = true)
+    @Expose
     @JsonIgnore
     @XmlAttribute(name="dwgID")
     public String dwgID="";
-    @Expose(serialize = true,deserialize = true)
+    @Expose
     @JsonIgnore
     @XmlAttribute(name="doc")
     public String doc;
-    @JsonPropertyOrder("1")
-    @SerializedName("n")
-    @Expose(serialize = true,deserialize = true)
+    @Expose
     @JsonProperty("n")
     @XmlAttribute(name="n")
     public String _n;
-    @JsonPropertyOrder("4")
-
-    @Expose(serialize = true,deserialize = true)
+    @Expose
     @XmlElement(name = "N")
     public YN N=new YN();
-    @JsonPropertyOrder("3")
-    @Expose(serialize = true,deserialize = true)
+    @Expose
     @XmlElement(name = "Y")
     public YN Y=new YN();
-    @Expose(serialize = true,deserialize = true)
+    @Expose
     @XmlTransient
     public HtmlObj htmlObj;
-    @JsonPropertyOrder("2")
-    @Expose(serialize = true,deserialize = true)
+    @Expose
     @XmlTransient
     public String status;
-    @Expose(serialize = true,deserialize = true)
+    @Expose
     @XmlTransient
     public String type;
 
