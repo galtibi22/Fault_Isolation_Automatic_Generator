@@ -31,7 +31,7 @@ public class FiFactory extends ViewFactory<FI> {
                     doc(pgZero.htmlObj);
         }
         else {
-            ID(Helpers.removeSpecialChars(view.lbl)+"_"+ FieldGenerator.id());
+            ID(FieldGenerator.id());
             view.lbl="Cannot generate lbl for fi_"+ FieldGenerator.id();
             pgZero.Y=new YN();
             pgZero.N=new YN();
