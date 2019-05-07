@@ -2,7 +2,7 @@ package org.afeka.fi.backend.pojo.commonstructure;
 
 public enum Status {
     pending,success,failed,taskReturnNextYesIncorrectFormat,taskReturnNextNoIncorrectFormat,
-    nextYesIncorrectFormat,nextNoIncorrectFormat,FiPathLoopError;
+    nextYesIncorrectFormat,nextNoIncorrectFormat,FiPathLoopError,stepNotExist;
 
     public static String getDescription(String status) {
         String description;
@@ -16,6 +16,8 @@ public enum Status {
             description="The next step if the test fail not in Number format";
         else if (status.equals(Status.FiPathLoopError.name()))
             description="Loop is exist in the path";
+        else if (status.equals(Status.stepNotExist.name()))
+            description="The next step is not in the range of the exist steps";
         else
             description=status+" please implement this error in Status.getDescription";
         return description;
