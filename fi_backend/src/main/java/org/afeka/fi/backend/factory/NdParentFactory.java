@@ -1,6 +1,6 @@
 package org.afeka.fi.backend.factory;
 
-import org.afeka.fi.backend.generator.Generator;
+import org.afeka.fi.backend.generator.FieldGenerator;
 import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.generator.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
@@ -30,7 +30,7 @@ public class NdParentFactory extends ViewFactory<NdParent> {
      public NdParent newNdParent(ViewCreateRequest viewCreateRequest,String treId){
          view=new NdParent();
          return lbl(viewCreateRequest.getLbl()).
-                 ID(viewCreateRequest.getLbl().replaceAll(" ","")+"_"+ Generator.id()).
+                 ID(viewCreateRequest.getLbl().replaceAll(" ","")+"_"+ FieldGenerator.id()).
                  des(viewCreateRequest.getDes()).
                  typ("4").
                  kIdDsp("").
@@ -113,7 +113,7 @@ public class NdParentFactory extends ViewFactory<NdParent> {
          for(ND nd:ndParent.ND){
               new NdFactory().export(path,nd);
          }
-         HtmlGenerator htmlGenerator=new HtmlGenerator();
+         htmlGenerator=new HtmlGenerator();
          htmlGenerator.basicRootPage(ndParent.lbl,ndParent.des);
          save(htmlGenerator.toHtml().renderFormatted(), Paths.get(path+"/"+ndParent.doc));
      }

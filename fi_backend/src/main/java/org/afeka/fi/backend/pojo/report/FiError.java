@@ -1,3 +1,4 @@
+/*
 package org.afeka.fi.backend.pojo.report;
 
 public class FiError {
@@ -56,3 +57,4 @@ public class FiError {
         this.version = version;
     }
 }
+*/

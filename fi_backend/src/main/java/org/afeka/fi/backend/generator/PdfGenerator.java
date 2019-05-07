@@ -4,11 +4,9 @@ import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.lowagie.text.pdf.PdfCell;
-import com.lowagie.text.pdf.PdfTable;
 import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
-import org.afeka.fi.backend.pojo.commonstructure.PgBoundery;
+import org.afeka.fi.backend.pojo.http.PgBoundery;
 import org.afeka.fi.backend.pojo.commonstructure.Status;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
 
@@ -99,7 +97,7 @@ public class PdfGenerator extends FiCommon {
     }
     private void newTable() throws DocumentException {
         table = new PdfPTable(7);
-        table.setWidths(new int[]{1, 1, 1,3,1,1,1});
+        table.setWidths(new int[]{1, 1, 1,2,1,1,1});
         Stream.of("Number","Type","Status","Description","To Yes","To No","Task link")
                 .forEach(columnTitle -> {
                     PdfPCell header = new PdfPCell();

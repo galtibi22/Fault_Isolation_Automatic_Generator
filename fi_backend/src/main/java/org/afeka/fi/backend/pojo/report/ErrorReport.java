@@ -1,3 +1,4 @@
+/*
 package org.afeka.fi.backend.pojo.report;
 
 import java.util.Date;
@@ -28,3 +29,4 @@ public class ErrorReport {
     }
 
 }
+*/

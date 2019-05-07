@@ -12,7 +12,10 @@ import org.afeka.fi.backend.pojo.commonstructure.FI;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
+import org.afeka.fi.backend.pojo.http.GeneralResponse;
 import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
+import org.afeka.fi.backend.services.EntityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -32,35 +35,38 @@ import java.util.List;
 @RestController
 public class NdApi extends CommonApi {
 
+    private EntityService<ND> ndService;
+    @Autowired
+    public void init(EntityService<ND> ndService){
+        this.ndService=ndService;
+    }
+
     @PostMapping(value = "/new/{ndParentId}",produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
     public ND ndNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String ndParentId) throws ResourceNotFoundException {
         logger.called("ndNewApi","viewCreateRequest",viewCreateRequest);
         securityCheck(request,Role.user);
-        NdParent ndParent = repositoryService.findNdParent(ndParentId);
-        return repositoryService.add(ndFactory.newND(viewCreateRequest, ndParentId));
+        return ndService.add(viewCreateRequest,ndParentId);
     }
 
     @GetMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public ND getNd(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException {
         logger.called("getNdApi","ndId",id);
         securityCheck(request,Role.user,Role.viewer);
-        return repositoryService.getNd(id);
+        return ndService.get(id);
 
     }
     @DeleteMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
-    public NdParent deleteNd(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException, DeleteEntityExption {
+    public GeneralResponse deleteNd(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException, DeleteEntityExption {
         logger.called("deleteNdApi","id",id);
         securityCheck(request,Role.user);
-        String parentId=repositoryService.findNd(id).ndParentId;
-        repositoryService.deleteNd(id);
-        return repositoryService.getNdParent(parentId);
+        ndService.delete(id);
+        return new GeneralResponse("Success to delete nd with id "+id );
     }
     @PutMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public ND updateND(HttpServletRequest request, @RequestBody ND nd, @PathVariable String id) throws ResourceNotFoundException {
         securityCheck(request, Role.user);
         logger.called("updateNDApi", "ND",nd);
-        repositoryService.findNd(id);
-        return repositoryService.updateND(nd);
+        return ndService.update(nd);
     }
 
 }

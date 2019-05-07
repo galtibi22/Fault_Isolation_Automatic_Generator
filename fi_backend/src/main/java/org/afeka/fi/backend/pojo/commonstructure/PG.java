@@ -26,6 +26,7 @@ public class PG
     @Expose
     @JsonProperty("n")
     @XmlAttribute(name="n")
+    @SerializedName("n")
     public String _n;
     @Expose
     @XmlElement(name = "N")
@@ -43,5 +44,8 @@ public class PG
     @XmlTransient
     public String type;
 
-
+    @Override
+    public String toString() {
+        return "PG{" + "dwgID='" + dwgID + '\'' + ", doc='" + doc + '\'' + ", _n='" + _n + '\'' + ", N=" + N + ", Y=" + Y + ", htmlObj=" + htmlObj + ", status='" + status + '\'' + ", type='" + type + '\'' + '}';
+    }
 }

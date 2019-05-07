@@ -1,6 +1,7 @@
 package org.afeka.fi.backend.factory;
 
 import org.afeka.fi.backend.common.FiCommon;
+import org.afeka.fi.backend.generator.HtmlGenerator;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,6 +11,8 @@ import java.nio.file.Paths;
 public abstract class ViewFactory <V> extends FiCommon {
 
     protected V view;
+    protected HtmlGenerator htmlGenerator;
+
     public abstract void export(Path path,V v) throws Exception;
     // public abstract void add(E e) throws Exception;
 

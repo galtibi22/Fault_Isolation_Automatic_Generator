@@ -13,7 +13,10 @@ import org.afeka.fi.backend.pojo.commonstructure.FI;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
+import org.afeka.fi.backend.pojo.http.GeneralResponse;
 import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
+import org.afeka.fi.backend.services.TreService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -34,33 +37,37 @@ import java.util.List;
 @RequestMapping(path = "api/fronted/tre")
 @RestController
 public class TreApi extends CommonApi {
-
+    private TreService treService;
+    @Autowired
+    public void initServices(TreService treService){
+        this.treService=treService;
+    }
     @PostMapping(value = "/new",produces = "application/json")
     public TRE newTre(HttpServletRequest request, @RequestBody ViewCreateRequest viewCreateRequest) {
         logger.called("newTreApi","viewCreateRequest",viewCreateRequest);
         User user= securityCheck(request, Role.user);
-        return repositoryService.add(treFactory.newTRE(user.userName,viewCreateRequest));
+        return  treService.add(viewCreateRequest,user.userName);
+        //return
     }
     @GetMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public TRE getTre(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException {
         logger.called("getTreApi","treId",id);
         securityCheck(request,Role.user);
-        return repositoryService.getTre(id);
+        return treService.get(id);
+
     }
     @GetMapping(value = "/",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public List<TRE> getTres(HttpServletRequest request) throws ResourceNotFoundException {
         logger.called("getTresApi","","");
         User user=securityCheck(request,Role.user);
-        List<TRE> tres=repositoryService.getTres(user);
-        logger.info("getTresApi return "+Helpers.initGson().toJson(tres));
-        return repositoryService.getTres(user);
+        return treService.getAll(user.userName);
     }
     @DeleteMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
-    public List<TRE> deleteTre(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException, DeleteEntityExption {
+    public GeneralResponse deleteTre(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException, DeleteEntityExption {
         logger.called("deleteTreApi","id",id);
         User user=securityCheck(request,Role.user);
-        repositoryService.deleteTre(id,user);
-        return repositoryService.getTres(user);
+        treService.delete(id);
+        return new GeneralResponse("Success to delete TRE "+id);
 
     }
 
@@ -68,8 +75,8 @@ public class TreApi extends CommonApi {
     public TRE updateTre(HttpServletRequest request, @RequestBody TRE tre, @PathVariable String id) throws ResourceNotFoundException {
         securityCheck(request, Role.user);
         logger.called("updateTreApi", "tre",tre);
-        repositoryService.findTre(id);
-        return repositoryService.updateTre(tre);
+        treService.find(id);
+        return treService.update(tre);
 
     }
 
@@ -78,45 +85,17 @@ public class TreApi extends CommonApi {
     public ResponseEntity<Resource> export(HttpServletRequest request, @RequestBody TRE tre) throws ResourceNotFoundException, IOException, JAXBException, DataNotValidException {
         logger.called("exportApi", "tre",tre);
         securityCheck(request, Role.user);
-        TRE treToExport=initTreToExport(tre);
-        TreFactory treFactory=new TreFactory();
-        Path resultPath= Files.createTempDirectory("results").toAbsolutePath();
-        treFactory.export(resultPath,treToExport);
-        Path zipPath=Files.createTempFile("export",".zip");
-        Helpers.zip(resultPath,zipPath);
-        InputStreamResource inputStream= new InputStreamResource(new FileInputStream(zipPath.toFile()));
-        return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+tre.ID+"_xml.zip")
-                .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .contentLength(zipPath.toFile().length())
-                .body(inputStream);
+        return initFileResponse(treService.export(tre));
 
     }
     @PostMapping(value="/export/report",headers =HttpHeaders.AUTHORIZATION)
     public ResponseEntity<Resource> exportReport(HttpServletRequest request, @RequestBody TRE tre) throws ResourceNotFoundException, IOException, JAXBException, DataNotValidException, DocumentException {
-        logger.called("exportApi", "tre",tre);
+        logger.called("exportReportApi", "tre",tre);
         securityCheck(request, Role.user);
-        TRE treToExport=initTreToExport(tre);
-        TreFactory treFactory=new TreFactory();
-        Path reportPath=Files.createTempFile(tre.ID+"_report_",".pdf");
-        treFactory.exportReport(reportPath,treToExport);
-        InputStream inputStream= new FileInputStream(reportPath.toFile());
-        return initFileResponse(new MockMultipartFile(reportPath.getFileName().toString(),inputStream));
+
+        return initFileResponse(treService.exportReport(tre));
 
     }
 
-    private TRE initTreToExport(TRE tre) throws ResourceNotFoundException {
-        TRE treToExport=repositoryService.findTre(tre.ID);
-        for(NdParent ndParent:tre.ndParents){
-            NdParent ndParentToExport=repositoryService.findNdParent(ndParent.ID);
-            treToExport.ndParents.add(ndParentToExport);
-            for(ND nd:ndParent.ND){
-                ND ndToExport=repositoryService.findNd(nd.ID);
-                ndParentToExport.ND.add(ndToExport);
-                for (FI fi:nd.FI){
-                    ndToExport.FI.add(repositoryService.getFi(fi.ID));
-                }
-            }
-        }
-        return treToExport;
-    }
+
 }

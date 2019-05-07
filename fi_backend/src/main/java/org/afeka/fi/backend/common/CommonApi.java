@@ -18,6 +18,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,7 +26,10 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -100,10 +104,16 @@ public class CommonApi extends FiCommon{
             mediaType=MediaType.parseMediaType("application/msword");
         else if( extension.equals("pdf"))
             mediaType=MediaType.APPLICATION_PDF;
+        else if (extension.equals("zip"))
+            mediaType=MediaType.APPLICATION_OCTET_STREAM;
         return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+file.getName())
                 .contentType(mediaType)
                 .contentLength(file.getSize())
                 .body(file.getResource());
+    }
+    protected ResponseEntity<Resource> initFileResponse(Path path) throws IOException {
+        InputStream inputStream= new FileInputStream(path.toFile());
+        return initFileResponse(new MockMultipartFile(path.getFileName().toString(),inputStream));
     }
 /*
     public String getOcrclass() {

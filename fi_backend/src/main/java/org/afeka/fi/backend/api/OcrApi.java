@@ -25,11 +25,6 @@ public class OcrApi extends CommonApi {
         ocrClient= (OcrClient) context.getBean(ocrProvider);
         MultipartFile fiDoc=ocrClient.run(fiImage);
         return initFileResponse(fiDoc);
-       /* return ResponseEntity.ok().header("Content-Disposition", "attachment;filename="+fiDoc.getName())
-                .contentType(MediaType.parseMediaType("application/msword"))
-                .contentLength(fiDoc.getSize())
-                .body(new InputStreamResource(fiDoc.getInputStream()));
-*/
 
     }
     @GetMapping(value = "/ocr",headers = HttpHeaders.AUTHORIZATION)

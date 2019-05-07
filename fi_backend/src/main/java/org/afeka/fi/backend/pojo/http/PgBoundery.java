@@ -1,8 +1,12 @@
-package org.afeka.fi.backend.pojo.commonstructure;
+package org.afeka.fi.backend.pojo.http;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import org.afeka.fi.backend.common.FiLogger;
+import org.afeka.fi.backend.pojo.commonstructure.HtmlType;
+import org.afeka.fi.backend.pojo.commonstructure.PG;
+import org.afeka.fi.backend.pojo.commonstructure.Status;
+import org.afeka.fi.backend.pojo.commonstructure.YN;
 import org.apache.logging.log4j.Logger;
 
 import java.util.Arrays;

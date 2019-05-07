@@ -4,11 +4,7 @@ package org.afeka.fi.backend.pojo.commonstructure;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.gson.annotations.Expose;
-import j2html.tags.ContainerTag;
-import org.afeka.fi.backend.common.Helpers;
-import org.afeka.fi.backend.pojo.report.ErrorReport;
-import org.hibernate.annotations.Type;
-import org.springframework.web.multipart.MultipartFile;
+import org.afeka.fi.backend.pojo.http.PgBoundery;
 
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -37,8 +33,8 @@ public class FI
     @Transient
    @XmlAttribute(name="nPg")
     public String nPg;
- @JsonIgnore
- @Expose
+    @JsonIgnore
+    @Expose
     @Transient
     @XmlAttribute(name="pd")
    public String pd;
@@ -53,7 +49,7 @@ public class FI
     @Transient
     @Expose
     @XmlAttribute(name="lbl")
-    public String lbl="lbl";
+    public String lbl;
  @JsonIgnore
     @Expose
     @Transient
@@ -96,7 +92,7 @@ public class FI
     @Transient
     @Expose
     @XmlElement(name="PG")
-    public List<PG> PG;
+    public List<PG> PG=new ArrayList<>();
 
     @XmlTransient
     @Expose

@@ -1,6 +1,6 @@
 package org.afeka.fi.backend.factory;
 
-import org.afeka.fi.backend.generator.Generator;
+import org.afeka.fi.backend.generator.FieldGenerator;
 import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.generator.HtmlGenerator;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
@@ -46,7 +46,7 @@ public class NdFactory extends ViewFactory<ND> {
          view=new ND();
          return lbl(viewCreateRequest.getLbl()).
                  des(viewCreateRequest.getDes()).
-                 ID(viewCreateRequest.getLbl().replaceAll(" ","")+"_"+ Generator.id()).
+                 ID(viewCreateRequest.getLbl().replaceAll(" ","")+"_"+ FieldGenerator.id()).
                  ndParentId(ndParentId).
                  typ("4").
                  kIdDsp("").
@@ -129,49 +129,12 @@ public class NdFactory extends ViewFactory<ND> {
          for(FI fi:nd.FI){
               new FiFactory().export(path,fi);
          }
-
-         HtmlGenerator htmlGenerator=new HtmlGenerator();
+         htmlGenerator=new HtmlGenerator();
          if (nd.FI.size()==0)
              throw new DataNotValidException("Cannot generate ndDoc for nd.fi.size()=0");
          htmlGenerator.ndDoc(nd.lbl,nd.FI,nd.des);
          save(htmlGenerator.toHtml().renderFormatted(), Paths.get(path+"/"+nd.doc));
      }
-
-
-/*     @Override
-     public void add(String fiJson) throws Exception {
-          logger.info("add fiJson to ndId="+nd.ID);
-          logger.debug("fiJson="+fiJson);
-          String id=nd.ID+"_"+(nd.FI.size()+1);
-          FiFactory fiFactory=new FiFactory(fiJson,id);
-          nd.FI.add(fiFactory.get());
-          generateNdDoc();
-     }*/
-
- /*   public void add(FI fi) throws Exception {
-        logger.info("add fiJson to ndId="+nd.ID);
-        logger.debug("fiJson="+fi);
-        String id=nd.ID+"_"+(nd.FI.size()+1);
-        fi.ID=id;
-        // FiFactory fiFactory=new FiFactory(fi,id);
-        nd.FI.add(fi);
-    }*/
-
-     /*public void addFis(String fiArray) throws Exception {
-         logger.called("addFis",fiArray);
-         logger.debug("fiArray="+fiArray);
-         FI fis[]=  new FI[1];
-         fis= Helpers.initGson().fromJson(fiArray,fis.getClass());
-         Arrays.asList(fis).forEach(fi-> {
-             try {
-                 add(fi);
-             } catch (Exception e) {
-                 logger.error(e);
-             }
-         });
-
-     }*/
-
 }
 
 
