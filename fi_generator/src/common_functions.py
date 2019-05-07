@@ -180,7 +180,7 @@ def recheckFlow(FI_Array):
                         if numObj['N']['to'] == numOnjTest['n']:
                             existN = True
                     if existN == False:
-                        numObj['status'] = "missingTest"
+                        numObj['status'] = "stepNotExist"
 
                 if 'Y' in numObj:
                     existY = False
@@ -188,7 +188,7 @@ def recheckFlow(FI_Array):
                         if numObj['Y']['to'] == numOnjTest['n']:
                             existY = True
                     if existY == False:
-                        numObj['status'] = "missingTest"
+                        numObj['status'] = "stepNotExist"
 
     return FI_Array
 
