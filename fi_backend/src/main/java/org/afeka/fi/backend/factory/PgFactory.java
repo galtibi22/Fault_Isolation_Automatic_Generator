@@ -38,8 +38,8 @@ public class PgFactory extends ViewFactory<PG> {
                     break;
                 }
             }else{
-            pg.N=new YN();
-            pg.Y=new YN();
+          //  pg.N=new YN();
+          //  pg.Y=new YN();
             pg.htmlObj=new HtmlObj();
 
         }

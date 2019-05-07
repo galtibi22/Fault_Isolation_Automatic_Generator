@@ -17,7 +17,7 @@ public enum Status {
         else if (status.equals(Status.FiPathLoopError.name()))
             description="Loop is exist in the path";
         else if (status.equals(Status.stepNotExist.name()))
-            description="The next step is not in the range of the exist steps";
+            description="The next step is not in the range";
         else
             description=status+" please implement this error in Status.getDescription";
         return description;
