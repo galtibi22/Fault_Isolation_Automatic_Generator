@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class FiDocService implements EntityService<FiDoc> {
+public class FiDocServiceImpl implements EntityService<FiDoc> {
 
     private EntityDao<FiDoc> fiDocDao;
     private EntityDao<FI> fiDao;

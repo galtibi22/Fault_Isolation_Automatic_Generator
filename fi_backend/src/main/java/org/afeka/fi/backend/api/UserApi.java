@@ -6,6 +6,7 @@ import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
 import org.afeka.fi.backend.pojo.auth.User;
 import org.afeka.fi.backend.repository.UserRepository;
+import org.afeka.fi.backend.services.EntityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.PermissionDeniedDataAccessException;
 import org.springframework.http.HttpHeaders;
@@ -21,38 +22,32 @@ import java.util.Optional;
 @RequestMapping(path = "api/user")
 @RestController
 public class UserApi extends CommonApi {
-    @Autowired
-    UserRepository userRepository;
+
+    private EntityService<User> userService;
+
+    public void init(EntityService<User> userService){
+        this.userService=userService;
+    }
 
     @PostMapping(path="/register", produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
     public User registerUser(HttpServletRequest request,@RequestBody User user) throws Exception {
         logger.called("registerUser","user",user);
         securityCheck(request, Role.admin);
-        if (user.role.equals(Role.admin))
-            throw new PermissionExption("Cannot add user with Role Admin to the system");
-        if (userRepository.findById(user.userName).isPresent())
-           throw new AddEntityExption("User "+user.userName +" already exist in the system");
-        return userRepository.save(user);
+        return userService.add(user);
 
     }
     @PostMapping(path="/update", produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
     public User updateUser(HttpServletRequest request,@RequestBody User user) throws Exception {
         logger.called("updateUser","user",user);
         securityCheck(request, Role.admin);
-        if (user.role.equals(Role.admin))
-            throw new PermissionExption("Cannot update user with Role Admin");
-        userRepository.find(user.userName);
-        return userRepository.update(user);
+        return userService.update(user);
     }
 
     @DeleteMapping(path="/delete/{userName}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public GeneralResponse deleteUser(HttpServletRequest request, @PathVariable String userName) throws Exception {
         logger.called("deleteUser","userName",userName);
         securityCheck(request, Role.admin);
-        User userToDelete=userRepository.find(userName);
-        if (userToDelete.role.equals(Role.admin))
-            throw new PermissionExption("Cannot delete user with Role Admin from the system");
-        userRepository.deleteById(userName);
+        userService.delete(userName);
         return new GeneralResponse("Success to delete user "+userName);
     }
 
@@ -60,17 +55,15 @@ public class UserApi extends CommonApi {
     public List<User> getAllUsers(HttpServletRequest request) throws Exception {
         logger.called("getAllUsers","","");
         securityCheck(request, Role.admin);
-        return  userRepository.findAll();
+        return  userService.getAll("");
     }
     @GetMapping(path="/get/{userName}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public User getUser(HttpServletRequest request,@PathVariable String userName) throws Exception {
         logger.called("getUser","user","");
         securityCheck(request, Role.admin);
-        return userRepository.find(userName);
+        return userService.get(userName);
     }
 
-
-    //@CrossOrigin(origins = "http://localhost:3000", maxAge = 3600)
     @PostMapping(path="/login",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public ResponseEntity login(HttpServletRequest request) throws Exception {
         User user=securityCheck(request, Role.admin,Role.user,Role.viewer,Role.generator,Role.provider);

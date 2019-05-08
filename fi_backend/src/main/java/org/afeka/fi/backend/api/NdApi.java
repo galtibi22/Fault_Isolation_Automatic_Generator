@@ -2,9 +2,7 @@ package org.afeka.fi.backend.api;
 
 import org.afeka.fi.backend.common.CommonApi;
 import org.afeka.fi.backend.common.Helpers;
-import org.afeka.fi.backend.exception.DataNotValidException;
-import org.afeka.fi.backend.exception.DeleteEntityExption;
-import org.afeka.fi.backend.exception.ResourceNotFoundException;
+import org.afeka.fi.backend.exception.*;
 import org.afeka.fi.backend.factory.TreFactory;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.auth.User;
@@ -42,7 +40,7 @@ public class NdApi extends CommonApi {
     }
 
     @PostMapping(value = "/new/{ndParentId}",produces = "application/json",headers = HttpHeaders.AUTHORIZATION)
-    public ND ndNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String ndParentId) throws ResourceNotFoundException {
+    public ND ndNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String ndParentId) throws ResourceNotFoundException, AddEntityExption {
         logger.called("ndNewApi","viewCreateRequest",viewCreateRequest);
         securityCheck(request,Role.user);
         return ndService.add(viewCreateRequest,ndParentId);
@@ -56,14 +54,14 @@ public class NdApi extends CommonApi {
 
     }
     @DeleteMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
-    public GeneralResponse deleteNd(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException, DeleteEntityExption {
+    public GeneralResponse deleteNd(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException, DeleteEntityExption, PermissionExption {
         logger.called("deleteNdApi","id",id);
         securityCheck(request,Role.user);
         ndService.delete(id);
         return new GeneralResponse("Success to delete nd with id "+id );
     }
     @PutMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
-    public ND updateND(HttpServletRequest request, @RequestBody ND nd, @PathVariable String id) throws ResourceNotFoundException {
+    public ND updateND(HttpServletRequest request, @RequestBody ND nd, @PathVariable String id) throws ResourceNotFoundException, PermissionExption {
         securityCheck(request, Role.user);
         logger.called("updateNDApi", "ND",nd);
         return ndService.update(nd);

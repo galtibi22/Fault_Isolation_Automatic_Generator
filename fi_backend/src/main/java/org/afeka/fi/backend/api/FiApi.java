@@ -6,7 +6,7 @@ import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.commonstructure.*;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
 import org.afeka.fi.backend.services.EntityService;
-import org.afeka.fi.backend.services.FiServiceInterface;
+import org.afeka.fi.backend.services.FiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -22,11 +22,11 @@ import java.io.*;
 @RestController
 public class FiApi extends CommonApi {
 
-    private FiServiceInterface fiService;
+    private FiService fiService;
     private EntityService<FiDoc> fiDocService;
 
     @Autowired
-    public void init(FiServiceInterface fiService, EntityService<FiDoc> fiDocService){
+    public void init(FiService fiService, EntityService<FiDoc> fiDocService){
         this.fiService=fiService;
         this.fiDocService=fiDocService;
     }
@@ -46,7 +46,7 @@ public class FiApi extends CommonApi {
     }
 
     @DeleteMapping(value = "{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
-    public GeneralResponse deleteFi(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException, DeleteEntityExption {
+    public GeneralResponse deleteFi(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException, DeleteEntityExption, PermissionExption {
             logger.called("deleteFiApi","id",id);
             securityCheck(request,Role.user);
             fiService.delete(id);
@@ -55,7 +55,7 @@ public class FiApi extends CommonApi {
     }
 
     @PutMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
-    public FI updateFi(HttpServletRequest request, @RequestBody FI fi, @PathVariable String id) throws ResourceNotFoundException {
+    public FI updateFi(HttpServletRequest request, @RequestBody FI fi, @PathVariable String id) throws ResourceNotFoundException, PermissionExption {
             securityCheck(request, Role.user);
             logger.called("updateFiApi", "FI",fi);
             return fiService.update(fi);

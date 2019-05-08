@@ -1,14 +1,10 @@
 package org.afeka.fi.backend.api;
 
 import org.afeka.fi.backend.common.CommonApi;
-import org.afeka.fi.backend.common.FiCommon;
-import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
-import org.afeka.fi.backend.pojo.commonstructure.ND;
-import org.afeka.fi.backend.services.FiGeneratorService;
-import org.afeka.fi.backend.services.NdService;
+import org.afeka.fi.backend.services.FiGeneratorServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
@@ -21,10 +17,10 @@ import java.util.List;
 public class FiGeneratorApi extends CommonApi {
 
 
-    private FiGeneratorService fiGeneratorService;
+    private FiGeneratorServiceImpl fiGeneratorService;
 
     @Autowired
-    public void init(FiGeneratorService fiGeneratorService){
+    public void init(FiGeneratorServiceImpl fiGeneratorService){
         this.fiGeneratorService=fiGeneratorService;
     }
 

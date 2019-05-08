@@ -51,7 +51,6 @@ public class CommonApi extends FiCommon{
     @Autowired
     protected TreFactory treFactory;
 
-    protected OcrClient ocrClient=new OcrAbbyyCloud();
     protected FiGeneratorClient fiGenerator;
 
 

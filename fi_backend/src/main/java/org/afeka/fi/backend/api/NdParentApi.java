@@ -1,7 +1,9 @@
 package org.afeka.fi.backend.api;
 
 import org.afeka.fi.backend.common.CommonApi;
+import org.afeka.fi.backend.exception.AddEntityExption;
 import org.afeka.fi.backend.exception.DeleteEntityExption;
+import org.afeka.fi.backend.exception.PermissionExption;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
@@ -28,14 +30,14 @@ public class NdParentApi extends CommonApi {
 
 
     @PutMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
-    public NdParent updateNdParent(HttpServletRequest request, @RequestBody NdParent ndParent, @PathVariable String id) throws ResourceNotFoundException {
+    public NdParent updateNdParent(HttpServletRequest request, @RequestBody NdParent ndParent, @PathVariable String id) throws ResourceNotFoundException, PermissionExption {
         securityCheck(request, Role.user);
         logger.called("updateNdParentApi", "ndParent",ndParent);
         return ndParentService.update(ndParent);
     }
 
     @DeleteMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
-    public GeneralResponse deleteNdParent(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException, DeleteEntityExption {
+    public GeneralResponse deleteNdParent(HttpServletRequest request, @PathVariable String id) throws ResourceNotFoundException, DeleteEntityExption, PermissionExption {
         logger.called("deleteNdParentApi","id",id);
         securityCheck(request,Role.user);
         ndParentService.delete(id);
@@ -51,7 +53,7 @@ public class NdParentApi extends CommonApi {
     }
 
     @PostMapping(value = "/new/{treId}",produces = "application/json")
-    public NdParent ndParentNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String treId) throws ResourceNotFoundException {
+    public NdParent ndParentNew(HttpServletRequest request,@RequestBody ViewCreateRequest viewCreateRequest, @PathVariable String treId) throws ResourceNotFoundException, AddEntityExption {
         logger.called("ndParentNewApi","viewCreateRequest",viewCreateRequest);
         securityCheck(request,Role.user);
         return  ndParentService.add(viewCreateRequest,treId);

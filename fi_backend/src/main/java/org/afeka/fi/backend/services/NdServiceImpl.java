@@ -1,6 +1,7 @@
 package org.afeka.fi.backend.services;
 
 import org.afeka.fi.backend.dao.EntityDao;
+import org.afeka.fi.backend.exception.AddEntityExption;
 import org.afeka.fi.backend.exception.DeleteEntityExption;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
 import org.afeka.fi.backend.factory.NdFactory;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 @Service
-public class NdService implements EntityService<ND> {
+public class NdServiceImpl implements EntityService<ND> {
     private EntityDao<ND> ndDao;
     private EntityDao<NdParent> ndParentDao;
     private NdFactory ndFactory;
@@ -24,7 +25,7 @@ public class NdService implements EntityService<ND> {
         this.ndFactory=ndFactory;
     }
     @Override
-    public ND add(ViewCreateRequest viewCreateRequest, String parentId) throws ResourceNotFoundException {
+    public ND add(ViewCreateRequest viewCreateRequest, String parentId) throws ResourceNotFoundException, AddEntityExption {
         ndParentDao.find(parentId);
         return ndDao.add(ndFactory.newND(viewCreateRequest, parentId));
     }

@@ -2,48 +2,37 @@ package org.afeka.fi.backend.api;
 
 import com.itextpdf.text.DocumentException;
 import org.afeka.fi.backend.common.CommonApi;
-import org.afeka.fi.backend.common.Helpers;
+import org.afeka.fi.backend.exception.AddEntityExption;
 import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.exception.DeleteEntityExption;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
-import org.afeka.fi.backend.factory.TreFactory;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.auth.User;
-import org.afeka.fi.backend.pojo.commonstructure.FI;
-import org.afeka.fi.backend.pojo.commonstructure.ND;
-import org.afeka.fi.backend.pojo.commonstructure.NdParent;
 import org.afeka.fi.backend.pojo.commonstructure.TRE;
 import org.afeka.fi.backend.pojo.http.GeneralResponse;
 import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
-import org.afeka.fi.backend.services.TreService;
+import org.afeka.fi.backend.services.TreServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.bind.JAXBException;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 
 @RequestMapping(path = "api/fronted/tre")
 @RestController
 public class TreApi extends CommonApi {
-    private TreService treService;
+    private TreServiceImpl treService;
     @Autowired
-    public void initServices(TreService treService){
+    public void initServices(TreServiceImpl treService){
         this.treService=treService;
     }
     @PostMapping(value = "/new",produces = "application/json")
-    public TRE newTre(HttpServletRequest request, @RequestBody ViewCreateRequest viewCreateRequest) {
+    public TRE newTre(HttpServletRequest request, @RequestBody ViewCreateRequest viewCreateRequest) throws AddEntityExption {
         logger.called("newTreApi","viewCreateRequest",viewCreateRequest);
         User user= securityCheck(request, Role.user);
         return  treService.add(viewCreateRequest,user.userName);

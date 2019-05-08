@@ -12,10 +12,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 public class Helpers {
+    private static FiLogger logger=new FiLogger();
     public static String inputStreamToString(InputStream inputStream) throws IOException {
         String line;
         StringBuilder builder=new StringBuilder();
@@ -54,6 +57,16 @@ public class Helpers {
         return file.getOriginalFilename().substring(point+1);
     }
 
+    public static String getFileExtension(String file){
+        int point=file.lastIndexOf(".");
+        if (point>0)
+            return file.substring(point+1);
+        else
+            return "";
+
+
+    }
+
     public static void saveFile(String path,MultipartFile file) throws IOException {
         Files.write(Paths.get(path),file.getBytes());
     }
@@ -86,6 +99,48 @@ public class Helpers {
         }
     }
 
+    public static Path unzip(Path zipFilePath) throws IOException {
+        File dir = Files.createTempDirectory("destDir").toFile();
+        // create output directory if it doesn't exist
+        if(!dir.exists()) dir.mkdirs();
+        FileInputStream fis;
+        //buffer for read and write data to file
+        byte[] buffer = new byte[1024];
+        try {
+            fis = new FileInputStream(zipFilePath.toFile());
+            ZipInputStream zis = new ZipInputStream(fis);
+            ZipEntry ze = zis.getNextEntry();
+            while(ze != null){
+                String fileName = ze.getName();
+                if (!getFileExtension(fileName).isEmpty() && !fileName.contains("/")) {
+                    File newFile = new File(dir.getAbsolutePath() + File.separator + fileName);
+                    System.out.println("Unzipping to " + newFile.getAbsolutePath());
+                    //create directories for sub directories in zip
+                    new File(newFile.getParent()).mkdirs();
+                    FileOutputStream fos = new FileOutputStream(newFile);
+                    int len;
+                    while ((len = zis.read(buffer)) > 0) {
+                        fos.write(buffer, 0, len);
+                    }
+                    fos.close();
+                    //close this ZipEntry
+                    zis.closeEntry();
+                }else{
+
+                    logger.error("Cannot unzip "+fileName+" from "+zipFilePath.toString()+" because the file without Extension or a directory");
+                }
+                ze = zis.getNextEntry();
+            }
+            //close last ZipEntry
+            zis.closeEntry();
+            zis.close();
+            fis.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return Paths.get(dir.toURI());
+    }
+
     public static String removeSpecialChars(String lbl) {
         return lbl.replaceAll("[-+.^:,]","").replaceAll(" ","");
     }
@@ -93,7 +148,9 @@ public class Helpers {
     public static String getFileSimpleName(MultipartFile fiDoc) {
         return fiDoc.getOriginalFilename().substring(0,fiDoc.getOriginalFilename().lastIndexOf("."));
     }
-
+    public static String getFileSimpleName(String file) {
+        return file.substring(0,file.lastIndexOf("."));
+    }
     public static String encodeBasicAuth(String userName, String password) {
         return "Basic " + Base64.getEncoder().encodeToString((userName + ":" + password).getBytes());
     }
