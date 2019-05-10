@@ -24,7 +24,7 @@ import java.util.Optional;
 public class UserApi extends CommonApi {
 
     private EntityService<User> userService;
-
+@Autowired
     public void init(EntityService<User> userService){
         this.userService=userService;
     }
