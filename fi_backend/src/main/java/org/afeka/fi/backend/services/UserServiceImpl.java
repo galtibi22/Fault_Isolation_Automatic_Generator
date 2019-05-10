@@ -41,6 +41,8 @@ public class UserServiceImpl implements EntityService<User> {
         User userToDelete=userDao.find(id);
         if (userToDelete.role.equals(Role.admin))
             throw new PermissionExption("Cannot delete user with Role Admin from the system");
+        if (userToDelete.role.equals(Role.generator))
+            throw new PermissionExption("Cannot delete user with Role Generator from the system");
         userDao.delete(id);
     }
 
