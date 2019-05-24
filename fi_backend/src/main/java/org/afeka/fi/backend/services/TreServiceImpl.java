@@ -9,6 +9,7 @@ import org.afeka.fi.backend.exception.DataNotValidException;
 import org.afeka.fi.backend.exception.DeleteEntityExption;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
 import org.afeka.fi.backend.factory.TreFactory;
+import org.afeka.fi.backend.pojo.auth.User;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
 import org.afeka.fi.backend.pojo.commonstructure.ND;
 import org.afeka.fi.backend.pojo.commonstructure.NdParent;
@@ -31,14 +32,17 @@ public class TreServiceImpl implements TreService {
     private EntityDao<FI> fiDao;
     private EntityDao<TRE> treDao;
     private TreFactory treFactory;
+    private EntityDao<User> userDao;
+
 
     @Autowired
-    public void init(EntityDao<NdParent> ndParentDao, EntityDao<ND> ndDao, EntityDao<FI> fiDao, EntityDao<TRE> treDao, TreFactory treFactory) {
+    public void init(EntityDao<NdParent> ndParentDao, EntityDao<ND> ndDao, EntityDao<FI> fiDao,EntityDao<User> userDao, EntityDao<TRE> treDao, TreFactory treFactory) {
         this.ndParentDao = ndParentDao;
         this.ndDao = ndDao;
         this.fiDao = fiDao;
         this.treDao = treDao;
         this.treFactory = treFactory;
+        this.userDao=userDao;
     }
 
 
