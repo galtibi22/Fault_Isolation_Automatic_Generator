@@ -10,10 +10,7 @@ import org.afeka.fi.backend.exception.DeleteEntityExption;
 import org.afeka.fi.backend.exception.ResourceNotFoundException;
 import org.afeka.fi.backend.factory.TreFactory;
 import org.afeka.fi.backend.pojo.auth.User;
-import org.afeka.fi.backend.pojo.commonstructure.FI;
-import org.afeka.fi.backend.pojo.commonstructure.ND;
-import org.afeka.fi.backend.pojo.commonstructure.NdParent;
-import org.afeka.fi.backend.pojo.commonstructure.TRE;
+import org.afeka.fi.backend.pojo.commonstructure.*;
 import org.afeka.fi.backend.pojo.http.ViewCreateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -88,6 +85,9 @@ public class TreServiceImpl implements TreService {
                 ND ndToExport= ndDao.find(nd.ID);
                 ndParentToExport.ND.add(ndToExport);
                 for (FI fi:nd.FI){
+                    FI fiToExport=fiDao.get(fi.ID);
+                    if (fiToExport.status.equals(Status.failed))
+                        throw new RuntimeException("Cannot export fi "+fiToExport.ID+" with status failed. Please fix the fi or select other fis to export");
                     ndToExport.FI.add(fiDao.get(fi.ID));
                 }
             }
