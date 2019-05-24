@@ -16,7 +16,6 @@ export class AddUserComponent implements OnInit {
   editMode = false;
   roles: any[] = [
     { value: 'user', viewValue: 'User' },
-    { value: 'admin', viewValue: 'Admin' },
     { value: 'generator', viewValue: 'Generator' }
   ];
   selectedRole: string;
