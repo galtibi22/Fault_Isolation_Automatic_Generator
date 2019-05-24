@@ -60,7 +60,13 @@ public class RestExceptionHendler extends ResponseEntityExceptionHandler{
                 ResponseError.builder().setError(HttpStatus.INTERNAL_SERVER_ERROR).setMessage(ex.getMessage()).timeStampNow().setReason(ex).setUrl(request.getRequest().getRequestURI()));
     }
     @ExceptionHandler(DeleteEntityExption.class)
-    protected ResponseEntity<ResponseError> deleteEntityExption(EmptyResultDataAccessException ex, ServletWebRequest request) {
+    protected ResponseEntity<ResponseError> deleteEntityExption(DeleteEntityExption ex, ServletWebRequest request) {
+        return  ResponseEntity.status(HttpStatus.METHOD_FAILURE).body(
+                ResponseError.builder().setError(HttpStatus.METHOD_FAILURE).setMessage(ex.getMessage()).timeStampNow().setReason(ex).setUrl(request.getRequest().getRequestURI()));
+    }
+    @ExceptionHandler(RuntimeException.class)
+    protected ResponseEntity<ResponseError> runTimeException(EmptyResultDataAccessException ex, ServletWebRequest request) {
+        logger.error(ex);
         return  ResponseEntity.status(HttpStatus.METHOD_FAILURE).body(
                 ResponseError.builder().setError(HttpStatus.METHOD_FAILURE).setMessage(ex.getMessage()).timeStampNow().setReason(ex).setUrl(request.getRequest().getRequestURI()));
     }
