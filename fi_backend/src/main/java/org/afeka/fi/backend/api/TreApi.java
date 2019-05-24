@@ -48,7 +48,7 @@ public class TreApi extends CommonApi {
     @GetMapping(value = "/",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
     public List<TRE> getTres(HttpServletRequest request) throws ResourceNotFoundException {
         logger.called("getTresApi","","");
-        User user=securityCheck(request,Role.user);
+        User user=securityCheck(request,Role.user,Role.viewer);
         return treService.getAll(user.userName);
     }
     @DeleteMapping(value = "/{id}",headers = HttpHeaders.AUTHORIZATION,produces = "application/json")
