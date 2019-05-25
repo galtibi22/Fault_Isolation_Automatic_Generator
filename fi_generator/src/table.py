@@ -89,16 +89,16 @@ for table in tables:
                         for key, value in FI_Generic_Title_Main_Rows.items():
                             if (FI_row[key] == ""):
                                 if (PG_Status == ""):
-                                    PG_Status = "missing"+str(value)
+                                    PG_Status = str(value) + "IsMissing"
                                 else:
-                                    PG_Status += ",missing" + str(value)
+                                    PG_Status += "," + str(value) + "IsMissing"
 
                         for key, value in FI_Generic_Title_Des_Rows.items():
                             if (FI_row[key] == ""):
                                 if (PG_Status == ""):
-                                    PG_Status = "missing"+str(value)
+                                    PG_Status = str(value)+"IsMissing"
                                 else:
-                                    PG_Status += ",missing" + str(value)
+                                    PG_Status += "," + str(value) + "IsMissing"
 
                         if (PG_Status == ""):
                             newNumberObj['status'] = "success"
@@ -137,7 +137,7 @@ for table in tables:
                                 newNumberObj = {}
                                 newNumberObj['n'] = str(FI_Num)
                                 newNumberObj['type'] = "test"
-                                newNumberObj['status'] = "missingTest"
+                                newNumberObj['status'] = "TestIsMissing"
                                 FI_Array.append(newNumberObj)
                                 FI_Num+=1
 
