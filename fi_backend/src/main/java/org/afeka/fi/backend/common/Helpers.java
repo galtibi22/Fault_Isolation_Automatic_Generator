@@ -154,4 +154,18 @@ public class Helpers {
     public static String encodeBasicAuth(String userName, String password) {
         return "Basic " + Base64.getEncoder().encodeToString((userName + ":" + password).getBytes());
     }
+
+    public static String upperCaseSpreate(String cpt){
+        String new_string = "";
+        for (int i=0; i < cpt.length(); i++){
+            char c = cpt.charAt(i);
+            if(Character.isUpperCase(c)){
+                new_string = new_string + " " + Character.toLowerCase(c);
+            }
+            else {
+                new_string = new_string + c;
+            }
+        }
+        return new_string;
+    }
 }

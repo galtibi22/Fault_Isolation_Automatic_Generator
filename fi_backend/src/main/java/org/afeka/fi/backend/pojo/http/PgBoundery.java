@@ -103,7 +103,7 @@ public class PgBoundery {
         else if(pg.status.equals(Status.success.name()))
             description= Arrays.stream(pg.htmlObj.getHtmlData()).map(htmlData -> htmlData.txt).collect(Collectors.joining());
         else{
-            if(pg.status.toLowerCase().startsWith("missing")){
+           /* if(pg.status.toLowerCase().startsWith("missing")){
                 String[] errors=pg.status.split(",");
                 for (String error:errors) {
                     error=error.replace("missing","");
@@ -111,10 +111,10 @@ public class PgBoundery {
                     description += name +" is missing, ";
                 }
                 description.substring(0,description.length()-3);
-            }else{
+            }else{*/
                 description=Status.getDescription(pg.status);
             }
-        }
+        //}
         return description;
     }
 
