@@ -31,11 +31,14 @@ FI_Num+=1
 FI_Main_HTML_Obj ={}
 FI_Main_HTML_Data = []
 FI_Main_HTML_Data_Obj = {}
+FI_Save_Errors = ""
 
 for para in document.paragraphs:
     if (FI_Label == True):
         FI_Main_HTML_Data_Obj['htmlType'] = 'fiTitle'
         FI_Main_HTML_Data_Obj['txt'] = para.text
+        if FI_Main_HTML_Data_Obj['txt'] == "":
+            FI_Save_Errors = "titleIsMissing"
         FI_Label = False
         FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
         FI_Main_HTML_Data_Obj = {}
@@ -48,7 +51,14 @@ FI_Main_HTML_Data.append(FI_Main_HTML_Data_Obj)
 
 FI_Main_HTML_Obj['htmlData'] = FI_Main_HTML_Data
 FI_Main_Info['htmlObj'] = FI_Main_HTML_Obj
-FI_Main_Info['status'] = "success"
+if (FI_Save_Errors==""):
+    FI_Main_Info['status'] = "success"
+else:
+    FI_Main_Info['status'] = FI_Save_Errors
+
+if (FI_Main_Info['htmlObj']):
+    print("eden")
+
 FI_Array.append(FI_Main_Info)
 
 tables = document.tables
