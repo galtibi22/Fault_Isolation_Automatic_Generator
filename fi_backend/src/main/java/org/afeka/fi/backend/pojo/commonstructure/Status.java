@@ -20,7 +20,7 @@ public enum Status {
             description="Loop is exist in the path";
         else if (status.equals(Status.stepNotExist.name()))
             description="The next step is not in the range";
-        else if (status.contains("missing"))
+        else if (status.contains("Missing"))
             description= Helpers.upperCaseSpreate(status);
         else
             description=status+" please implement this error in Status.getDescription";
