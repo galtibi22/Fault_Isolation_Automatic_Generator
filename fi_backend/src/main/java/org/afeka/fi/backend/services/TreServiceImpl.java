@@ -88,7 +88,8 @@ public class TreServiceImpl implements TreService {
                     FI fiToExport=fiDao.get(fi.ID);
                     if (fiToExport.status.equals(Status.failed))
                         throw new RuntimeException("Cannot export fi "+fiToExport.ID+" with status failed. Please fix the fi or select other fis to export");
-                    ndToExport.FI.add(fiDao.get(fi.ID));
+                    fiToExport.PG.remove(0);
+                    ndToExport.FI.add(fiToExport);
                 }
             }
         }

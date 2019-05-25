@@ -80,7 +80,7 @@ public class FiFactory extends ViewFactory<FI> {
         htmlGenerator.fiTitle(fi.lbl);
         logger.info("export fi html with name=" + fi.doc);
         save(htmlGenerator.toHtml().renderFormatted(), Paths.get(path + "/" + fi.doc));
-        for (PG pg : fi.PG.subList(1,fi.PG.size())) {
+        for (PG pg : fi.PG) {
             pgFactory.export(path,pg);
         }
     }

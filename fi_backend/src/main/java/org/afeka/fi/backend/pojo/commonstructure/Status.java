@@ -1,5 +1,7 @@
 package org.afeka.fi.backend.pojo.commonstructure;
 
+import org.afeka.fi.backend.common.Helpers;
+
 public enum Status {
     pending,success,failed,taskReturnNextYesIncorrectFormat,taskReturnNextNoIncorrectFormat,
     nextYesIncorrectFormat,nextNoIncorrectFormat,FiPathLoopError,stepNotExist;
@@ -8,7 +10,7 @@ public enum Status {
         String description;
         if (status.equals(Status.taskReturnNextYesIncorrectFormat.name()))
             description= "The next step if the task  success not in Number format";
-        else if (status.equals(Status.taskReturnNextYesIncorrectFormat.name()))
+        else if (status.equals(Status.taskReturnNextNoIncorrectFormat.name()))
             description= "The next step if the task fail not in Number format";
         else if (status.equals(Status.nextYesIncorrectFormat.name()))
             description="The next step if the test success not in Number format";
@@ -18,6 +20,8 @@ public enum Status {
             description="Loop is exist in the path";
         else if (status.equals(Status.stepNotExist.name()))
             description="The next step is not in the range";
+        else if (status.contains("missing"))
+            description= Helpers.upperCaseSpreate(status);
         else
             description=status+" please implement this error in Status.getDescription";
         return description;
