@@ -207,9 +207,8 @@ export class FlowsComponent implements OnInit {
     };
     this.tresService.report(data).subscribe(
       (result: any) => {
-        // downloadFileByType(result, 'application/octet-stream', 'report.pdf');
-        this.downloadFile(result, 'application/octet-stream');
-
+        downloadFileByType(result, 'application/octet-stream', 'report.pdf');
+        // this.downloadFile(result, 'application/octet-stream');
       },
       error => {
         console.error(error);
