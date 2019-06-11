@@ -2,7 +2,6 @@ package org.afeka.fi.backend;
 
 import org.afeka.fi.backend.common.Constants;
 import org.afeka.fi.backend.common.FiCommon;
-import org.afeka.fi.backend.common.FiProperties;
 import org.afeka.fi.backend.pojo.auth.Role;
 import org.afeka.fi.backend.pojo.auth.User;
 import org.afeka.fi.backend.repository.RepositoryService;
@@ -14,7 +13,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jmx.JmxAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
-import java.io.IOException;
 
 @SpringBootApplication(exclude = JmxAutoConfiguration.class)
 

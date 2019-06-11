@@ -222,13 +222,8 @@ def generate_fi_doc_path(path):
     else:
         if (path.endswith('doc')):
             # Conversion doc to docx use with LibreOffice that should be install on server
-            if (os.name == 'posix'):
-                print("use save_as_docx_mac")
-                SOFFICE_PATH = '/Users/gal.tibi/afekaProjects/Fault_Isolation_Automatic_Generator/Contents/MacOS/soffice'
-            else:
-                print("use save_as_docx_win")
-                SOFFICE_PATH = "C:\Program Files\LibreOffice\program\soffice.exe"
-
+            print("use save_as_docx_win")
+            SOFFICE_PATH = "C:\Program Files\LibreOffice\program\soffice.exe"
             pathUrl=save_as_docx(path, SOFFICE_PATH)
     return pathUrl
 
@@ -237,7 +232,7 @@ def post_api_server(jsondata):
     # Define API-Endpoint to local server
     API_ENDPOINT = "http://127.0.0.1:8080/api/figenerator/new/"+sys.argv[2]+"/"+sys.argv[3]
     headers = { 'content-type' : 'application/json', 'Authorization' : 'Basic ZmlnZW5lcmF0b3I6QWExMjM0NTY='}
-    print("send fi","to",API_ENDPOINT,"with headers",headers,"data",jsondata)
+    #print("send fi","to",API_ENDPOINT,"with headers",headers,"data",jsondata)
     r=requests.post(API_ENDPOINT,data=json.dumps(jsondata),headers = headers)
     print(r)
 

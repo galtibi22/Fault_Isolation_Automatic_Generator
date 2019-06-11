@@ -1,11 +1,9 @@
 package org.afeka.fi.backend.clients;
 
 import org.afeka.fi.backend.common.FiLogger;
-import org.afeka.fi.backend.common.FiProperties;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.FileNotSupportExption;
 import org.afeka.fi.backend.pojo.fiGenerator.FiDocType;
-import org.afeka.fi.backend.pojo.fiGenerator.FiGeneratorMode;
 import org.afeka.fi.backend.pojo.fiGenerator.FiGeneratorType;
 import org.springframework.web.multipart.MultipartFile;
 

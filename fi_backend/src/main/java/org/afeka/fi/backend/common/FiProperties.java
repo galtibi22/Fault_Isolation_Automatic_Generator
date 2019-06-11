@@ -1,3 +1,4 @@
+/*
 package org.afeka.fi.backend.common;
 
 import org.afeka.fi.backend.pojo.internal.ENV;
@@ -10,11 +11,13 @@ public class FiProperties extends FiCommon{
     private static FiProperties instance;
     private Properties prop = new Properties();
 
-    /**
+    */
+/**
      * init method will load the fi.properties from the dist every time the method called
      * @return
      * @throws IOException
-     */
+     *//*
+
     public static void init() throws Exception {
         instance = new FiProperties();
         instance.setSystemEnv();
@@ -70,15 +73,16 @@ public class FiProperties extends FiCommon{
         //RESOURCES_PATH=instance.getProperty("resources.path").toString();
       //  VIEW_DEMO_FITRE_PATH=instance.getProperty("viewdemo.fiTre.path").toString();
        // VIEW_DEMO_FITRE_NAME=instance.getProperty("viewdemo.fiTre.name").toString();
-        ABBY_DLL_PATH=instance.getProperty("abby.dll.path").toString();
-        ABBY_PROJECTID=instance.getProperty("abby.projectId").toString();
-        FI_GENERATOR_CLIENT_PATH=getProperty("fiGenerator.client.path").toString();
-        PYTHON_COMMAND_START =getProperty("fiGenerator.python.start").toString();
+      //  ABBY_DLL_PATH=instance.getProperty("abby.dll.path").toString();
+      //  ABBY_PROJECTID=instance.getProperty("abby.projectId").toString();
+       // FI_GENERATOR_CLIENT_PATH=getProperty("fiGenerator.client.path").toString();
+       // PYTHON_COMMAND_START =getProperty("fiGenerator.python.start").toString();
 
-        FI_GENERATOR_MODE= getProperty("fiGenerator.mode").toString();
-        WEBAPP_PATH=getProperty("webapp.path").toString();
+       // FI_GENERATOR_MODE= getProperty("fiGenerator.mode").toString();
+       // WEBAPP_PATH=getProperty("webapp.path").toString();
 
     }
 
 
 }
+*/

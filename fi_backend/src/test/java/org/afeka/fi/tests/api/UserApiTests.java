@@ -1,3 +1,4 @@
+/*
 package org.afeka.fi.tests.api;
 
 import org.afeka.fi.backend.common.Constants;
@@ -20,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 @WebAppConfiguration
 public class UserApiTests extends ApiCommonTest {
 
-    @Test
+   // @Test
     public void admin_can_create_users_in_the_system() throws Exception {
         given("admin is login to the system");
         String uri="/api/user/login";
@@ -43,3 +44,4 @@ public class UserApiTests extends ApiCommonTest {
 
 
 }
+*/

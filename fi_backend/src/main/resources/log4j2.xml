@@ -18,8 +18,8 @@
 		</Console>
 	</Appenders>
 	<Loggers>
-		<Logger name="org.afeka.fi" level="debug" additivity="true">
-			<appender-ref ref="fileLogger" level="debug" />
+		<Logger name="org.afeka.fi" level="DEBUG" additivity="true">
+			<appender-ref ref="fileLogger" level="DEBUG" />
 		</Logger>
 		<Root level="DEBUG" additivity="false">
 			<appender-ref ref="console" />

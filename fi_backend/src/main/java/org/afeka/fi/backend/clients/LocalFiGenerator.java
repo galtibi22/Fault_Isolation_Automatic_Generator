@@ -1,7 +1,6 @@
 package org.afeka.fi.backend.clients;
 
 
-import org.afeka.fi.backend.common.FiProperties;
 import org.afeka.fi.backend.common.Helpers;
 import org.afeka.fi.backend.exception.FiGenratorException;
 import org.afeka.fi.backend.pojo.fiGenerator.FiGeneratorType;
@@ -23,7 +22,7 @@ public class LocalFiGenerator implements FiGeneratorClient {
     public void runFiGenerator(MultipartFile fiDoc,String fiDocId, FiGeneratorType fiGeneratorType, String ndId) throws IOException {
         logger.called("runLocalFiGenerator","type",fiGeneratorType);
         Path path= Paths.get(getPath(),fiGeneratorType+".py");
-        Path fiDocPath=Files.createTempFile(Helpers.getFileSimpleName(fiDoc),"."+Helpers.getFileExtension(fiDoc));
+        Path fiDocPath=Files.createTempFile(Helpers.removeSpecialChars(Helpers.getFileSimpleName(fiDoc)),"."+Helpers.getFileExtension(fiDoc));
         fiDocPath.toFile().deleteOnExit();
         Files.write(fiDocPath,fiDoc.getBytes());
         String command = String.format(pythonprefix+" %s %s %s %s",path.toAbsolutePath(),fiDocPath.toAbsolutePath(),ndId,fiDocId);
