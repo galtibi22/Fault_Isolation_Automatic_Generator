@@ -130,6 +130,7 @@ export class FlowsComponent implements OnInit {
           this.uploading = false;
           this.chooseUpload = false;
           console.error(error);
+          alert("Error occur:" + error);
           this.file.nativeElement.value = '';
         });
     }
@@ -151,6 +152,7 @@ export class FlowsComponent implements OnInit {
       },
       error => {
         console.error(error);
+        alert("Error occur:" + error);
       });
   }
 
@@ -184,6 +186,7 @@ export class FlowsComponent implements OnInit {
       },
       error => {
         console.error(error);
+        alert("Error occur:" + error);
       });
   }
 
@@ -212,6 +215,7 @@ export class FlowsComponent implements OnInit {
       },
       error => {
         console.error(error);
+        alert("Error occur:" + error);
       });
   }
 
@@ -242,6 +246,7 @@ export class FlowsComponent implements OnInit {
         },
         error => {
           console.error(error);
+          alert("Error occur:" + error);
         });
     }
   }

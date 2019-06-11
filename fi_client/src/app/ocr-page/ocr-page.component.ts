@@ -44,8 +44,9 @@ export class OcrPageComponent implements OnInit {
           downloadFileByType(file, 'application/msword', 'ocr.doc');
         },
         error => {
-          this.uploading = false;
+          this.uploadingOcr = false;
           console.error(error);
+          alert("Error occur, upload Image failed to OCR provider " + error);
           this.fileOcr.nativeElement.value = '';
         });
     }
