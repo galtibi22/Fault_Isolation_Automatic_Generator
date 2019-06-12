@@ -75,7 +75,7 @@ public class TreServiceImpl implements TreService {
         return treDao.getAll(parentId);
     }
 
-    private TRE initTreToExport(TRE tre) throws ResourceNotFoundException {
+    private TRE initTreToExport(TRE tre,String type) throws ResourceNotFoundException {
         logger.called("initTreToExport","tre",tre);
         TRE treToExport=find(tre.ID);
         for(NdParent ndParent:tre.ndParents){
@@ -86,8 +86,9 @@ public class TreServiceImpl implements TreService {
                 ndParentToExport.ND.add(ndToExport);
                 for (FI fi:nd.FI){
                     FI fiToExport=fiDao.get(fi.ID);
-                    if (fiToExport.status.equals(Status.failed))
-                        throw new RuntimeException("Cannot export fi "+fiToExport.ID+" with status failed. Please fix the fi or select other fis to export");
+                    if (type.equals("export"))
+                        if (fiToExport.status.equals(Status.failed))
+                            throw new RuntimeException("Cannot export fi "+fiToExport.ID+" with status failed. Please fix the fi or select other fis to export");
                     fiToExport.PG.remove(0);
                     ndToExport.FI.add(fiToExport);
                 }
@@ -97,7 +98,7 @@ public class TreServiceImpl implements TreService {
     }
 
     public Path export(TRE tre) throws ResourceNotFoundException, IOException, JAXBException, DataNotValidException {
-        TRE treToExport=initTreToExport(tre);
+        TRE treToExport=initTreToExport(tre,"export");
         TreFactory treFactory=new TreFactory();
         Path resultPath= Files.createTempDirectory("results").toAbsolutePath();
         treFactory.export(resultPath,treToExport);
@@ -107,7 +108,7 @@ public class TreServiceImpl implements TreService {
     }
 
     public Path exportReport(TRE tre) throws ResourceNotFoundException, IOException, DocumentException {
-        TRE treToExport=initTreToExport(tre);
+        TRE treToExport=initTreToExport(tre,"report");
         TreFactory treFactory=new TreFactory();
         Path reportPath=Files.createTempFile(tre.ID+"_report_",".pdf");
         treFactory.exportReport(reportPath,treToExport);
