@@ -147,7 +147,7 @@ public class HtmlGenerator extends FiCommon {
                                     "font-family:Arial; " +
                                     "font-size:12pt; " +
                                     "background-color:"+color+";").
-                            attr("onclick","toTreeNode('0:"+fi.ID+":0');")
+                            attr("onclick","toTreeNode(\'0:"+fi.ID+":0\');")
             ));
         }
         return table;

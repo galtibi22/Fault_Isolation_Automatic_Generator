@@ -19,8 +19,8 @@ public interface FiGeneratorClient {
     default void fiDocumentValidator(MultipartFile file) throws FileNotSupportExption{
         logger.called("fiDocumentValidator", "fiDoc", file.getName());
         String docType = Helpers.getFileExtension(file);
-        if (!docType.equals(FiDocType.DOC) && !docType.equals(FiDocType.DOCX)) {
-            throw new FileNotSupportExption("doc type " + docType + " is not supported docx or doc supported only");
+        if (!docType.equals(FiDocType.DOC) && !docType.equals(FiDocType.DOCX) && !docType.equals(FiDocType.PDF)) {
+            throw new FileNotSupportExption("doc type " + docType + " is not supported docx, doc or pdf supported only");
         }
     }
 
