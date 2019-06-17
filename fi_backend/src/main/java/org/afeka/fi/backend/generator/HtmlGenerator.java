@@ -3,20 +3,21 @@ import j2html.tags.ContainerTag;
 import org.afeka.fi.backend.common.FiCommon;
 import org.afeka.fi.backend.pojo.commonstructure.FI;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import static j2html.TagCreator.*;
 public class HtmlGenerator extends FiCommon {
     private ContainerTag div=div().withDir("ltr");
     private ContainerTag body=body(br(),br(),div);
-    private ContainerTag head=html(
+    private ContainerTag head=///html(
             head(
                     link().withRel("stylesheet").withHref("../../dbPrj/setup/_lkCss_ietm.css"),
                     link().withRel("StyleSheet").withHref("../../dbPrj/setup/_lkCss_lk.css"),
                     link().withRel("StyleSheet").withHref("../../dbPrj/setup/_lkCss_reserved.css"),
                     script().withLang("javascript").withSrc("../../../gen/agen/funcs_doc.js"),
                     script().withLang("javascript").withSrc("../../../man/srch/highlight.js")
-            )
+          //  )
     );
 
 
@@ -117,6 +118,7 @@ public class HtmlGenerator extends FiCommon {
     private ContainerTag ndDocHead() {
                 return head.with(
                         script().withLang("javascript").withSrc("../../../aMain/to/toTree.js"),
+                       // script().withText("function toTre(fiId){ toTreeNode(#@#0:#@#+fiId+#@#:0#@#);}"),
                         style(".highlight { background: #FFFF40; }"),
                         title("Created by FI Generator")
                 );
@@ -147,18 +149,22 @@ public class HtmlGenerator extends FiCommon {
                                     "font-family:Arial; " +
                                     "font-size:12pt; " +
                                     "background-color:"+color+";").
-                            attr("onclick","toTreeNode(\'0:"+fi.ID+":0\');")
+                           // attr("onclick","toTre(#@#"+fi.ID+"#@#);")
+                          attr("onclick","toTreeNode(#@#0:"+fi.ID+":0#@#);")
             ));
         }
         return table;
     }
 
-    public ContainerTag toHtml(){
-        return head.with(body);
-    }
-
-    public String toString(){
-        return head.with(body).renderFormatted();
+    public String toHtml(){
+        String html=html(head,body).renderFormatted().replaceAll("#@#","'");
+        try {
+            html=new String(html.getBytes(), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        logger.info("renderFormatted "+ html);
+        return html;
     }
 
 

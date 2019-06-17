@@ -133,7 +133,7 @@ public class NdFactory extends ViewFactory<ND> {
          if (nd.FI.size()==0)
              throw new DataNotValidException("Cannot generate ndDoc for nd.fi.size()=0");
          htmlGenerator.ndDoc(nd.lbl,nd.FI,nd.des);
-         save(htmlGenerator.toHtml().renderFormatted(), Paths.get(path+"/"+nd.doc));
+         save(htmlGenerator.toHtml(), Paths.get(path+"/"+nd.doc));
      }
 }
 

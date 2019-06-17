@@ -166,7 +166,7 @@ public class TreFactory extends ViewFactory <TRE> {
         }
         htmlGenerator=new HtmlGenerator();
         htmlGenerator.basicRootPage(tre.lbl,tre.des);
-        save(htmlGenerator.toHtml().renderFormatted(),path.resolve("main.html"));
+        save(htmlGenerator.toHtml(),path.resolve("main.html"));
     }
 
     public void exportReport(Path path, TRE tre) throws DocumentException, FileNotFoundException {
