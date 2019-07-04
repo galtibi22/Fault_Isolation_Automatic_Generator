@@ -90,9 +90,16 @@ for table in tables:
                             newNumberObj['type'] = "task"
 
                         if (newNumberObj['htmlObj']['htmlData'][0]['txt'] == ""):
-                            newNumberObj['status'] = "desctiptionIsMissing"
+                            newNumberObj['status'] = "descriptionIsMissing"
                         else:
-                            newNumberObj['status'] = "success"
+                            if (newNumberObj['type'] == "task"):
+                                if (newNumberObj['Y']['to'] == ""):
+                                    newNumberObj['status'] = "tasklinkIsMissing"
+                                else:
+                                    newNumberObj['status'] = "success"
+                            else:
+                                newNumberObj['status'] = "success"
+
                         FI_Array.append(newNumberObj)
                         FI_Num+=1
 
