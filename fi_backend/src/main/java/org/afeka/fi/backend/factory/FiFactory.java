@@ -91,8 +91,27 @@ public class FiFactory extends ViewFactory<FI> {
         view.PG.add(pgFactory.newPg(pg,view.ID))
     );
         validatePgsTree();
+       // validatePgData();
     return this;
 }
+
+    private void validatePgData() {
+        for (PG pg : view.PG){
+            try {
+               for(HtmlData htmlData:pg.htmlObj.getHtmlData()){
+                   if (htmlData.txt.isEmpty()){
+                       if (htmlData.htmlType.name().equals(HtmlType.fiStpDsc) || htmlData.htmlType.name().equals(HtmlType.fiStpPrc))
+                           pg.status = Status.stepNotExist.name();
+
+                   }
+               }
+            } catch (Exception e) {
+                logger.error("Found nextYesIncorrectFormat in fi " + view.ID + " in pg n " + pg._n);
+
+            }
+    }
+
+    }
 
     private void validatePgsTree() {
             List<PgNode> pgNodes = new ArrayList<>();
