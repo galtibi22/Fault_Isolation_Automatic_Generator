@@ -21,7 +21,7 @@ public class PgFactory extends ViewFactory<PG> {
             if (htmlData.htmlType.equals(HtmlType.fiStpPrc)) htmlGenerator.fiStpPrc(htmlData.txt);
             else if (htmlData.htmlType.equals(HtmlType.fiStpQst)) htmlGenerator.fiStpQst(htmlData.txt);
         }
-        save(htmlGenerator.toHtml().renderFormatted(), Paths.get(path + "/" + pg.doc));
+        save(htmlGenerator.toHtml(), Paths.get(path + "/" + pg.doc));
     }
 
     public PG newPg(PG pg,String fiId) {
