@@ -88,7 +88,11 @@ for table in tables:
                             newNumberObj['N'] = { 'typ' : '4' }
                             newNumberObj['htmlObj'] = cf.fiTaskDescriptionQuestion(FI_row[0])
                             newNumberObj['type'] = "task"
-                        newNumberObj['status'] = "success"
+
+                        if (newNumberObj['htmlObj']['htmlData'][0]['txt'] == ""):
+                            newNumberObj['status'] = "desctiptionIsMissing"
+                        else:
+                            newNumberObj['status'] = "success"
                         FI_Array.append(newNumberObj)
                         FI_Num+=1
 
